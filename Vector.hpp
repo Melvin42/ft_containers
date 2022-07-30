@@ -2,29 +2,29 @@
 #define VECTOR_HPP
 
 #include <memory>
-
-template <class T, class Alloc = allocator<T>>
+namespace ft {
+template <class T, class Allocator = std::allocator<T> >
 class Vector {
 	public:
-		/* TYPES */
-		typedef typename Allocator::reference			reference;
-		typedef typename Allocator::const_reference		const_reference;
-		typedef implementation defined					iterator;
-		typedef implementation defined					const_iterator;
-		typedef implementation defined					size_type;
-		typedef implementation defined					difference_type;
-		typedef T;										value_type;
-		typedef Allocator								allocator_type;
-		typedef typename Allocator::pointer				pointer;
-		typedef typename Allocator::const_pointer		const_pointer;
-		typedef std::reverse_iterator<iterator>			reverse_iterator;
-		typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
+	/* TYPES */
+	typedef typename Allocator::reference			reference;
+	typedef typename Allocator::const_reference		const_reference;
+	typedef T*										iterator;
+	typedef const T*								const_iterator;
+	typedef std::size_t								size_type;
+	typedef ptrdiff_t								difference_type;
+	typedef T										value_type;
+	typedef Allocator								allocator_type;
+	typedef typename Allocator::pointer				pointer;
+	typedef typename Allocator::const_pointer		const_pointer;
+	typedef std::reverse_iterator<iterator>			reverse_iterator;
+	typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 		/* CONSTRUCT/COPY/DESTROY */
 						Vector();
 						Vector(const Vector<T, Allocator> &vector);
-		explicit		vector(const Allocator & = Allocator());
-		explicit		vector(size_type n, const T &value = T(),
+		explicit		Vector(const Allocator & = Allocator());
+		explicit		Vector(size_type n, const T &value = T(),
 							const Allocator & = Allocator());
 		template <class InputIterator>
 						Vector(InputIterator first, InputIterator last,
@@ -77,62 +77,17 @@ class Vector {
 						InputIterator first, InputIterator last);
 		iterator	erase(iterator position);
 		iterator	erase(iterator first, iterator last);
-		void		swap(vector<T, Allocator> &);
+		void		swap(Vector<T, Allocator> &);
 		void		clear();
 
-
-
-
-		/*
-		 * ITERATORS
-		 * begin();
-		 * end();
-		 * rbegin()
-		 * rend();
-		 *
-		 * CAPACITY
-		 * size();
-		 * max_size();
-		 * resize();
-		 * capacity()
-		 * empty();
-		 * reserve();
-		 *
-		 * MODIFIERS
-		 * assign();
-		 * push_back();
-		 * pop_back();
-		 * insert();
-		 * erase();
-		 * swap();
-		 * clear();
-		 *
-		 * ALLOCATOR
-		 * get_allocator();
-		 *
-		 * NON-MEMBER FUNCTION OVERLOADS
-		 *
-		 * relational operators
-		 * ==
-		 * !=
-		 * <
-		 * <=
-		 * >
-		 * >=
-		 *
-		 * swap;
-		 *
-		 * TEMPLATE SPECIALIZATIONS
-		 *
-		 * vector<bool>
-		 */
-		bool operator== (const Vector<T, Alloc>& rhs);
-		bool operator!= (const Vector<T, Alloc>& rhs);
-		bool operator< (const Vector<T, Alloc>& rhs);
-		bool operator<= (const Vector<T, Alloc>& rhs);
-		bool operator> (const Vector<T, Alloc>& rhs);
-		bool operator>= (const Vector<T, Alloc>& rhs);
+		bool operator== (const Vector<T, Allocator>& rhs);
+		bool operator!= (const Vector<T, Allocator>& rhs);
+		bool operator< (const Vector<T, Allocator>& rhs);
+		bool operator<= (const Vector<T, Allocator>& rhs);
+		bool operator> (const Vector<T, Allocator>& rhs);
+		bool operator>= (const Vector<T, Allocator>& rhs);
 	private:
 };
 
+}
 #endif
