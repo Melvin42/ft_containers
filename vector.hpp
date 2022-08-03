@@ -9,21 +9,20 @@
 #include "iterator_traits.hpp"
 
 namespace ft {
-
 	template <typename T, class Allocator>	class vector;
 	template <typename T> class	MyIterator;
 
 	template <typename T>
 	class	MyIterator {
 		public:
-				typedef MyIterator<T>							iterator;
-				typedef T										value_type;
-				typedef T*										pointer;
-				typedef T&										reference;
-				typedef const T*								const_iterator;
-				typedef ptrdiff_t								difference_type;
-//				typedef std::reverse_iterator<iterator>			reverse_iterator;
-//				typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
+			typedef MyIterator<T>							iterator;
+			typedef T										value_type;
+			typedef T*										pointer;
+			typedef T&										reference;
+			typedef const T*								const_iterator;
+			typedef ptrdiff_t								difference_type;
+//			typedef std::reverse_iterator<iterator>			reverse_iterator;
+//			typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 			MyIterator() : _pos(NULL) {} ;
 			MyIterator(const T* vector) { *this = vector; };
@@ -139,10 +138,15 @@ namespace ft {
 				};
 
 				//range (3)
-//				template <class InputIterator>
-//					vector(InputIterator first, InputIterator last,
-//							const Allocator& = Allocator()) {
-//					};
+				template <class MyIterator>
+					vector(MyIterator first, MyIterator last,
+							const Allocator& = Allocator()) {
+//						MyIterator	tmp = _p;
+
+						_p = _alloc.allocate(last - first);
+//						while (first != last)
+//							*first = va
+					};
 
 				//copy (4)
 				vector(const vector<T, Allocator> &vector) { *this = vector; };
@@ -166,14 +170,14 @@ namespace ft {
 
 
 				/* ITERATORS */
-				iterator				begin();
-				const_iterator			begin() const;
-				iterator				end();
-				const_iterator			end() const;
-				reverse_iterator		rbegin();
-				const_reverse_iterator	rbegin() const;
-				reverse_iterator		rend();
-				const_reverse_iterator	rend() const;
+				iterator				begin() { return _p; };
+				const_iterator			begin() const { return _p; };
+				iterator				end() { return _p + _size; };
+				const_iterator			end() const { return _p + _size; };
+//				reverse_iterator		rbegin() { return _pos; };
+//				const_reverse_iterator	rbegin() const { return _pos; };
+//				reverse_iterator		rend() { return _pos; };
+//				const_reverse_iterator	rend() const { return _pos; };
 
 				/* CAPACITY */
 				size_type	size() const { return _size; };

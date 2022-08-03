@@ -7,10 +7,30 @@
 #else
 	#include "vector.hpp"
 	#include "iterator_traits.hpp"
+	#include "pair.hpp"
 	#include "utils.hpp"
 #endif
 
-int	main() {
+void	test_pair() {
+	std::cout << "/******** TESTING PAIR ********/\n" << std::endl;
+		std::pair <int,int> pair1;
+		std::pair <int,int> pair2;
+
+		pair1 = std::make_pair (10,20);
+		pair2 = std::make_pair (10.5,'A'); // ok: implicit conversion from pair<double,char>
+
+		std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
+		std::cout << "pair2: " << pair2.first << ", " << pair2.second << '\n';
+}
+
+void	test_iterator() {
+	std::cout << "TESTING ITERATOR\n" << std::endl;
+//	std::cout << "TESTING REVERSE_ITERATOR\n" << std::endl;
+//	std::cout << "TESTING ITERATOR_TRAITS\n" << std::endl;
+//
+}
+
+void	test_vector() {
 	std::cout << "/******** TESTING VECTOR ********/\n" << std::endl;
 
 	int	n = 7;
@@ -51,13 +71,14 @@ int	main() {
 	std::cout << "TESTING MAX_SIZE\n"
 		<< "max_size = " << vect.max_size() << std::endl;
 
-	std::cout << "TESTING ITERATOR\n" << std::endl;
+//	ft::vector<int>	vect_cpy(vect);
+
 	std::cout << "\nvect.insert() TESTS:\n" << std::endl;
 
 //	vect.insert(vect.end(), n + 1);
+}
 
-	ft::vector<int>	vect_cpy(vect);
-
+void	test_is_integral() {
 	std::cout << "TESTING IS_INTEGRAL\n"
 		<< "\nbool: " << ft::is_integral<bool>::value
 		<< "\nchar: " << ft::is_integral<char>::value
@@ -73,9 +94,28 @@ int	main() {
 		<< "\nunsigned long int: " << ft::is_integral<unsigned long int>::value
 		<< "\nunsigned long long int: "
 		<< ft::is_integral<unsigned long long int>::value << std::endl;
-//
-//	std::cout << "TESTING EQUAL\n" << std::endl;
+}
 
+void	test_equal() {
+	std::cout << "TESTING EQUAL\n" << std::endl;
+	int	myints[] = {20,40,60,80,100};               //   myints: 20 40 60 80 100
+
+	ft::vector<int>myvector (myints,myints+5);      // myvector: 20 40 60 80 100
+
+	// using default comparison:
+	if (ft::equal(myvector.begin(), myvector.end(), myints))
+		std::cout << "The contents of both sequences are equal.\n";
+	else
+		std::cout << "The contents of both sequences differ.\n";
+
+	myvector[3] = 81;                           // myvector: 20 40 60 81 100
+}
+
+void	test_enable_if() {
+//	std::cout << "TESTING ENABLE_IF\n" << std::endl;
+}
+
+void	test_lexicographical_compare() {
 	std::cout << "TESTING LEXICOGRAPHICAL_COMPARE\n" << std::endl;
 
 	char	foo[]="Apple";
@@ -88,9 +128,20 @@ int	main() {
 	std::cout << "Using default comparison (operator<): ";
 	std::cout << ft::lexicographical_compare(foo,foo+5,bar,bar+9);
 	std::cout << '\n';
+}
 
-//	std::cout << "TESTING ENABLE_IF\n" << std::endl;
+//void	test_map() {
+//	std::cout << "/******** TESTING MAP ********/\n" << std::endl;
+//}
 
-	std::cout << "/******** TESTING MAP ********/\n" << std::endl;
+int	main() {
+	test_pair();
+	test_iterator();
+	test_vector();
+//	test_is_integral();
+	test_equal();
+//	test_lexicographical_compare();
+//	test_enable_if();
+//	test_map();
 	return 0;
 }
