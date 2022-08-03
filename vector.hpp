@@ -4,7 +4,9 @@
 #include <memory>
 #include <limits>
 #include <cstddef>
-//#include <iostream>
+#include <iostream>
+#include "utils.hpp"
+#include "iterator_traits.hpp"
 
 namespace ft {
 
@@ -27,6 +29,15 @@ namespace ft {
 			MyIterator(const T* vector) { *this = vector; };
 			~MyIterator() {};
 
+			iterator				begin() { return _pos; };
+			const_iterator			begin() const { return _pos; };
+			iterator				end() { return _pos; };
+			const_iterator			end() const { return _pos; };
+//			reverse_iterator		rbegin() { return _pos; };
+//			const_reverse_iterator	rbegin() const { return _pos; };
+//			reverse_iterator		rend() { return _pos; };
+//			const_reverse_iterator	rend() const { return _pos; };
+
 			iterator	operator++(int) { return _pos++; };
 			iterator	operator++() { ++_pos; return *this; };
 			iterator	operator* () const { return *_pos; };
@@ -36,14 +47,6 @@ namespace ft {
 			iterator	operator!=(const iterator& rhs) const { return _pos != rhs._pos; };
 		private:
 			pointer	_pos;
-	};
-
-	struct	std::iterator_traits<MyIterator> {
-		typedef ptrdiff_t	difference_type;
-		typedef T			value_type;
-		typedef T&			reference;
-		typedef T*			pointer;
-//		typedef ????		iterator_category;
 	};
 
 //	template<typename T>
@@ -215,13 +218,16 @@ namespace ft {
 
 				//single element (1)
 				iterator	insert(iterator pos, const value_type& val) {
-					insert(pos, 1, value);
+					insert(pos, 1, val);
 					return pos;
 				};
 
 				//fill (2)
-				void		insert(iterator position, size_type n,
-								const value_type& value) {
+				void		insert(iterator pos, size_type n,
+								const value_type& val) {
+					(void)pos;
+					(void)n;
+					(void)val;
 				};
 
 				//range (3)
