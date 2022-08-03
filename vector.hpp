@@ -10,113 +10,83 @@
 
 namespace ft {
 	template <typename T, class Allocator>	class vector;
-	template <typename T> class	MyIterator;
+/*
+	template <class T> class	MyIterator;
 
-	template <typename T>
+	template <class T>
 	class	MyIterator {
 		public:
-			typedef MyIterator<T>							iterator;
 			typedef T										value_type;
 			typedef T*										pointer;
 			typedef T&										reference;
-			typedef const T*								const_iterator;
 			typedef ptrdiff_t								difference_type;
+			
 //			typedef std::reverse_iterator<iterator>			reverse_iterator;
 //			typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
 
-			MyIterator() : _pos(NULL) {} ;
-			MyIterator(const T* vector) { *this = vector; };
-			~MyIterator() {};
-
-			iterator				begin() { return _pos; };
-			const_iterator			begin() const { return _pos; };
-			iterator				end() { return _pos; };
-			const_iterator			end() const { return _pos; };
+//			pointer					begin() { return _pos; };
+//			pointer					end(difference_type v) { return _pos + v; };
 //			reverse_iterator		rbegin() { return _pos; };
 //			const_reverse_iterator	rbegin() const { return _pos; };
 //			reverse_iterator		rend() { return _pos; };
 //			const_reverse_iterator	rend() const { return _pos; };
 
-			iterator	operator++(int) { return _pos++; };
-			iterator	operator++() { ++_pos; return *this; };
-			iterator	operator* () const { return *_pos; };
-			iterator	operator->() const { return _pos; };
-			iterator	operator+ (difference_type v) const { return _pos + v; };
-			iterator	operator==(const iterator& rhs) const { return _pos == rhs._pos; };
-			iterator	operator!=(const iterator& rhs) const { return _pos != rhs._pos; };
 		private:
+			typedef MyIterator<T>	iterator;
 			pointer	_pos;
-	};
 
-//	template<typename T>
-//	class	iterator {
-//		iterator(const iterator&);
-//		~iterator();
-//		iterator& operator=(const iterator&);
-//		iterator& operator++();
-//		reference operator*() const;
-//		friend void swap(iterator& lhs, iterator rhs);
-//	};
-//
-//input_iterator : public virtual iterator {
-//	iterator operator++(int);
-//	value_type operator*() const;
-//	pointer operator->() const;
-//	friend bool operator==(const iterator&, const iterator&);
-//	friend bool operator!=(const iterator&, const iterator&);
-//};
-//
-//
-//output_iterator : public virtual iterator {
-//	reference operator*() const;
-//	iterator operator++(int);
-//};
-//
-//forward_iterator : input_iterator, output_iterator{
-//	forward_iterator();
-//};
-//
-//bidirectional_iterator : forward_iterator {
-//	iterator& operator--();
-//	iterator operator--(int);
-// };
-//
-//random_access_iterator : bidirectionel_iterator {
-//	friend bool operator<(const iterator&, const iterator&);
-//	friend bool operator>(const iterator&, const iterator&);
-//	friend bool operator<=(const iterator&, const iterator&);
-//	friend bool operator>=(const iterator&, const iterator&);
-//
-//	iterator& operator+=(size_type);
-//	friend iterator operator+(const iterator&, size_type);
-//	friend iterator operator+(size_type, const iterator&);
-//	iterator& operator-=(size_type);
-//	friend iterator operator- const iterator&, size_type);
-//	friend difference_type operator-(iterator, iterator);
-//
-//	reference operator[](size_type) const;
-//};
-//
-	template <class T, class Allocator = std::allocator<T> >
+		public:
+			MyIterator() : _pos(NULL) {} ;
+			MyIterator(const iterator &it) { *this = it; };
+			~MyIterator() {};
+
+			iterator	operator++(int) { return _pos++; };
+			iterator	&operator++() { ++_pos; return *this; };
+			reference	operator*() const { return *_pos; };
+			pointer		operator->() const { return _pos; };
+			reference	operator+(difference_type v) const { return _pos + v; };
+			reference	operator[](difference_type v) const { return *(_pos + v); };
+			iterator	&operator=(const iterator &it) {
+//				clear();
+//				insert(begin(), it.begin(), it.end());
+				_pos = it._pos;
+				return *this;
+			};
+			bool		operator==(const iterator &rhs) const { return _pos == rhs._pos; };
+			bool		operator!=(const iterator &rhs) const { return _pos != rhs._pos; };
+	};
+	*/
+
+	template <typename T, class Allocator = std::allocator<T> >
 		class vector {
 			public:
 				/* TYPES */
-				typedef typename Allocator::reference			reference;
-				typedef typename Allocator::const_reference		const_reference;
 				typedef T										value_type;
-				typedef T*										iterator;
-				typedef const T*								const_iterator;
 				typedef size_t									size_type;
 				typedef ptrdiff_t								difference_type;
+//				typedef T*										pointer;
+				typedef T*										iterator;
+//				typedef const T*								const_pointeur;
+				typedef const T*								const_iterator;
+				typedef T&										reference;
+				typedef const T&								const_reference;
+//				typedef MyIterator<T>							iterator;
+//				typedef const iterator							const_iterator;
+//				typedef MyReverseIterator<iterator>				reverse_iterator;
+//				typedef MyReverseIterator<const_iterator>		const_reverse_iterator;
 				typedef Allocator								allocator_type;
-				typedef typename Allocator::pointer				pointer;
-				typedef typename Allocator::const_pointer		const_pointer;
-				typedef std::reverse_iterator<iterator>			reverse_iterator;
-				typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
+//				typedef typename Allocator::reference			reference;
+//				typedef typename Allocator::const_reference		const_reference;
+//				typedef typename Allocator::pointer				pointer;
+//				typedef typename Allocator::const_pointer		const_pointer;
+//				typedef std::reverse_iterator<iterator>			reverse_iterator;
+//				typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 			private:
 				Allocator	_alloc;
 				iterator	_p;
+//				pointer		_p;
+//				iterator	_it;
 				size_type	_size;
 				size_type	_capacity;
 			public:
@@ -125,9 +95,11 @@ namespace ft {
 				vector() : _p(NULL), _size(0), _capacity(0) {};
 
 				//fill (2)
-				vector(size_type n) //, const value_type &val = value_type())
+				vector(size_type n, const value_type &val = value_type())
 					: _size(n), _capacity(n) {
-						_p = _alloc.allocate(n);
+						_p = _alloc.allocate(_size);
+//						_it = _p.begin();
+						(void)val;
 				};
 
 				vector	&operator=(const vector<T, Allocator> &vector) {
@@ -138,8 +110,8 @@ namespace ft {
 				};
 
 				//range (3)
-				template <class MyIterator>
-					vector(MyIterator first, MyIterator last,
+				template <class iterator>
+					vector(iterator first, iterator last,
 							const Allocator& = Allocator()) {
 //						MyIterator	tmp = _p;
 
@@ -152,7 +124,7 @@ namespace ft {
 				vector(const vector<T, Allocator> &vector) { *this = vector; };
 
 				~vector() {
-					_alloc.deallocate(_p, _capacity);
+//					_alloc.deallocate(_p.begin(), _capacity);
 				};
 
 //				template <class InputIterator>
@@ -172,8 +144,8 @@ namespace ft {
 				/* ITERATORS */
 				iterator				begin() { return _p; };
 				const_iterator			begin() const { return _p; };
-				iterator				end() { return _p + _size; };
-				const_iterator			end() const { return _p + _size; };
+				iterator				end() { return _p + _capacity; };
+				const_iterator			end() const { return _p + _capacity; };
 //				reverse_iterator		rbegin() { return _pos; };
 //				const_reverse_iterator	rbegin() const { return _pos; };
 //				reverse_iterator		rend() { return _pos; };
@@ -184,7 +156,7 @@ namespace ft {
 				size_type	capacity() const { return _capacity; };
 
 				size_type	max_size() const {
-					return std::numeric_limits<size_type>::max(); };
+					return std::numeric_limits<value_type>::max(); };
 
 				bool		empty() const { return false; };
 
@@ -200,11 +172,11 @@ namespace ft {
 				reference		operator[](size_type n) {
 					if (n >= _capacity)
 						throw std::out_of_range("");
-					return *(_p + n);
+					return _p[n];
 				};
-				const_reference	operator[](size_type n) const { return *(_p + n); };
-				const_reference	at(size_type n) const { return *(_p + n); };
+				const_reference	operator[](size_type n) const { return _p[n]; };
 				reference		at(size_type n) { return *(_p + n); };
+				const_reference	at(size_type n) const { return *(_p + n); };
 				reference		front() { return _p; };
 				const_reference	front() const { return _p; };
 				reference		back() { return _p + _capacity; };

@@ -25,11 +25,21 @@ void	test_pair() {
 
 void	test_iterator() {
 	std::cout << "TESTING ITERATOR\n" << std::endl;
+
+	int	n = 7;
+	ft::vector<int>					vect(n);
+
+	for (int i = 0; i < n; i++) {
+		vect[i] = i;
+	}
+//	ft::MyIterator<int> it(vect.begin());
+
 //	std::cout << "TESTING REVERSE_ITERATOR\n" << std::endl;
 //	std::cout << "TESTING ITERATOR_TRAITS\n" << std::endl;
 //
 }
 
+#include <unistd.h>
 void	test_vector() {
 	std::cout << "/******** TESTING VECTOR ********/\n" << std::endl;
 
@@ -42,6 +52,7 @@ void	test_vector() {
 	std::cout << "TESTING OPERATOR[]\n" << std::endl;
 
 	try {
+	write(1, "1", 1);
 		for (int i = 0; i < n; i++) {
 			vect[i] = i;
 			std::cout << "vector[" << i << "] = " << vect[i] << std::endl;
@@ -49,14 +60,13 @@ void	test_vector() {
 		int big = n + 1;
 
 		vect[big] = 42;
-		std::cout << "TESTING \nvect.at()\n add + 10" << std::endl;
 	} catch (std::exception &e) {
 		e.what();
 	}
 
 	for (int i = 0; i < n; i++) {
-		vect.at(i) = i + 5;
-		vect.at(i) += 5;
+		vect[i] = i + 5;
+		vect[i] += 5;
 	}
 
 	for (int i = 0; i < n; i++) {
@@ -64,14 +74,14 @@ void	test_vector() {
 	}
 
 	std::cout << "overflow: vect.at(1) = " << INT_MAX << " + 1" << std::endl;
-	vect.at(1) = INT_MAX;
-	vect.at(1) += 1;
+	vect[1] = INT_MAX;
+	vect[1] += 1;
 	std::cout << "vect.at(1) = " << vect.at(1) << std::endl;
 
 	std::cout << "TESTING MAX_SIZE\n"
 		<< "max_size = " << vect.max_size() << std::endl;
 
-//	ft::vector<int>	vect_cpy(vect);
+	ft::vector<int>	vect_cpy(vect);
 
 	std::cout << "\nvect.insert() TESTS:\n" << std::endl;
 
