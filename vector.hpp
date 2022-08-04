@@ -97,10 +97,11 @@ namespace ft {
 				//fill (2)
 				vector(size_type n, const value_type &val = value_type())
 					: _size(n), _capacity(n) {
-						_p = _alloc.allocate(_size);
+						_p = _alloc.allocate(_capacity);
+//						for (
 //						_it = _p.begin();
 						(void)val;
-				};
+				}
 
 				vector	&operator=(const vector<T, Allocator> &vector) {
 					_alloc = vector._alloc;
@@ -112,20 +113,22 @@ namespace ft {
 				//range (3)
 				template <class iterator>
 					vector(iterator first, iterator last,
-							const Allocator& = Allocator()) : _p(NULL) {
+							const Allocator& = Allocator())
+							: _p(NULL), _size(0), _capacity(0) {
 
-						_capacity = last - first;
+						if (last >= first)
+							_capacity = last - first;
 						_size = _capacity;
-						std::cout << last-first << std::endl;
-						_p = _alloc.allocate(_capacity);// + 1);
+						std::cout << "Constructor _capacity = " << _capacity << std::endl;
+						_p = _alloc.allocate(_capacity);
 						while (first != last) {
 							_alloc.construct(_p, *first);
-//							std::cout << *first << std::endl;
+							std::cout << *first << std::endl;
 							++first;
 							++_p;
 						}
 //						_p -= _capacity;
-						iterator it = _p;
+						iterator it = begin();
 						std:: cout << "_p = " << *it << std::endl;
 //						for (iterator	it = begin(); it != end(); ++it) {
 //							std:: cout << "_p = " << *it << std::endl;
@@ -156,8 +159,8 @@ namespace ft {
 				/* ITERATORS */
 				iterator				begin() { return _p; };
 				const_iterator			begin() const { return _p; };
-				iterator				end() { return _p + _capacity; };
-				const_iterator			end() const { return _p + _capacity; };
+				iterator				end() { return _p + _size; };
+				const_iterator			end() const { return _p + _size; };
 //				reverse_iterator		rbegin() { return _pos; };
 //				const_reverse_iterator	rbegin() const { return _pos; };
 //				reverse_iterator		rend() { return _pos; };
@@ -168,7 +171,7 @@ namespace ft {
 				size_type	capacity() const { return _capacity; };
 
 				size_type	max_size() const {
-					return std::numeric_limits<value_type>::max(); };
+					return std::numeric_limits<size_type>::max() / sizeof(difference_type); };
 
 				bool		empty() const { return false; };
 
@@ -186,15 +189,26 @@ namespace ft {
 					value_type	tmp[_size];
 
 					for (size_t i = 0; i < _size; i++) {
-						tmp[i] = _p[i];
+						tmp[i] = *(_p + i);
 					}
 					_alloc.deallocate(_p, _capacity);
+//					_alloc.destroy(_p);
 					_p = _alloc.allocate(n);
-					for (size_t i = 0; i < _size; i++) {
-						_alloc.construct(_p, tmp[i]);
+//					for (size_t i = 0; i < _size; i++) {
+					size_t	i = 0;
+					std::cout << _size << std::endl;
+					while (i < _size) {
+						_alloc.construct(_p + i, tmp[i]);
+						++i;
 					}
 					_capacity = n;
-					std::cout << "Reserve add :" << (int)(_capacity - _size) << std::endl;
+					std::cout << "AFTER RESERVE" << std::endl;
+					for (iterator it = begin(); it != end(); it++) {
+						std::cout << "_p =" << *it << std::endl;
+					}
+//					std::cout << "Reserve add :" << (int)(_capacity - _size) << std::endl;
+					std::cout << "Reserve _capacity:" << _capacity << std::endl;
+					std::cout << "Reserve _size:" << _size << std::endl;
 				}
 
 				/* ELEMENT ACCES */
@@ -208,8 +222,8 @@ namespace ft {
 				const_reference	at(size_type n) const { return *(_p + n); };
 				reference		front() { return _p; };
 				const_reference	front() const { return _p; };
-				reference		back() { return _p + _capacity; };
-				const_reference	back() const { return _p + _capacity; };
+				reference		back() { return _p + _size; };
+				const_reference	back() const { return _p + _size; };
 
 				/* MODIFIERS */
 

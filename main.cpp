@@ -29,9 +29,15 @@ void	test_iterator() {
 	int	n = 7;
 	ft::vector<int>					vect(n);
 
-	for (int i = 0; i < n; i++) {
-		vect[i] = i;
+	ft::vector<int>::iterator		it;
+	int	i = 0;
+
+	for (it = vect.begin(); it != vect.end(); it++) {
+		vect[i] = *it;
+		std::cout << "vect[" << i << "] = " << vect[i] << std::endl;
+		i++;
 	}
+
 //	ft::MyIterator<int> it(vect.begin());
 
 //	std::cout << "TESTING REVERSE_ITERATOR\n" << std::endl;
@@ -84,9 +90,10 @@ void	test_vector() {
 	ft::vector<int>	vect_cpy(vect);
 
 	std::cout << "\nvect.insert() TESTS:\n" << std::endl;
+	std::cout << "n = " << n << std::endl;
 
 
-	vect.insert(vect.end(), n + 1);
+//	vect.insert(vect.end(), n + 1);
 }
 
 void	test_is_integral() {
@@ -111,15 +118,15 @@ void	test_equal() {
 	std::cout << "TESTING EQUAL\n" << std::endl;
 	int	myints[] = {20,40,60,80,100};               //   myints: 20 40 60 80 100
 
-	ft::vector<int>myvector (myints,myints+5);      // myvector: 20 40 60 80 100
+	ft::vector<int>	myvector(myints, myints+5);      // myvector: 20 40 60 80 100
 
 	// using default comparison:
-	if (ft::equal(myvector.begin(), myvector.end(), myints))
-		std::cout << "The contents of both sequences are equal.\n";
-	else
-		std::cout << "The contents of both sequences differ.\n";
+//	if (ft::equal(myvector.begin(), myvector.end(), myints))
+//		std::cout << "The contents of both sequences are equal.\n";
+//	else
+//		std::cout << "The contents of both sequences differ.\n";
 
-	myvector[3] = 81;                           // myvector: 20 40 60 81 100
+//	myvector[3] = 81;                           // myvector: 20 40 60 81 100
 }
 
 void	test_enable_if() {
