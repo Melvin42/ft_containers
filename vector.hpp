@@ -112,12 +112,24 @@ namespace ft {
 				//range (3)
 				template <class iterator>
 					vector(iterator first, iterator last,
-							const Allocator& = Allocator()) {
-//						MyIterator	tmp = _p;
+							const Allocator& = Allocator()) : _p(NULL) {
 
-						_p = _alloc.allocate(last - first);
-//						while (first != last)
-//							*first = va
+						_capacity = last - first;
+						_size = _capacity;
+						std::cout << last-first << std::endl;
+						_p = _alloc.allocate(_capacity);// + 1);
+						while (first != last) {
+							_alloc.construct(_p, *first);
+//							std::cout << *first << std::endl;
+							++first;
+							++_p;
+						}
+//						_p -= _capacity;
+						iterator it = _p;
+						std:: cout << "_p = " << *it << std::endl;
+//						for (iterator	it = begin(); it != end(); ++it) {
+//							std:: cout << "_p = " << *it << std::endl;
+//						}
 					};
 
 				//copy (4)
@@ -161,12 +173,29 @@ namespace ft {
 				bool		empty() const { return false; };
 
 				void		resize(size_type sz) {
-					(void)sz;
+					if (sz < _capacity)
+						_p[sz] = 0;
+					else {
+//						insert();
+						_p[sz] = 0;
+						//destroy
+					}
 				};
 
 				void		reserve(size_type n) {
-					(void)n;
-				};
+					value_type	tmp[_size];
+
+					for (size_t i = 0; i < _size; i++) {
+						tmp[i] = _p[i];
+					}
+					_alloc.deallocate(_p, _capacity);
+					_p = _alloc.allocate(n);
+					for (size_t i = 0; i < _size; i++) {
+						_alloc.construct(_p, tmp[i]);
+					}
+					_capacity = n;
+					std::cout << "Reserve add :" << (int)(_capacity - _size) << std::endl;
+				}
 
 				/* ELEMENT ACCES */
 				reference		operator[](size_type n) {
@@ -201,8 +230,9 @@ namespace ft {
 				//fill (2)
 				void		insert(iterator pos, size_type n,
 								const value_type& val) {
+					reserve(n);
+
 					(void)pos;
-					(void)n;
 					(void)val;
 				};
 

@@ -85,7 +85,8 @@ void	test_vector() {
 
 	std::cout << "\nvect.insert() TESTS:\n" << std::endl;
 
-//	vect.insert(vect.end(), n + 1);
+
+	vect.insert(vect.end(), n + 1);
 }
 
 void	test_is_integral() {
