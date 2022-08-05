@@ -157,7 +157,7 @@ int	main() {
 	test_iterator();
 	test_vector();
 //	test_is_integral();
-	test_equal();
+//	test_equal();
 //	test_lexicographical_compare();
 //	test_enable_if();
 //	test_map();

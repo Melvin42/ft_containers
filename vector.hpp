@@ -103,7 +103,7 @@ namespace ft {
 
 				vector	&operator=(const vector<T, Allocator> &vector) {
 					_alloc = vector._alloc;
-					_p = vector._p;
+//					_p = vector._p;
 					_size = vector._size;
 					_capacity = vector._capacity;
 					return *this;
@@ -242,15 +242,17 @@ namespace ft {
 				//fill (2)
 				void		insert(iterator pos, size_type n,
 								const value_type& val) {
-//					_size = 50;
-//					value_type	tmp[50] = {0};
+					value_type	tmp[_size];
 
 					reserve(n);
 
-					std::cout << pos << std::endl;
+//					std::cout <<  << std::endl;
+//					//copier que juska pos
 					for (size_t i = 0; i < _size; i++) {
-//						tmp[i] = *(_p + i);
+						tmp[i] = *(_p + i);
 					}
+
+					//inserer n value depuis pos
 
 					(void)pos;
 					(void)val;
