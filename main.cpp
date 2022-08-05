@@ -13,14 +13,14 @@
 
 void	test_pair() {
 	std::cout << "/******** TESTING PAIR ********/\n" << std::endl;
-		std::pair <int,int> pair1;
-		std::pair <int,int> pair2;
+	std::pair <int,int> pair1;
+	std::pair <int,int> pair2;
 
-		pair1 = std::make_pair (10,20);
-		pair2 = std::make_pair (10.5,'A'); // ok: implicit conversion from pair<double,char>
+	pair1 = std::make_pair (10,20);
+	pair2 = std::make_pair (10.5,'A'); // ok: implicit conversion from pair<double,char>
 
-		std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
-		std::cout << "pair2: " << pair2.first << ", " << pair2.second << '\n';
+	std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
+	std::cout << "pair2: " << pair2.first << ", " << pair2.second << '\n';
 }
 
 void	test_iterator() {
@@ -93,7 +93,7 @@ void	test_vector() {
 	std::cout << "n = " << n << std::endl;
 
 
-//	vect.insert(vect.end(), n + 1);
+	vect.insert(vect.end(), n + 1);
 }
 
 void	test_is_integral() {
@@ -121,12 +121,12 @@ void	test_equal() {
 	ft::vector<int>	myvector(myints, myints+5);      // myvector: 20 40 60 80 100
 
 	// using default comparison:
-//	if (ft::equal(myvector.begin(), myvector.end(), myints))
-//		std::cout << "The contents of both sequences are equal.\n";
-//	else
-//		std::cout << "The contents of both sequences differ.\n";
+	if (ft::equal(myvector.begin(), myvector.end(), myints))
+		std::cout << "The contents of both sequences are equal.\n";
+	else
+		std::cout << "The contents of both sequences differ.\n";
 
-//	myvector[3] = 81;                           // myvector: 20 40 60 81 100
+	myvector[3] = 81;                           // myvector: 20 40 60 81 100
 }
 
 void	test_enable_if() {

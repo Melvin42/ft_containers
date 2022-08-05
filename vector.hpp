@@ -32,7 +32,7 @@ namespace ft {
 //			const_reverse_iterator	rend() const { return _pos; };
 
 		private:
-			typedef MyIterator<T>	iterator;
+//			typedef MyIterator<T>	iterator;
 			pointer	_pos;
 
 		public:
@@ -96,15 +96,14 @@ namespace ft {
 
 				//fill (2)
 				vector(size_type n, const value_type &val = value_type())
-					: _size(n), _capacity(n) {
+					: _p(NULL), _size(n), _capacity(n) {
 						_p = _alloc.allocate(_capacity);
-//						for (
-//						_it = _p.begin();
 						(void)val;
 				}
 
 				vector	&operator=(const vector<T, Allocator> &vector) {
 					_alloc = vector._alloc;
+					_p = vector._p;
 					_size = vector._size;
 					_capacity = vector._capacity;
 					return *this;
@@ -183,8 +182,7 @@ namespace ft {
 						_p[sz] = 0;
 						//destroy
 					}
-				};
-
+				}; 
 				void		reserve(size_type n) {
 					value_type	tmp[_size];
 
@@ -244,7 +242,15 @@ namespace ft {
 				//fill (2)
 				void		insert(iterator pos, size_type n,
 								const value_type& val) {
+//					_size = 50;
+//					value_type	tmp[50] = {0};
+
 					reserve(n);
+
+					std::cout << pos << std::endl;
+					for (size_t i = 0; i < _size; i++) {
+//						tmp[i] = *(_p + i);
+					}
 
 					(void)pos;
 					(void)val;
