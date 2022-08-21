@@ -61,11 +61,12 @@ void	test_vector() {
 			vect[i] = i;
 			std::cout << "vector[" << i << "] = " << vect[i] << std::endl;
 		}
+		std::cout << "size = " << vect.size() << '\n';
+		vect.resize(4);
 		int big = n + 1;
 
 		(void)big;
 //		vect[big] = 42;
-	std::cout << "COUCOUCOU\n";
 	} catch (std::exception &e) {
 		e.what();
 	}
@@ -75,15 +76,19 @@ void	test_vector() {
 		vect[i] += 5;
 	}
 
-	for (int i = 0; i < n; i++) {
-		std::cout << "vector.at(" << i << ") = " << vect.at(i) << std::endl;
+	try {
+		std::cout << "vector size = " << vect.size() << '\n';
+		for (int i = 0; i < n; i++) {
+			std::cout << "vector.at(" << i << ") = " << vect.at(i) << std::endl;
+		}
+	} catch (std::exception &e) {
+		e.what();
 	}
 
-	std::cout << "overflow: vect.at(1) = " << INT_MAX << " + 1" << std::endl;
-	vect[1] = INT_MAX;
-	vect[1] += 1;
-	std::cout << "vect.at(1) = " << vect.at(1) << std::endl;
-
+		std::cout << "overflow: vect.at(1) = " << INT_MAX << " + 1" << std::endl;
+		vect[1] = INT_MAX;
+		vect[1] += 1;
+		std::cout << "vect.at(1) = " << vect.at(1) << std::endl;
 	std::cout << "TESTING MAX_SIZE\n"
 		<< "max_size = " << vect.max_size() << std::endl;
 
@@ -107,6 +112,27 @@ void	test_vector() {
 		i++;
 	}
 //	vect.insert(it+2, anotherVector.begin(), anotherVector.end());
+	std::cout << "TESTING ASSIGN\n";
+	ft::vector<int>	first;
+	ft::vector<int>	second;
+	ft::vector<int>	third;
+
+	first.assign(7, 100);
+	for (ft::vector<int>::iterator it = first.begin(); it != first.end(); it++) {
+		std::cout << "AssignVect = " << *it << '\n';
+	}
+
+	ft::vector<int>::iterator it;
+	it = first.begin()+1;
+
+	second.assign(it,first.end()-1); // the 5 central values of first
+
+	int	myints[] = {1776,7,4};
+	third.assign(myints,myints+3);   // assigning from array.
+
+	std::cout << "Size of first: " << int (first.size()) << '\n';
+	std::cout << "Size of second: " << int (second.size()) << '\n';
+	std::cout << "Size of third: " << int (third.size()) << '\n';
 	std::cout << "TESTING PUSH_BACK\n";
 	ft::vector<int> myVector;
 
@@ -115,7 +141,6 @@ void	test_vector() {
 
 	for (int j = 0; j < 10; j++) std::cout << "push back : " << myVector.at(j) << '\n';
 	// erase the 6th element
-	//
 	myVector.erase(myVector.begin() + 5);
 
 	for (int j = 0; j < 9; j++) std::cout << "push back : " << myVector.at(j) << '\n';
@@ -149,9 +174,8 @@ void	test_is_integral() {
 
 void	test_equal() {
 	std::cout << "TESTING EQUAL\n" << std::endl;
-	int	myints[] = {20,40,60,80,100};               //   myints: 20 40 60 80 100
-
-	ft::vector<int>	myvector(myints, myints+5);      // myvector: 20 40 60 80 100
+	int				myints[] = {20, 40, 60, 80, 100};//  myints: 20 40 60 80 100
+	ft::vector<int>	myvector(myints, myints + 5);   // myvector: 20 40 60 80 100
 
 	// using default comparison:
 	if (ft::equal(myvector.begin(), myvector.end(), myints))
@@ -159,11 +183,11 @@ void	test_equal() {
 	else
 		std::cout << "The contents of both sequences differ.\n";
 
-//	myvector[3] = 81;                           // myvector: 20 40 60 81 100
+	myvector[3] = 81;                               // myvector: 20 40 60 81 100
 }
 
 void	test_enable_if() {
-//	std::cout << "TESTING ENABLE_IF\n" << std::endl;
+	std::cout << "TESTING ENABLE_IF\n" << std::endl;
 }
 
 void	test_lexicographical_compare() {
