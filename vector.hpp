@@ -61,36 +61,26 @@ namespace ft {
 		class vector {
 			public:
 				/* TYPES */
+
 				typedef T										value_type;
 				typedef size_t									size_type;
 				typedef ptrdiff_t								difference_type;
-//				typedef T*										pointer;
 				typedef T*										iterator;
-//				typedef const T*								const_pointeur;
 				typedef const T*								const_iterator;
 				typedef T&										reference;
 				typedef const T&								const_reference;
-//				typedef MyIterator<T>							iterator;
-//				typedef const iterator							const_iterator;
-//				typedef MyReverseIterator<iterator>				reverse_iterator;
-//				typedef MyReverseIterator<const_iterator>		const_reverse_iterator;
 				typedef Allocator								allocator_type;
-//				typedef typename Allocator::reference			reference;
-//				typedef typename Allocator::const_reference		const_reference;
-//				typedef typename Allocator::pointer				pointer;
-//				typedef typename Allocator::const_pointer		const_pointer;
 //				typedef std::reverse_iterator<iterator>			reverse_iterator;
 //				typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 			private:
 				Allocator	_alloc;
 				iterator	_p;
-//				pointer		_p;
-//				iterator	_it;
 				size_type	_size;
 				size_type	_capacity;
 			public:
 				/* CONSTRUCT/COPY/DESTROY */
+
 				//default (1)
 				vector() : _p(NULL), _size(0), _capacity(0) {};
 
@@ -98,47 +88,41 @@ namespace ft {
 				vector(size_type n, const value_type &val = value_type())
 					: _p(NULL), _size(n), _capacity(n) {
 						_p = _alloc.allocate(_capacity);
-						(void)val;
+						for (size_t i = 0; i < n; i++) {
+							_alloc.construct(_p + i, val);
+						}
 				}
 
 				vector	&operator=(const vector<T, Allocator> &vector) {
 					_alloc = vector._alloc;
-//					_p = vector._p;
+					_p = vector._p;
 					_size = vector._size;
 					_capacity = vector._capacity;
 					return *this;
 				};
 
 				//range (3)
-				template <class iterator>
-					vector(iterator first, iterator last,
-							const Allocator& = Allocator())
-							: _p(NULL), _size(0), _capacity(0) {
+				vector(iterator first, iterator last,
+						const Allocator& = Allocator())
+						: _p(NULL), _size(0), _capacity(0) {
 
-						if (last >= first)
-							_capacity = last - first;
-						_size = _capacity;
-						std::cout << "Constructor _capacity = " << _capacity << std::endl;
-						_p = _alloc.allocate(_capacity);
-						while (first != last) {
-							_alloc.construct(_p, *first);
-							std::cout << *first << std::endl;
-							++first;
-							++_p;
-						}
-//						_p -= _capacity;
-						iterator it = begin();
-						std:: cout << "_p = " << *it << std::endl;
-//						for (iterator	it = begin(); it != end(); ++it) {
-//							std:: cout << "_p = " << *it << std::endl;
-//						}
-					};
+					if (last >= first)
+						_capacity = last - first;
+					_size = _capacity;
+					_p = _alloc.allocate(_capacity);
+					for (size_t i = 0; first != last; i++) {
+						_alloc.construct(_p + i, *first);
+						++first;
+					}
+				};
 
 				//copy (4)
 				vector(const vector<T, Allocator> &vector) { *this = vector; };
 
 				~vector() {
-//					_alloc.deallocate(_p.begin(), _capacity);
+//					if (_capacity > 0)
+//						_alloc.deallocate(_p, _capacity);
+//					_alloc.destroy(_p);
 				};
 
 //				template <class InputIterator>
@@ -183,33 +167,24 @@ namespace ft {
 						//destroy
 					}
 				}; 
+
 				void		reserve(size_type n) {
 					value_type	tmp[_size];
 
 					for (size_t i = 0; i < _size; i++) {
 						tmp[i] = *(_p + i);
 					}
-					_alloc.deallocate(_p, _capacity);
-//					_alloc.destroy(_p);
-					_p = _alloc.allocate(n);
-//					for (size_t i = 0; i < _size; i++) {
-					size_t	i = 0;
-					std::cout << _size << std::endl;
-					while (i < _size) {
+					if (_capacity > 0)
+						_alloc.deallocate(_p, _capacity);
+					_capacity += n;
+					_p = _alloc.allocate(_capacity);
+					for (size_t i = 0; i < _size; i++) {
 						_alloc.construct(_p + i, tmp[i]);
-						++i;
 					}
-					_capacity = n;
-					std::cout << "AFTER RESERVE" << std::endl;
-					for (iterator it = begin(); it != end(); it++) {
-						std::cout << "_p =" << *it << std::endl;
-					}
-//					std::cout << "Reserve add :" << (int)(_capacity - _size) << std::endl;
-					std::cout << "Reserve _capacity:" << _capacity << std::endl;
-					std::cout << "Reserve _size:" << _size << std::endl;
 				}
 
 				/* ELEMENT ACCES */
+
 				reference		operator[](size_type n) {
 					if (n >= _capacity)
 						throw std::out_of_range("");
@@ -226,10 +201,17 @@ namespace ft {
 				/* MODIFIERS */
 
 				void		push_back(const value_type& val) {
-					(void)val;
+					if (_capacity == 0)
+						reserve(1);
+					else if (_size == _capacity)
+						reserve(_capacity + 1);
+					_alloc.construct(_p + _size, val);
+					++_size;
 				};
 
-				void		pop_back() {};
+				void		pop_back() {
+					--_size;
+				};
 
 				//INSERT
 
@@ -242,20 +224,14 @@ namespace ft {
 				//fill (2)
 				void		insert(iterator pos, size_type n,
 								const value_type& val) {
-					value_type	tmp[_size];
-
 					reserve(n);
-
-//					std::cout <<  << std::endl;
-//					//copier que juska pos
-					for (size_t i = 0; i < _size; i++) {
-						tmp[i] = *(_p + i);
-					}
-
-					//inserer n value depuis pos
-
+					iterator	it = begin() + _size;
 					(void)pos;
-					(void)val;
+					_size += n;
+					while (it != end()) {
+						*it = val;
+						++it;
+					}
 				};
 
 				//range (3)
@@ -263,6 +239,7 @@ namespace ft {
 //					void	insert(iterator position,
 //							InputIterator first, InputIterator last) {
 //					};
+
 //				void	insert(iterator position,
 //						iterator first, iterator last) {
 //				//move (4)
@@ -271,13 +248,57 @@ namespace ft {
 //				};
 
 				iterator	erase(iterator position) {
-					(void)position;
+					value_type	tmp[_size - 1];
+					iterator	it = begin();
+					size_t		i = 0;
+
+					while (it != position) {
+						tmp[i] = *it;
+						++it;
+						++i;
+					}
+					while (++it != end()) {
+						tmp[i] = *it;
+						++i;
+					}
+					--_size;
+					i = 0;
+					for (i = 0; i < _size; i++) {
+						_alloc.construct(_p + i, tmp[i]);
+					}
+					_alloc.construct(_p + i, 0);
+					return _p;
 				};
 
 				iterator	erase(iterator first, iterator last) {
-					(void)first;
-					(void)last;
+					int			diff = 0;
+
+					if (last - first > 0)
+						diff = last - first;
+					value_type	tmp[_size - diff];
+					iterator	it = begin();
+					size_t		i = 0;
+
+					while (it != first) {
+						tmp[i] = *it;
+						++it;
+						++i;
+					}
+					while (it != last) {
+						++it;
+					}
+					while (it != end()) {
+						tmp[i] = *it;
+						++it;
+						++i;
+					}
+					for (i = 0; i < _size; i++) {
+						_alloc.construct(_p + i, tmp[i]);
+					}
+					_size -= diff;
+					return _p;
 				};
+
 				void		swap(vector<T, Allocator> &) {};
 				void		clear() {};
 

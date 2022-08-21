@@ -13,14 +13,14 @@
 
 void	test_pair() {
 	std::cout << "/******** TESTING PAIR ********/\n" << std::endl;
-	std::pair <int,int> pair1;
-	std::pair <int,int> pair2;
+		std::pair <int,int> pair1;
+		std::pair <int,int> pair2;
 
-	pair1 = std::make_pair (10,20);
-	pair2 = std::make_pair (10.5,'A'); // ok: implicit conversion from pair<double,char>
+		pair1 = std::make_pair (10,20);
+		pair2 = std::make_pair (10.5,'A'); // ok: implicit conversion from pair<double,char>
 
-	std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
-	std::cout << "pair2: " << pair2.first << ", " << pair2.second << '\n';
+		std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
+		std::cout << "pair2: " << pair2.first << ", " << pair2.second << '\n';
 }
 
 void	test_iterator() {
@@ -45,7 +45,6 @@ void	test_iterator() {
 //
 }
 
-#include <unistd.h>
 void	test_vector() {
 	std::cout << "/******** TESTING VECTOR ********/\n" << std::endl;
 
@@ -58,14 +57,15 @@ void	test_vector() {
 	std::cout << "TESTING OPERATOR[]\n" << std::endl;
 
 	try {
-	write(1, "1", 1);
 		for (int i = 0; i < n; i++) {
 			vect[i] = i;
 			std::cout << "vector[" << i << "] = " << vect[i] << std::endl;
 		}
 		int big = n + 1;
 
-		vect[big] = 42;
+		(void)big;
+//		vect[big] = 42;
+	std::cout << "COUCOUCOU\n";
 	} catch (std::exception &e) {
 		e.what();
 	}
@@ -92,8 +92,41 @@ void	test_vector() {
 	std::cout << "\nvect.insert() TESTS:\n" << std::endl;
 	std::cout << "n = " << n << std::endl;
 
+	vect.insert(vect.end(), n + 1, 42);
+	size_t	i = 0;
+	for (ft::vector<int>::iterator it = vect.begin(); it != vect.end(); it++) {
+		std::cout << "vect[" << i << "] = " << *it << std::endl;
+//		std::cout << "vect[" << i << "] = " << vect[i] << std::endl;
+		++i;
+	}
+	ft::vector<int> anotherVector(2,400);
 
-	vect.insert(vect.end(), n + 1);
+	i = 0;
+	for (ft::vector<int>::iterator it = anotherVector.begin(); it != anotherVector.end(); it++) {
+		std::cout << "vect[" << i << "] = " << *it << std::endl;
+		i++;
+	}
+//	vect.insert(it+2, anotherVector.begin(), anotherVector.end());
+	std::cout << "TESTING PUSH_BACK\n";
+	ft::vector<int> myVector;
+
+	// set some values (from 1 to 10)
+	for (int j = 1; j <= 10; j++) myVector.push_back(j);
+
+	for (int j = 0; j < 10; j++) std::cout << "push back : " << myVector.at(j) << '\n';
+	// erase the 6th element
+	//
+	myVector.erase(myVector.begin() + 5);
+
+	for (int j = 0; j < 9; j++) std::cout << "push back : " << myVector.at(j) << '\n';
+
+	// erase the first 3 elements:
+	myVector.erase(myVector.begin(), myVector.begin() + 3);
+
+	std::cout << "myVector contains:";
+	for (size_t j = 0; j < myVector.size(); ++j)
+		std::cout << ' ' << myVector[j];
+	std::cout << '\n';
 }
 
 void	test_is_integral() {
@@ -126,7 +159,7 @@ void	test_equal() {
 	else
 		std::cout << "The contents of both sequences differ.\n";
 
-	myvector[3] = 81;                           // myvector: 20 40 60 81 100
+//	myvector[3] = 81;                           // myvector: 20 40 60 81 100
 }
 
 void	test_enable_if() {
@@ -157,7 +190,7 @@ int	main() {
 	test_iterator();
 	test_vector();
 //	test_is_integral();
-//	test_equal();
+	test_equal();
 //	test_lexicographical_compare();
 //	test_enable_if();
 //	test_map();
