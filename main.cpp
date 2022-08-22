@@ -35,8 +35,11 @@ void	test_iterator() {
 	for (it = vect.begin(); it != vect.end(); it++) {
 		vect[i] = *it;
 		std::cout << "vect[" << i << "] = " << vect[i] << std::endl;
+		vect[i] = i;
+	std::cout << "BACK = " << vect.back() << std::endl;
 		i++;
 	}
+//	vect[i] = i;
 
 //	ft::MyIterator<int> it(vect.begin());
 
@@ -49,10 +52,7 @@ void	test_vector() {
 	std::cout << "/******** TESTING VECTOR ********/\n" << std::endl;
 
 	int	n = 7;
-//	ft::vector<int>	vect;
 	ft::vector<int>					vect(n);
-//	ft::vector<int>::iterator		it;
-//	ft::vector<int>::const_iterator	const_it;
 
 	std::cout << "TESTING OPERATOR[]\n" << std::endl;
 
@@ -63,10 +63,12 @@ void	test_vector() {
 		}
 		std::cout << "size = " << vect.size() << '\n';
 		vect.resize(4);
+
+		std::cout << "after resize 4 size = " << vect.size() << '\n';
 		int big = n + 1;
 
 		(void)big;
-//		vect[big] = 42;
+		vect[big] = 42;
 	} catch (std::exception &e) {
 		e.what();
 	}
@@ -183,7 +185,7 @@ void	test_equal() {
 	else
 		std::cout << "The contents of both sequences differ.\n";
 
-	myvector[3] = 81;                               // myvector: 20 40 60 81 100
+//	myvector[3] = 81;                               // myvector: 20 40 60 81 100
 }
 
 void	test_enable_if() {
@@ -210,11 +212,11 @@ void	test_lexicographical_compare() {
 //}
 
 int	main() {
-	test_pair();
+//	test_pair();
 	test_iterator();
 	test_vector();
 //	test_is_integral();
-	test_equal();
+//	test_equal();
 //	test_lexicographical_compare();
 //	test_enable_if();
 //	test_map();
