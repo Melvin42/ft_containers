@@ -36,7 +36,7 @@ void	test_iterator() {
 		vect[i] = *it;
 		std::cout << "vect[" << i << "] = " << vect[i] << std::endl;
 		vect[i] = i;
-	std::cout << "BACK = " << vect.back() << std::endl;
+		std::cout << "BACK = " << vect.back() << std::endl;
 		i++;
 	}
 //	vect[i] = i;
@@ -56,6 +56,7 @@ void	test_vector() {
 
 	std::cout << "TESTING OPERATOR[]\n" << std::endl;
 
+/*
 	try {
 		for (int i = 0; i < n; i++) {
 			vect[i] = i;
@@ -67,7 +68,6 @@ void	test_vector() {
 		std::cout << "after resize 4 size = " << vect.size() << '\n';
 		int big = n + 1;
 
-		(void)big;
 		vect[big] = 42;
 	} catch (std::exception &e) {
 		e.what();
@@ -96,16 +96,27 @@ void	test_vector() {
 
 	ft::vector<int>	vect_cpy(vect);
 
+	*/
 	std::cout << "\nvect.insert() TESTS:\n" << std::endl;
-	std::cout << "n = " << n << std::endl;
+//	std::cout << "n = " << n << std::endl;
 
-	vect.insert(vect.end(), n + 1, 42);
+	ft::vector<int> vectorOne;
+
+	vectorOne.insert(vectorOne.begin(), 2, 42);
+	vectorOne.insert(vectorOne.end(), 12);
+	vectorOne.insert(vectorOne.begin(), 2, 41);
+
+//	vectorOne.insert(vectorOne.begin() + 2, vectorOne.begin(), vectorOne.end());
+
 	size_t	i = 0;
-	for (ft::vector<int>::iterator it = vect.begin(); it != vect.end(); it++) {
+
+	for (ft::vector<int>::iterator it = vectorOne.begin(); it != vectorOne.end(); it++) {
 		std::cout << "vect[" << i << "] = " << *it << std::endl;
 //		std::cout << "vect[" << i << "] = " << vect[i] << std::endl;
 		++i;
 	}
+
+	std::cout << std::endl;
 	ft::vector<int> anotherVector(2,400);
 
 	i = 0;
@@ -114,6 +125,7 @@ void	test_vector() {
 		i++;
 	}
 //	vect.insert(it+2, anotherVector.begin(), anotherVector.end());
+	/*
 	std::cout << "TESTING ASSIGN\n";
 	ft::vector<int>	first;
 	ft::vector<int>	second;
@@ -139,21 +151,36 @@ void	test_vector() {
 	ft::vector<int> myVector;
 
 	// set some values (from 1 to 10)
+	std::cout << "SIZE = " << myVector.size() << '\n';
 	for (int j = 1; j <= 10; j++) myVector.push_back(j);
+	std::cout << "SIZE = " << myVector.size() << '\n';
 
 	for (int j = 0; j < 10; j++) std::cout << "push back : " << myVector.at(j) << '\n';
-	// erase the 6th element
-	myVector.erase(myVector.begin() + 5);
 
-	for (int j = 0; j < 9; j++) std::cout << "push back : " << myVector.at(j) << '\n';
+	std::cout << "CLEAR myVector\n";
+	myVector.clear();
+
+	ft::vector<std::string>	strVect;
+
+	strVect.push_back("Hello World!\n");
+	std::cout << strVect.at(0);
+	std::cout << "size = " << strVect.size() << '\n';
+	strVect.pop_back();
+	std::cout << "size = " << strVect.size() << '\n';
+
+	// erase the 6th element
+//	myVector.erase(myVector.begin() + 5);
+
+//	for (int j = 0; j < 9; j++) std::cout << "push back : " << myVector.at(j) << '\n';
 
 	// erase the first 3 elements:
-	myVector.erase(myVector.begin(), myVector.begin() + 3);
+//	myVector.erase(myVector.begin(), myVector.begin() + 3);
 
 	std::cout << "myVector contains:";
 	for (size_t j = 0; j < myVector.size(); ++j)
 		std::cout << ' ' << myVector[j];
 	std::cout << '\n';
+	*/
 }
 
 void	test_is_integral() {
