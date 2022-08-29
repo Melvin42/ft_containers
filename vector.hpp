@@ -514,7 +514,7 @@ namespace ft {
 					cap_tmp = _capacity;
 					_capacity = x._capacity;
 					x._capacity = cap_tmp;
-				};
+				}
 
 				void		clear() {
 					for (iterator it = begin(); it != end(); it++) {
@@ -529,8 +529,8 @@ namespace ft {
 		};
 
 	template<class T, class Alloc>
-		bool	operator==(const vector<T, Alloc>& lhs,
-							const vector<T, Alloc>& rhs)
+		bool	operator==(const vector<T, Alloc> &lhs,
+							const vector<T, Alloc> &rhs)
 		{
 			if (lhs.size() == rhs.size()) {
 				for (size_t i = 0; i < lhs.size(); i++) {
@@ -543,14 +543,14 @@ namespace ft {
 		}
 
 	template<class T, class Alloc>
-		bool	operator!=(const vector<T, Alloc>& lhs,
-							const vector<T, Alloc>& rhs) {
+		bool	operator!=(const vector<T, Alloc> &lhs,
+							const vector<T, Alloc> &rhs) {
 			return (!(lhs == rhs));
 		}
 
 	template<class T, class Alloc>
-		bool	operator<(const vector<T, Alloc>& lhs,
-							const vector<T, Alloc>& rhs) {
+		bool	operator<(const vector<T, Alloc> &hs,
+							const vector<T, Alloc> &rhs) {
 			size_t i;
 
 			for (i = 0; i < lhs.size() && i < rhs.size(); i++) {
@@ -566,25 +566,25 @@ namespace ft {
 		}
 
 	template<class T, class Alloc>
-		bool	operator<=(const vector<T, Alloc>& lhs,
-							const vector<T, Alloc>& rhs) {
+		bool	operator<=(const vector<T, Alloc> &lhs,
+							const vector<T, Alloc> &rhs) {
 			return (!(rhs < lhs));
 		}
 
 	template<class T, class Alloc>
-		bool	operator>(const vector<T, Alloc>& lhs,
-							const vector<T, Alloc>& rhs) {
+		bool	operator>(const vector<T, Alloc> &lhs,
+							const vector<T, Alloc> &rhs) {
 			return (rhs < lhs);
 		}
 
 	template<class T, class Alloc>
-		bool	operator>=(const vector<T, Alloc>& lhs,
-							const vector<T, Alloc>& rhs) {
+		bool	operator>=(const vector<T, Alloc> &lhs,
+							const vector<T, Alloc> &rhs) {
 			return (!(lhs < rhs));
 		}
 
 	template<class T, class Alloc>
-		void	swap(vector<T, Alloc> &x, vector<T, Alloc>& y) {
+		void	swap(vector<T, Alloc> &x, vector<T, Alloc> &y) {
 			x.swap(y);
 		}
 
