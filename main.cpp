@@ -150,6 +150,7 @@ void	test_vector() {
 	std::cout << "Size = " << vect.size() << '\n';
 
 	*/
+	/*
 	std::cout << "TESTING ERASE\n" << std::endl;
 
 	ft::vector<int>				vectDel;
@@ -188,6 +189,7 @@ void	test_vector() {
 		std::cout << *it << ", ";
 	}
 	std::cout << '\n';
+	*/
 
 //	std::cout << "TESTING OPERATOR[]\n" << std::endl;
 
@@ -421,6 +423,20 @@ void	test_enable_if() {
 	std::cout << "TESTING ENABLE_IF\n" << std::endl;
 }
 
+void	test_relational_operator() {
+	std::cout << "TESTING RELATIONAL_OPERATOR\n" << std::endl;
+
+	ft::vector<int>	vect1(3, 42);
+	ft::vector<int>	vect2(2, 42);
+
+	std::cout << "== " << (vect1 == vect2) << '\n';
+	std::cout << "!= " << (vect1 != vect2) << '\n';
+	std::cout << "< " << (vect1 < vect2) << '\n';
+	std::cout << "<= " << (vect1 <= vect2) << '\n';
+	std::cout << "> " << (vect1 > vect2) << '\n';
+	std::cout << ">= " << (vect1 >= vect2) << '\n';
+}
+
 void	test_lexicographical_compare() {
 	std::cout << "TESTING LEXICOGRAPHICAL_COMPARE\n" << std::endl;
 
@@ -446,6 +462,7 @@ int	main() {
 	test_vector();
 //	test_is_integral();
 //	test_equal();
+	test_relational_operator();
 //	test_lexicographical_compare();
 //	test_enable_if();
 //	test_map();
