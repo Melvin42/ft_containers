@@ -25,6 +25,7 @@ void	test_pair() {
 }
 
 void	test_iterator() {
+	/*
 	std::cout << "TESTING ITERATOR\n" << std::endl;
 
 	int							n = 7;
@@ -93,6 +94,7 @@ void	test_iterator() {
 	std::cout << "BACK = " << vect.back() << std::endl;
 //	vect[i] = i;
 
+	*/
 //	ft::MyIterator<int> it(vect.begin());
 
 	std::cout << "TESTING REVERSE_ITERATOR\n" << std::endl;
@@ -102,6 +104,45 @@ void	test_iterator() {
 	for (size_t i = 0; i < 5; i++) {
 		lst.push_back(i);
 	}
+	const int								size = 5;
+	ft::vector<int>							vct(size);
+	ft::vector<int>::reverse_iterator		it = vct.rbegin();
+	ft::vector<int>::const_reverse_iterator	ite = vct.rbegin();
+
+	for (int i = 0; i < size; ++i)
+		it[i] = (size - i) * 5;
+
+	it = it + 5;
+	it = 1 + it;
+	it = it - 4;
+	std::cout << *(it += 2) << std::endl;
+	std::cout << *(it -= 1) << std::endl;
+
+	*(it -= 2) = 42;
+	*(it += 2) = 21;
+
+	std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
+
+	std::cout << "(it == const_it): " << (ite == it) << std::endl;
+	std::cout << "(const_ite - it): " << (ite - it) << std::endl;
+	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
+
+	/*
+	std::cout << "TESTING BIDIR_ITERATOR\n" << std::endl;
+	std::list<int> lst2;
+	std::list<int>::iterator lst_it;
+	for (int i = 1; i < 5; ++i)
+		lst2.push_back(i * 3);
+
+	ft::vector<int> vct2(lst2.begin(), lst2.end());
+
+	lst_it = lst2.begin();
+	for (int i = 1; lst_it != lst2.end(); ++i)
+		*lst_it++ = i * 5;
+	vct.assign(lst2.begin(), lst2.end());
+
+	*/
+//	vct2.insert(vct2.end(), lst2.rbegin(), lst2.rend());
 
 //	ft::vector<int>				rvect(lst.begin(), lst.end());
 
@@ -166,13 +207,20 @@ void	test_vector() {
 	std::cout << '\n';
 
 	std::cout << "SIZE = " << vectDel.size() << '\n';
-	vectDel.erase(vectDel.begin());
+	vectDel.erase(vectDel.begin() + 2);
+
+	std::cout << "VectDel = ";
+	for (ft::vector<int>::iterator it = vectDel.begin(); it != vectDel.end(); it++) {
+		std::cout << *it << ", ";
+	}
+	std::cout << '\n';
+
 	std::cout << "SIZE = " << vectDel.size() << '\n';
-//	vectDel.erase(vectDel.end() - 3, vectDel.end() - 1);
-	vectDel.erase(vectDel.end());
-	std::cout << "SIZE = " << vectDel.size() << '\n';
-	vectDel.erase(vectDel.begin(), vectDel.begin() + 2);
-	std::cout << "SIZE = " << vectDel.size() << '\n';
+///	vectDel.erase(vectDel.end() - 3, vectDel.end() - 1);
+//	vectDel.erase(vectDel.end());
+//	std::cout << "SIZE = " << vectDel.size() << '\n';
+//	vectDel.erase(vectDel.begin(), vectDel.begin() + 1);
+//	std::cout << "SIZE = " << vectDel.size() << '\n';
 //	vectDel.erase(vectDel.begin(), vectDel.begin() + 3);
 //	vectDel.erase(vectDel.end());;
 //	vectDel.erase(vectDel.begin());;
@@ -184,12 +232,12 @@ void	test_vector() {
 //	vectDel.push_back(42);
 //	vectDel.push_back(532);
 //	vectDel.erase(vectDel.end() - 3, vectDel.end());
-	std::cout << "VectDel = ";
-	for (ft::vector<int>::iterator it = vectDel.begin(); it != vectDel.end(); it++) {
-		std::cout << *it << ", ";
-	}
-	std::cout << '\n';
-	*/
+//	std::cout << "VectDel = ";
+//	for (ft::vector<int>::iterator it = vectDel.begin(); it != vectDel.end(); it++) {
+//		std::cout << *it << ", ";
+//	}
+//	std::cout << '\n';
+*/
 
 //	std::cout << "TESTING OPERATOR[]\n" << std::endl;
 
@@ -328,7 +376,6 @@ void	test_vector() {
 	std::cout << '\n';
 	*/
 
-	/*
 	std::cout << "TESTING ASSIGN\n";
 	ft::vector<int>	first;
 	ft::vector<int>	second;
@@ -383,7 +430,6 @@ void	test_vector() {
 	for (size_t j = 0; j < myVector.size(); ++j)
 		std::cout << ' ' << myVector[j];
 	std::cout << '\n';
-	*/
 }
 
 void	test_is_integral() {
@@ -458,11 +504,11 @@ void	test_lexicographical_compare() {
 
 int	main() {
 //	test_pair();
-//	test_iterator();
-	test_vector();
+	test_iterator();
+//	test_vector();
 //	test_is_integral();
 //	test_equal();
-	test_relational_operator();
+//	test_relational_operator();
 //	test_lexicographical_compare();
 //	test_enable_if();
 //	test_map();
