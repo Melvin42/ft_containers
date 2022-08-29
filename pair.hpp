@@ -3,21 +3,51 @@
 
 namespace ft {
 	template <class T1, class T2>
-		struct	pair {
+		class	pair {
 			public:
-				pair();
-				~pair();
-				pair(const pair<T1, T2> &pair);
+				typedef T1		first_type;
+				typedef T2		second_type;
+				first_type		first;
+				second_type		second;
 
-				pair<T1, T2> make_pair(T1 first, T2 second);
+				//default (1)
+				pair() : first(0), second(0) {}
 
-			private:
-				T1		_first;
-				T2		_second;
+				//copy (2)
+				template <class U, class V>
+					pair(const pair<U, V> &pair) {
+						*this = pair;
+					}
+
+				//initialization (3)
+				pair(const first_type &a, const second_type &b)
+					: first(a), second(b) {}
+
+				~pair() {}
+
+				pair<T1, T2>	&operator=(const pair<T1, T2> &pair) {
+					first = pair.first;
+					second = pair.second;
+					return *this;
+				}
+
+				/*
+				void	swap(pair &pair) noexcept ( noexcept(swap(first, pair.first))
+							&& noexcept(swap(second, pair.second)) ) {
+					first_type	tmp_first = first;
+					first = pair.first;
+					pair.first = tmp.first;
+
+					second_type	tmp_second = second;
+					second = pair.second;
+					pair.second = tmp_second;
+				}
+				*/
+
 		};
 
 	template <class T1, class T2>
-		pair<T1, T2> makepair(T1 first, T2 second) {
+		pair<T1, T2> make_pair(T1 first, T2 second) {
 			return (pair<T1, T2>(first, second));
 		}
 };

@@ -15,27 +15,33 @@
 
 void	test_pair() {
 	std::cout << "/******** TESTING PAIR ********/\n" << std::endl;
-		std::pair <int,int> pair1;
-		std::pair <int,int> pair2;
+		ft::pair <int,int> pair1;
+//		ft::pair <int,int> pair2;
 
-		pair1 = std::make_pair (10,20);
-		pair2 = std::make_pair (10.5,'A'); // ok: implicit conversion from pair<double,char>
+		pair1 = ft::make_pair(10,20);
+//		pair2 = ft::make_pair(10.5,'A'); // ok: implicit conversion from pair<double,char>
 
 		std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
-		std::cout << "pair2: " << pair2.first << ", " << pair2.second << '\n';
+//		std::cout << "pair2: " << pair2.first << ", " << pair2.second << '\n';
 }
 
 void	test_iterator() {
 	std::cout << "TESTING ITERATOR\n" << std::endl;
 
-	std::cout << "TESTING REVERSE_ITERATOR\n" << std::endl;
-	std::cout << "TESTING BIDIR_ITERATOR\n" << std::endl;
-	std::cout << "TESTING ITERATOR_TRAITS\n" << std::endl;
+//	std::cout << "TESTING REVERSE_ITERATOR\n" << std::endl;
+//	std::cout << "TESTING BIDIR_ITERATOR\n" << std::endl;
+//	std::cout << "TESTING ITERATOR_TRAITS\n" << std::endl;
 }
 
 void	test_map() {
 	std::cout << "/******** TESTING MAP ********/\n" << std::endl;
 
+	ft::pair<int,int> pair1;
+
+	pair1 = ft::make_pair(10,20);
+
+	std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
+	/*
 	std::cout << "TESTING RESIZE\n" << std::endl;
 	std::cout << "TESTING ERASE\n" << std::endl;
 	std::cout << "TESTING OPERATOR[]\n" << std::endl;
@@ -50,6 +56,7 @@ void	test_map() {
 	std::cout << "TESTING ASSIGN\n";
 	std::cout << "TESTING PUSH_BACK\n";
 	std::cout << "CLEAR\n";
+	*/
 }
 
 void	test_is_integral() {
@@ -74,7 +81,7 @@ void	test_equal() {
 	std::cout << "TESTING EQUAL\n" << std::endl;
 
 	int				myints[] = {20, 40, 60, 80, 100};//  myints: 20 40 60 80 100
-	ft::vector<int>	myvector(myints, myints + 5);   // myvector: 20 40 60 80 100
+	std::vector<int>	myvector(myints, myints + 5);   // myvector: 20 40 60 80 100
 
 	// using default comparison:
 	if (ft::equal(myvector.begin(), myvector.end(), myints))
@@ -121,8 +128,8 @@ void	test_lexicographical_compare() {
 
 int	main() {
 //	test_pair();
-	test_iterator();
-//	test_map();
+//	test_iterator();
+	test_map();
 //	test_is_integral();
 //	test_equal();
 //	test_relational_operator();

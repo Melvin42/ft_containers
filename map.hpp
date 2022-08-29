@@ -6,13 +6,14 @@
 #include <cstddef>
 #include <iostream>
 #include "utils.hpp"
+#include "pair.hpp"
 #include "iterator_traits.hpp"
 
 namespace ft {
 	template <	class Key,
 				class T,
-				class Compare = less<Key>,
-				class Alloc = allocator<pair<const Key, T> >
+				class Compare = std::less<Key>,
+				class Alloc = std::allocator<pair<const Key, T> > >
 		class map {
 			public:
 				/* TYPES */
@@ -20,6 +21,7 @@ namespace ft {
 				typedef T										mapped_type;
 				typedef T										value_type;
 				typedef T										key_compare;
+				typedef T										value_compare;
 				typedef std::size_t								size_type;
 				typedef std::ptrdiff_t							difference_type;
 				typedef T*										pointer;
@@ -29,7 +31,7 @@ namespace ft {
 				typedef const T*								const_iterator;
 				typedef T&										reference;
 				typedef const T&								const_reference;
-				typedef Allocator								allocator_type;
+				typedef Alloc									allocator_type;
 				typedef std::reverse_iterator<iterator>			reverse_iterator;
 				typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
 
@@ -38,26 +40,33 @@ namespace ft {
 //				iterator	_p;
 				pointer		_p;
 				pointer		_p_end;
-				size_type	_capacity;
 
 			public:
 				/* CONSTRUCT/COPY/DESTROY */
 
 				map	&operator=(const map<Key, T, Compare, Alloc> &map) {
+					(void)map;
 					return *this;
 				}
 
 				//empty (1)
 				explicit map(const key_compare &comp = key_compare(),
 						const allocator_type &alloc = allocator_type())
-					: _p(NULL), _p_end(NULL), _capacity(0) {};
+					: _p(NULL), _p_end(NULL) {
+						(void)comp;
+						(void)alloc;
+					}
 
 				//fill (2)
 				template <class InputIterator>
 					map(InputIterator first, InputIterator last,
 						const key_compare &comp = key_compare(),
 						const allocator_type &alloc = allocator_type())
-						: _p(NULL), _p_end(NULL), _capacity(n) {
+						: _p(NULL), _p_end(NULL) {
+						(void)first;
+						(void)last;
+						(void)comp;
+						(void)alloc;
 					}
 
 				//copy (3)
@@ -94,6 +103,7 @@ namespace ft {
 				/* ELEMENT ACCES */
 
 				mapped_type	&operator[](const key_type &k) {
+					(void)k;
 					return ;
 				}
 
@@ -101,18 +111,18 @@ namespace ft {
 
 				key_compare		key_comp() const {}
 				value_compare	value_comp() const {}
-				size_type		count(const key_type &k) const {}
-				iterator		find(const key_type &k) {}
-				const_iterator	find(const key_type &k) const {}
-				iterator		lower_bound(const key_type &k) {}
-				const_iterator	lower_bound(const key_type &k) const {}
-				iterator		upper_bound(const key_type &k) {}
-				const_iterator	upper_bound(const key_type &k) const {}
+				size_type		count(const key_type &k) const {(void)k;}
+				iterator		find(const key_type &k) {(void)k;}
+				const_iterator	find(const key_type &k) const {(void)k;}
+				iterator		lower_bound(const key_type &k) {(void)k;}
+				const_iterator	lower_bound(const key_type &k) const {(void)k;}
+				iterator		upper_bound(const key_type &k) {(void)k;}
+				const_iterator	upper_bound(const key_type &k) const {(void)k;}
 
 				pair<const_iterator,
-					const_iterator>	equal_range(const key_type &k) const {}
+					const_iterator>	equal_range(const key_type &k) const {(void)k;}
 
-				pair<iterator, iterator>	equal_range(const key_type &k) {}
+				pair<iterator, iterator>	equal_range(const key_type &k) {(void)k;}
 
 				/* MODIFIERS */
 
@@ -120,6 +130,7 @@ namespace ft {
 
 				//single element (1)
 				pair<iterator, bool>	insert(const value_type& val) {
+					(void)val;
 //					insert(pos, 1, val);
 //					return pos;
 				}
@@ -127,23 +138,33 @@ namespace ft {
 				//with hint (2)
 				iterator	insert(iterator pos, size_type n,
 								const value_type& val) {
+					(void)n;
+					(void)val;
+					return pos;
 				}
 
 				//range (3)
 				template <class InputIterator>
 					void	insert(InputIterator first, InputIterator last) {
+						(void)first;
+						(void)last;
 					}
 
 				void	erase(iterator pos) {
+					(void)pos;
 				}
 
 				size_type	erase(const key_type &k) {
+					(void)k;
 				}
 
 				void	erase(iterator first, iterator last) {
+					(void)first;
+					(void)last;
 				}
 
 				void		swap(map<Key, T, Compare, Alloc> &x) {
+					(void)x;
 				}
 
 				void		clear() {
@@ -154,6 +175,7 @@ namespace ft {
 //				}
 		};
 
+	/*
 	template<class Key, class T, class Compare, class Alloc>
 		bool	operator==(const map<Key, T, Compare, Alloc> &lhs,
 							const map<Key, T, Compare, Alloc> &rhs)
@@ -213,6 +235,7 @@ namespace ft {
 		void	swap(map<Key, T, Compare, Alloc> &x, map<Key, T, Compare, Alloc> &y) {
 			x.swap(y);
 		}
+	*/
 
 }
 

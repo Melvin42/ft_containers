@@ -8,21 +8,8 @@
 #else
 	#include "vector.hpp"
 	#include "iterator_traits.hpp"
-	#include "pair.hpp"
 	#include "utils.hpp"
 #endif
-
-void	test_pair() {
-	std::cout << "/******** TESTING PAIR ********/\n" << std::endl;
-		std::pair <int,int> pair1;
-		std::pair <int,int> pair2;
-
-		pair1 = std::make_pair (10,20);
-		pair2 = std::make_pair (10.5,'A'); // ok: implicit conversion from pair<double,char>
-
-		std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
-		std::cout << "pair2: " << pair2.first << ", " << pair2.second << '\n';
-}
 
 void	test_iterator() {
 	/*
@@ -503,7 +490,6 @@ void	test_lexicographical_compare() {
 //}
 
 int	main() {
-//	test_pair();
 	test_iterator();
 //	test_vector();
 //	test_is_integral();
