@@ -2,8 +2,14 @@
 #define UTILS_HPP
 
 namespace ft {
-	class enable_if {
-	};
+	template <bool cond, typename result=void>
+		struct	enable_if {
+		};
+
+	template <typename result>
+		struct enable_if<true, result> {
+			typedef result	type;// = result;
+		};
 
 	template <typename T, T val> struct is_integral_base {
 		static const T	value = val;
