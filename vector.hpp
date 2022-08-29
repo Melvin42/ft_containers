@@ -549,7 +549,7 @@ namespace ft {
 		}
 
 	template<class T, class Alloc>
-		bool	operator<(const vector<T, Alloc> &hs,
+		bool	operator<(const vector<T, Alloc> &lhs,
 							const vector<T, Alloc> &rhs) {
 			size_t i;
 

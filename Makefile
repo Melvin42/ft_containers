@@ -3,10 +3,10 @@ all: main_vector.cpp main_map.cpp
 	clang++ -Wall -Wextra -Werror -std=c++98 main_vector.cpp -o ft_exec_vector
 	clang++ -Wall -Wextra -Werror -std=c++98 main_map.cpp -o ft_exec_map
 
-ft-vector: main_vector.cpp
+vector: main_vector.cpp
 	clang++ -Wall -Wextra -Werror -std=c++98 main_vector.cpp -o ft_exec_vector
 
-ft-map: main_map.cpp
+map: main_map.cpp
 	clang++ -Wall -Wextra -Werror -std=c++98 main_map.cpp -o ft_exec_map
 
 std-vector: main_vector.cpp
