@@ -17,27 +17,25 @@ namespace ft {
 		class map {
 			public:
 				/* TYPES */
-				typedef T										key_type;
+				typedef Key										key_type;
 				typedef T										mapped_type;
-				typedef T										value_type;
-				typedef T										key_compare;
-				typedef T										value_compare;
+				typedef pair<const key_type, mapped_type>		value_type;
+				typedef Compare									key_compare;
+				typedef Alloc									allocator_type;
+				typedef std::less<key_type>						value_compare;
 				typedef std::size_t								size_type;
 				typedef std::ptrdiff_t							difference_type;
-				typedef T*										pointer;
-//				typedef MyIterator<T>							iterator;
-//				typedef const MyIterator<T>						const_iterator;
-				typedef T*										iterator;
-				typedef const T*								const_iterator;
-				typedef T&										reference;
-				typedef const T&								const_reference;
-				typedef Alloc									allocator_type;
+				typedef value_type*								pointer;
+				typedef const value_type*						const_pointer;
+				typedef value_type*								iterator;
+				typedef const value_type*						const_iterator;
+				typedef value_type&								reference;
+				typedef const value_type&						const_reference;
 				typedef std::reverse_iterator<iterator>			reverse_iterator;
 				typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 			private:
-				Alloc	_alloc;
-//				iterator	_p;
+				Alloc		_alloc;
 				pointer		_p;
 				pointer		_p_end;
 
@@ -53,6 +51,12 @@ namespace ft {
 				explicit map(const key_compare &comp = key_compare(),
 						const allocator_type &alloc = allocator_type())
 					: _p(NULL), _p_end(NULL) {
+						_p = _alloc.allocate(0);
+						_p_end = _p;
+//						for (size_t i = 0; i < n; i++) {
+//							_alloc.construct(_p + i, val);
+//							++_p_end;
+//						}
 						(void)comp;
 						(void)alloc;
 					}

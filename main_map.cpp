@@ -36,7 +36,8 @@ void	test_iterator() {
 void	test_map() {
 	std::cout << "/******** TESTING MAP ********/\n" << std::endl;
 
-	ft::pair<int,int> pair1;
+	ft::pair<int,int>	pair1;
+	ft::map<int, int>	map1;
 
 	pair1 = ft::make_pair(10,20);
 
@@ -53,8 +54,6 @@ void	test_map() {
 	std::cout << "TESTING MAX_SIZE\n";
 	std::cout << "TESTING INSERT\n";
 	std::cout << "TESTING SWAP\n";
-	std::cout << "TESTING ASSIGN\n";
-	std::cout << "TESTING PUSH_BACK\n";
 	std::cout << "CLEAR\n";
 	*/
 }
