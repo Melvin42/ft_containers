@@ -115,18 +115,62 @@ namespace ft {
 
 				key_compare		key_comp() const {}
 				value_compare	value_comp() const {}
-				size_type		count(const key_type &k) const {(void)k;}
-				iterator		find(const key_type &k) {(void)k;}
-				const_iterator	find(const key_type &k) const {(void)k;}
+
+				size_type		count(const key_type &k) const {
+					for (const_iterator it = begin(); it != end(); it++) {
+						(void)k;
+//						if (it.first == k)
+//							return 1;
+					}
+					return 0;
+				}
+
+				iterator		find(const key_type &k) {
+					iterator	it = begin();
+
+					(void)k;
+					while (it != end()) {
+//						if (it.first == k)
+//							return it;
+//						++it;
+					}
+					return it;
+				}
+
+				const_iterator	find(const key_type &k) const {
+					const_iterator	it = begin();
+
+					(void)k;
+					while (it != end()) {
+//						if (it.first == k)
+//							return it;
+//						++it;
+					}
+					return it;
+				}
+
 				iterator		lower_bound(const key_type &k) {(void)k;}
 				const_iterator	lower_bound(const key_type &k) const {(void)k;}
 				iterator		upper_bound(const key_type &k) {(void)k;}
 				const_iterator	upper_bound(const key_type &k) const {(void)k;}
 
 				pair<const_iterator,
-					const_iterator>	equal_range(const key_type &k) const {(void)k;}
+					const_iterator>	equal_range(const key_type &k) const {
+						pair<const_iterator, const_iterator>	ret;
 
-				pair<iterator, iterator>	equal_range(const key_type &k) {(void)k;}
+						(void)k;
+//						for (const_iterator it = begin(); it != end(); it++) {
+//						}
+						return ret;
+					}
+
+				pair<iterator, iterator>	equal_range(const key_type &k) {
+					pair<iterator, iterator>	ret;
+
+					(void)k;
+
+					return ret;
+				}
 
 				/* MODIFIERS */
 
@@ -134,9 +178,11 @@ namespace ft {
 
 				//single element (1)
 				pair<iterator, bool>	insert(const value_type& val) {
+					pair<iterator, bool>	ret;
+
 					(void)val;
-//					insert(pos, 1, val);
-//					return pos;
+
+					return ret;
 				}
 
 				//with hint (2)
@@ -144,6 +190,7 @@ namespace ft {
 								const value_type& val) {
 					(void)n;
 					(void)val;
+
 					return pos;
 				}
 

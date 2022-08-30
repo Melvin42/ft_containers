@@ -32,7 +32,6 @@ void	test_iterator() {
 //	std::cout << "TESTING BIDIR_ITERATOR\n" << std::endl;
 //	std::cout << "TESTING ITERATOR_TRAITS\n" << std::endl;
 }
-
 void	test_map() {
 	std::cout << "/******** TESTING MAP ********/\n" << std::endl;
 
@@ -41,6 +40,7 @@ void	test_map() {
 
 	pair1 = ft::make_pair(10,20);
 
+	std::cout << "Count: " << map1.count(4) << '\n';
 	std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
 	/*
 	std::cout << "TESTING RESIZE\n" << std::endl;
