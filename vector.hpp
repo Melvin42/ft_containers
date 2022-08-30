@@ -135,10 +135,10 @@ namespace ft {
 				}
 
 				//default (1)
-				vector() : _p(NULL), _p_end(NULL), _capacity(0) {};
+				explicit vector() : _p(NULL), _p_end(NULL), _capacity(0) {};
 
 				//fill (2)
-				vector(size_type n, const value_type &val = value_type())
+				explicit vector(size_type n, const value_type &val = value_type())
 					: _p(NULL), _p_end(NULL), _capacity(n) {
 						_p = _alloc.allocate(_capacity);
 						_p_end = _p;
