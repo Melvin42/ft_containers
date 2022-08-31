@@ -19,8 +19,8 @@ namespace ft {
 				typedef std::size_t								size_type;
 				typedef std::ptrdiff_t							difference_type;
 				typedef T*										pointer;
-				typedef ft::iterator<std::random_access_iterator_tag>		iterator;
-				typedef ft::iterator<T>							const_iterator;
+				typedef ft::iterator<std::random_access_iterator_tag, T>		iterator;
+				typedef const ft::iterator<std::random_access_iterator_tag, T>	const_iterator;
 //				typedef T*										iterator;
 //				typedef const T*								const_iterator;
 				typedef T&										reference;
@@ -139,10 +139,10 @@ namespace ft {
 				const_iterator			begin() const { return _p; }
 				iterator				end() { return _p_end; }
 				const_iterator			end() const { return _p_end; }
-				reverse_iterator		rbegin() { return reverse_iterator(_p_end); }
-				const_reverse_iterator	rbegin() const { return const_reverse_iterator(_p_end); }
-				reverse_iterator		rend() { return reverse_iterator(_p); }
-				const_reverse_iterator	rend() const { return const_reverse_iterator(_p); }
+//				reverse_iterator		rbegin() { return reverse_iterator(_p_end); }
+//				const_reverse_iterator	rbegin() const { return const_reverse_iterator(_p_end); }
+//				reverse_iterator		rend() { return reverse_iterator(_p); }
+//				const_reverse_iterator	rend() const { return const_reverse_iterator(_p); }
 //				iterator_type			base() const { return ; }
 
 				/* CAPACITY */

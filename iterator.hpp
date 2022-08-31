@@ -13,17 +13,14 @@ namespace ft {
 		};
 }
 
-#endif
-/*
-
-
+template < class Category, class T>
 		class	iterator {
 			public:
-				typedef T										value_type;
-				typedef T*										pointer;
-				typedef T&										reference;
-				typedef std::ptrdiff_t							difference_type;
-				typedef std::random_access_iterator_tag			iterator_categorie;
+				typedef T				value_type;
+				typedef T*				pointer;
+				typedef T&				reference;
+				typedef std::ptrdiff_t	difference_type;
+				typedef Category		iterator_category;
 
 			private:
 //				typedef iterator<T>		iterator;
@@ -98,6 +95,7 @@ namespace ft {
 					return *this;
 				}
 
+				/*
 				bool	operator==(const iterator &rhs) const {
 					return _pos == rhs._pos;
 				}
@@ -138,7 +136,6 @@ namespace ft {
 				const iterator<T> &rhs) {
 			return lhs.base() - rhs.base();
 		}
-}
-
-#endif
 */
+};
+#endif

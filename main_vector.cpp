@@ -15,8 +15,8 @@
 void	test_iterator() {
 	std::cout << "TESTING ITERATOR\n" << std::endl;
 
-	int							n = 7;
-	ft::vector<int>				vect(n);
+//	int							n = 7;
+//	ft::vector<int>				vect(n);
 //	ft::vector<int>::iterator	it = vect.begin();
 //	ft::vector<int>::iterator	ite = vect.end();
 		
@@ -503,5 +503,6 @@ int	main() {
 //	test_lexicographical_compare();
 //	test_enable_if();
 //	test_map();
+//
 	return 0;
 }
