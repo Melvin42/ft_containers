@@ -112,14 +112,21 @@ namespace ft {
 				/* ELEMENT ACCES */
 
 				mapped_type	&operator[](const key_type &k) {
+					mapped_type	ret;
+
 					(void)k;
-					return ;
+					return ret;
 				}
 
 				/* UTILS */
 
-				key_compare		key_comp() const {}
-				value_compare	value_comp() const {}
+				key_compare		key_comp() const {
+					return key_compare();
+				}
+
+				value_compare	value_comp() const {
+					return value_compare();
+				}
 
 				size_type		count(const key_type &k) const {
 					for (const_iterator it = begin(); it != end(); it++) {

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <climits>
 #include <list>
+#include <typeinfo>
 
 #if STD
 	#include <vector>
@@ -12,14 +13,17 @@
 #endif
 
 void	test_iterator() {
-	/*
 	std::cout << "TESTING ITERATOR\n" << std::endl;
 
 	int							n = 7;
 	ft::vector<int>				vect(n);
-	ft::vector<int>::iterator	it = vect.begin();
-	ft::vector<int>::iterator	ite = vect.end();
-
+//	ft::vector<int>::iterator	it = vect.begin();
+//	ft::vector<int>::iterator	ite = vect.end();
+		
+	typedef ft::iterator_traits<int*> traits;
+	if (typeid(traits::iterator_category)==typeid(std::random_access_iterator_tag))
+		std::cout << "int* is a random-access iterator";
+			/*
 	std::cout << "len = " << ite - it << '\n';
 	for (; it != ite; it++) {
 		*it = (ite - it);
@@ -82,8 +86,8 @@ void	test_iterator() {
 //	vect[i] = i;
 
 	*/
-//	ft::MyIterator<int> it(vect.begin());
 
+	/*
 	std::cout << "TESTING REVERSE_ITERATOR\n" << std::endl;
 
 	std::list<int>				lst;
@@ -93,7 +97,7 @@ void	test_iterator() {
 	}
 	const int								size = 5;
 	ft::vector<int>							vct(size);
-	ft::vector<int>::reverse_iterator		it = vct.rbegin();
+/	ft::vector<int>::reverse_iterator		it = vct.rbegin();
 	ft::vector<int>::const_reverse_iterator	ite = vct.rbegin();
 
 	for (int i = 0; i < size; ++i)
@@ -113,6 +117,7 @@ void	test_iterator() {
 	std::cout << "(it == const_it): " << (ite == it) << std::endl;
 	std::cout << "(const_ite - it): " << (ite - it) << std::endl;
 	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
+	*/
 
 	/*
 	std::cout << "TESTING BIDIR_ITERATOR\n" << std::endl;

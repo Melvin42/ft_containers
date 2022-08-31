@@ -5,86 +5,9 @@
 #include <limits>
 #include <cstddef>
 #include <iostream>
+#include "iterator.hpp"
 #include "utils.hpp"
 #include "iterator_traits.hpp"
-
-//namespace ft {
-	template <typename T, class Allocator>	class vector;
-//	template <class T> class				MyIterator<T>;
-
-	/*
-	template <class T>
-	class	MyIterator {
-		public:
-			typedef T										value_type;
-			typedef T*										pointer;
-			typedef T&										reference;
-			typedef std::ptrdiff_t							difference_type;
-			typedef	std::random_access_iterator_tag			iterator_categorie;
-
-		private:
-			typedef MyIterator<T>		iterator;
-		protected:
-			pointer	_pos;
-
-		public:
-			typedef std::reverse_iterator<iterator>			reverse_iterator;
-//			typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
-
-//			operator	MyIterator<const T>() const { return MyIterator<const T>(_pos); }
-			MyIterator() : _pos(NULL) {}
-			MyIterator(pointer it) : _pos(it) {}
-			MyIterator(const iterator &it) : _pos(it.base()) {}
-			~MyIterator() {}
-
-			const pointer	&base() const {
-				return _pos;
-			}
-
-			iterator				begin() { return _pos; }
-			iterator				end(difference_type v) { return _pos + v; }
-			reverse_iterator		rbegin() { return _pos; }
-//			const_reverse_iterator	rbegin() const { return _pos; }
-			reverse_iterator		rend() { return _pos; }
-//			const_reverse_iterator	rend() const { return _pos; }
-
-			reference	operator*() const { return *_pos; }
-			pointer		operator->() const { return _pos; }
-			MyIterator	operator++(int) { MyIterator tmp = *this; ++(*this); return tmp; }
-			MyIterator	&operator++() { ++_pos; return *this; }
-			MyIterator	operator--(int) { MyIterator tmp = *this; --(*this); return tmp; }
-			MyIterator	&operator--() { --_pos; return *this; }
-			MyIterator	operator+(difference_type v) const { return MyIterator(_pos + v); }
-			MyIterator	operator-(difference_type v) const { return iterator(_pos - v); }
-			reference	operator[](difference_type v) const { return *(_pos + v); }
-			iterator	&operator=(value_type n) {
-				*_pos = n;
-				return *this;
-			}
-			iterator	&operator=(const iterator &it) {
-//				clear();
-//				insert(begin(), it.begin(), it.end());
-				_pos = it.base();
-				return *this;
-			}
-			bool	operator==(const MyIterator &rhs) const { return _pos == rhs._pos; }
-			bool	operator!=(const MyIterator &rhs) const { return _pos != rhs._pos; }
-			bool	operator<=(const MyIterator &rhs) const { return _pos <= rhs._pos; };
-			bool	operator>=(const MyIterator &rhs) const { return _pos <= rhs._pos; };
-			bool	operator<(const MyIterator &rhs) const { return _pos < rhs._pos; };
-			bool	operator>(const MyIterator &rhs) const { return _pos < rhs._pos; };
-	};
-
-	template <class T>
-		MyIterator<T> operator+ (std::ptrdiff_t v, MyIterator<T> &lhs) { return MyIterator<T>(lhs.base() + v); }
-
-	template <class T>
-		MyIterator<T> operator- (std::ptrdiff_t v, MyIterator<T> &lhs) { return MyIterator<T>(lhs.base() - v); }
-
-	template <class T>
-	typename MyIterator<T>::difference_type	operator-(const MyIterator<T> &lhs, const MyIterator<T> &rhs) { return lhs.base() - rhs.base(); }
-}
-*/
 
 namespace ft {
 	template <typename T, class Alloc = std::allocator<T> >
@@ -96,10 +19,10 @@ namespace ft {
 				typedef std::size_t								size_type;
 				typedef std::ptrdiff_t							difference_type;
 				typedef T*										pointer;
-//				typedef MyIterator<T>							iterator;
-//				typedef const MyIterator<T>						const_iterator;
-				typedef T*										iterator;
-				typedef const T*								const_iterator;
+				typedef ft::iterator<std::random_access_iterator_tag>		iterator;
+				typedef ft::iterator<T>							const_iterator;
+//				typedef T*										iterator;
+//				typedef const T*								const_iterator;
 				typedef T&										reference;
 				typedef const T&								const_reference;
 				typedef Alloc									allocator_type;
