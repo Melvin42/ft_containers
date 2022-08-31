@@ -87,7 +87,7 @@
 */
 
 namespace ft {
-	template <typename T, class Allocator = std::allocator<T> >
+	template <typename T, class Alloc = std::allocator<T> >
 		class vector {
 			public:
 				/* TYPES */
@@ -102,12 +102,12 @@ namespace ft {
 				typedef const T*								const_iterator;
 				typedef T&										reference;
 				typedef const T&								const_reference;
-				typedef Allocator								allocator_type;
+				typedef Alloc									allocator_type;
 				typedef std::reverse_iterator<iterator>			reverse_iterator;
 				typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 			private:
-				Allocator	_alloc;
+				Alloc		_alloc;
 //				iterator	_p;
 				pointer		_p;
 				pointer		_p_end;
@@ -116,7 +116,7 @@ namespace ft {
 			public:
 				/* CONSTRUCT/COPY/DESTROY */
 
-				vector	&operator=(const vector<T, Allocator> &vector) {
+				vector	&operator=(const vector<T, Alloc> &vector) {
 					if (this != &vector) {
 						if (_p)
 							_alloc.deallocate(_p, size());
@@ -135,7 +135,8 @@ namespace ft {
 				}
 
 				//default (1)
-				explicit vector() : _p(NULL), _p_end(NULL), _capacity(0) {};
+				explicit vector(const allocator_type& = allocator_type())
+					: _p(NULL), _p_end(NULL), _capacity(0) {};
 
 				//fill (2)
 				explicit vector(size_type n, const value_type &val = value_type())
@@ -151,7 +152,7 @@ namespace ft {
 				//range (3)
 				template <class InputIterator>
 					vector(InputIterator first, InputIterator last,
-							const Allocator& = Allocator(),
+							const allocator_type& = allocator_type(),
 							typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
 							: _p(NULL), _p_end(NULL), _capacity(0) {
 						if (last - first > 0) {
@@ -169,7 +170,7 @@ namespace ft {
 					}
 
 				//copy (4)
-				vector(const vector<T, Allocator> &vector) {
+				vector(const vector<T, Alloc> &vector) {
 					*this = vector;
 				}
 
@@ -499,7 +500,7 @@ namespace ft {
 					return _p + ret;
 				}
 
-				void		swap(vector<T, Allocator> &x) {
+				void		swap(vector<T, Alloc> &x) {
 					pointer		p_tmp;
 					value_type	cap_tmp;
 

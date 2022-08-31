@@ -10,9 +10,13 @@
 #include "iterator_traits.hpp"
 
 namespace ft {
+	template <class T> struct less : std::binary_function <T,T,bool> {
+		bool operator() (const T& x, const T& y) const {return x<y;}
+	};
+
 	template <	class Key,
 				class T,
-				class Compare = std::less<Key>,
+				class Compare = less<Key>,
 				class Alloc = std::allocator<pair<const Key, T> > >
 		class map {
 			public:
@@ -49,28 +53,29 @@ namespace ft {
 
 				//empty (1)
 				explicit map(const key_compare &comp = key_compare(),
-						const allocator_type &alloc = allocator_type())
+						const allocator_type& = allocator_type())
 					: _p(NULL), _p_end(NULL) {
 						_p = _alloc.allocate(0);
 						_p_end = _p;
-//						for (size_t i = 0; i < n; i++) {
-//							_alloc.construct(_p + i, val);
-//							++_p_end;
-//						}
-						(void)comp;
-						(void)alloc;
+						if (!comp(0, 0))
+							std::cout << "coucou\n";
 					}
 
 				//fill (2)
 				template <class InputIterator>
 					map(InputIterator first, InputIterator last,
-						const key_compare &comp = key_compare(),
-						const allocator_type &alloc = allocator_type())
-						: _p(NULL), _p_end(NULL) {
-						(void)first;
-						(void)last;
-						(void)comp;
-						(void)alloc;
+							const key_compare &comp = key_compare(),
+							const allocator_type& = allocator_type())
+							: _p(NULL), _p_end(NULL) {
+						size_t	n = 0;
+
+						if (last - first > 0)
+							n = last - first;
+
+						_p = _alloc.allocate(n);
+						_p_end = _p;
+						if (!comp(0, 0) || comp(0, 0))
+						std::cout << "Iterator Constructor\n";
 					}
 
 				//copy (3)

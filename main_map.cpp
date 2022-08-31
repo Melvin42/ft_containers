@@ -40,8 +40,11 @@ void	test_map() {
 
 	pair1 = ft::make_pair(10,20);
 
+	map1.insert(pair1);
+//	map1.insert(pair1);
 	std::cout << "Count: " << map1.count(4) << '\n';
 	std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
+
 	/*
 	std::cout << "TESTING RESIZE\n" << std::endl;
 	std::cout << "TESTING ERASE\n" << std::endl;
@@ -52,7 +55,6 @@ void	test_map() {
 		e.what();
 	}
 	std::cout << "TESTING MAX_SIZE\n";
-	std::cout << "TESTING INSERT\n";
 	std::cout << "TESTING SWAP\n";
 	std::cout << "CLEAR\n";
 	*/

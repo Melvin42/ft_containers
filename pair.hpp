@@ -11,13 +11,12 @@ namespace ft {
 				second_type		second;
 
 				//default (1)
-				pair() : first(0), second(0) {}
+				pair() {}
 
 				//copy (2)
 				template <class U, class V>
-					pair(const pair<U, V> &pair) {
-						*this = pair;
-					}
+					pair(const pair<U, V> &pr)
+					: first(pr.first), second(pr.second) {}
 
 				//initialization (3)
 				pair(const first_type &a, const second_type &b)
@@ -25,7 +24,7 @@ namespace ft {
 
 				~pair() {}
 
-				pair<T1, T2>	&operator=(const pair<T1, T2> &pair) {
+				pair<T1, T2>	&operator=(const pair<const T1, T2> &pair) {
 					first = pair.first;
 					second = pair.second;
 					return *this;
@@ -43,7 +42,6 @@ namespace ft {
 					pair.second = tmp_second;
 				}
 				*/
-
 		};
 
 	template <class T1, class T2>
