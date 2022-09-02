@@ -18,6 +18,9 @@ void	test_iterator() {
 	int							n = 7;
 	ft::vector<int>				vect(n);
 	std::cout << "TESTING ITERATOR\n" << std::endl;
+	ft::vector<int>::const_iterator	cit = vect.begin();
+
+	cit++;
 	ft::vector<int>::iterator	it = vect.begin();
 	ft::vector<int>::iterator	ite = vect.end();
 
@@ -69,6 +72,11 @@ void	test_iterator() {
 	std::cout << "SIZE = " << vect.size() << std::endl;
 	std::cout << "BACK = " << vect.back() << std::endl;
 
+	ft::vector<int>				vecttest;
+
+	vecttest.push_back(43);
+	std::cout << vecttest[0] << '\n';
+
 	ft::vector<int>				vectZero(vect);
 
 	int	i = 0;
@@ -88,22 +96,47 @@ void	test_iterator() {
 	std::cout << "BACK = " << vect.back() << std::endl;
 //	vect[i] = i;
 
+	ft::vector<int>::iterator	it_tmp = ++it;;
 
-	/*
-	std::cout << "TESTING REVERSE_ITERATOR\n" << std::endl;
+	std::cout << "Pre inc" << std::endl;
+	it_tmp = ++it;
+	std::cout << *it_tmp << " | " << *it << std::endl;
 
-	std::list<int>				lst;
+	std::cout << "Pre dec" << std::endl;
+	it_tmp = --it;
+	std::cout << *it_tmp << " | " << *it << std::endl;
 
-	for (size_t i = 0; i < 5; i++) {
-		lst.push_back(i);
-	}
-	const int								size = 5;
-	ft::vector<int>							vct(size);
-/	ft::vector<int>::reverse_iterator		it = vct.rbegin();
-	ft::vector<int>::const_reverse_iterator	ite = vct.rbegin();
+	std::cout << "Post inc" << std::endl;
+	it_tmp = it++;
+	std::cout << *it_tmp << " | " << *it << std::endl;
 
-	for (int i = 0; i < size; ++i)
-		it[i] = (size - i) * 5;
+	std::cout << "Post dec" << std::endl;
+	it_tmp = it--;
+	std::cout << *it_tmp << " | " << *it << std::endl;
+	std::cout << "###############################################" << std::endl;
+
+	it = vect.begin();
+	ite = vect.begin();
+
+	std::cout << *(++ite) << std::endl;
+	std::cout << *(ite++) << std::endl;
+	std::cout << *ite++ << std::endl;
+	std::cout << *++ite << std::endl;
+
+	std::cout << *(++it) << std::endl;
+	std::cout << *(it++) << std::endl;
+	std::cout << *it++ << std::endl;
+	std::cout << *++it << std::endl;
+
+	std::cout << *(--ite) << std::endl;
+	std::cout << *(ite--) << std::endl;
+	std::cout << *--ite << std::endl;
+	std::cout << *ite-- << std::endl;
+
+	std::cout << *(--it) << std::endl;
+	std::cout << *(it--) << std::endl;
+	std::cout << *it-- << std::endl;
+	std::cout << *--it << std::endl;
 
 	it = it + 5;
 	it = 1 + it;
@@ -114,12 +147,43 @@ void	test_iterator() {
 	*(it -= 2) = 42;
 	*(it += 2) = 21;
 
-	std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
+	std::cout << "const_ite +=: " << *(ite += 2) << std::endl;
+	std::cout << "const_ite -=: " << *(ite -= 2) << std::endl;
 
 	std::cout << "(it == const_it): " << (ite == it) << std::endl;
 	std::cout << "(const_ite - it): " << (ite - it) << std::endl;
 	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
-	*/
+
+
+	std::cout << "TESTING REVERSE_ITERATOR\n" << std::endl;
+
+	std::list<int>				lst;
+
+	for (size_t i = 0; i < 5; i++) {
+		lst.push_back(i);
+	}
+	const int								size = 5;
+	ft::vector<int>							vct(size);
+	ft::vector<int>::reverse_iterator		rit = vct.rbegin();
+	ft::vector<int>::const_reverse_iterator	rite = vct.rbegin();
+
+	for (int i = 0; i < size; ++i)
+		rit[i] = (size - i) * 5;
+
+	rit = rit + 4;
+	rit = 1 + rit;
+	rit = rit - 4;
+	std::cout << *(rit += 2) << std::endl;
+	std::cout << *(rit -= 1) << std::endl;
+
+	*(rit -= 2) = 42;
+	*(rit += 2) = 21;
+
+	std::cout << "const_rite +=/-=: " << *(rite += 2) << " | " << *(rite -= 2) << std::endl;
+
+	std::cout << "(rit == const_rit): " << (rite == rit) << std::endl;
+	std::cout << "(const_rite - rit): " << (rite - rit) << std::endl;
+	std::cout << "(rite + 3 == rit): " << (rite + 3 == rit) << std::endl;
 
 	/*
 	std::cout << "TESTING BIDIR_ITERATOR\n" << std::endl;
@@ -151,7 +215,7 @@ void	test_vector() {
 	int							n = 7;
 	ft::vector<int>				vect(n);
 	ft::vector<int>				vect2(n);
-//	ft::vector<int>::iterator	it = vect.begin();
+	ft::vector<int>::iterator	it = vect.begin();
 
 	/*
 	std::cout << "TESTING RESIZE\n" << std::endl;
@@ -184,8 +248,6 @@ void	test_vector() {
 	std::cout << '\n';
 	std::cout << "Size = " << vect.size() << '\n';
 
-	*/
-	/*
 	std::cout << "TESTING ERASE\n" << std::endl;
 
 	ft::vector<int>				vectDel;
@@ -231,11 +293,9 @@ void	test_vector() {
 //		std::cout << *it << ", ";
 //	}
 //	std::cout << '\n';
-*/
 
 //	std::cout << "TESTING OPERATOR[]\n" << std::endl;
 
-/*
 	try {
 		for (int i = 0; i < n; i++) {
 			vect[i] = i;
@@ -253,13 +313,21 @@ void	test_vector() {
 		e.what();
 	}
 
-	for (int i = 0; i < n; i++) {
-		vect[i] = i + 5;
-		vect[i] += 5;
+	try {
+		std::cout << "vector size = " << vect.size() << '\n';
+		std::cout << "vector size = " << vect.back() << '\n';
+		std::cout << "vector n = " << n << '\n';
+		for (int i = 0; i < n; i++) {
+			vect[i] = i + 5;
+			vect[i] += 5;
+		}
+	} catch (std::exception &e) {
+		e.what();
 	}
 
 	try {
 		std::cout << "vector size = " << vect.size() << '\n';
+		std::cout << "vector size = " << n << '\n';
 		for (int i = 0; i < n; i++) {
 			std::cout << "vector.at(" << i << ") = " << vect.at(i) << std::endl;
 		}
@@ -276,8 +344,6 @@ void	test_vector() {
 
 	ft::vector<int>	vect_cpy(vect);
 
-	*/
-	/*
 	std::cout << "\nvect.insert() TESTS:\n" << std::endl;
 
 	std::cout << "TESTING INSERT\n";
@@ -335,9 +401,7 @@ void	test_vector() {
 		i++;
 	}
 //	vect.insert(it+2, anotherVector.begin(), anotherVector.end());
-	*/
 
-	/*
 	std::cout << "TESTING SWAP\n";
 
 	ft::vector<int>	vectA(4, 42);
@@ -368,20 +432,28 @@ void	test_vector() {
 		std::cout << *it << ", ";
 	}
 	std::cout << '\n';
-	*/
 
-	/*
+	*/
 	std::cout << "TESTING ASSIGN\n";
 	ft::vector<int>	first;
 	ft::vector<int>	second;
 	ft::vector<int>	third;
+
+	first.push_back(2);
+	std::cout << "TEST = " << first.front() << '\n';;
+	std::cout << "TEST = " << first.back() << '\n';
+	ft::vector<int>	const test(first);
+
+
+	std::cout << "TEST = " << test.front() << '\n';;
+	std::cout << "TEST = " << test.back() << '\n';
 
 	first.assign(7, 100);
 	for (ft::vector<int>::iterator it = first.begin(); it != first.end(); it++) {
 		std::cout << "AssignVect = " << *it << '\n';
 	}
 
-	ft::vector<int>::iterator it;
+//	ft::vector<int>::iterator it;
 	it = first.begin()+1;
 
 	second.assign(it,first.end()-1); // the 5 central values of first
@@ -425,7 +497,32 @@ void	test_vector() {
 	for (size_t j = 0; j < myVector.size(); ++j)
 		std::cout << ' ' << myVector[j];
 	std::cout << '\n';
-	*/
+
+
+	ft::vector<int> vct(6);
+	ft::vector<int> vct_two(4);
+	ft::vector<int> vct_three;
+	ft::vector<int> vct_four;
+
+	for (unsigned long int i = 0; i < vct.size(); ++i)
+		vct[i] = (vct.size() - i) * 3;
+	for (unsigned long int i = 0; i < vct_two.size(); ++i)
+		vct_two[i] = (vct_two.size() - i) * 5;
+
+	vct_three.assign(vct.begin(), vct.end());
+	vct.assign(vct_two.begin(), vct_two.end());
+	vct_two.assign(2, 42);
+	vct_four.assign(4, 21);
+
+	std::cout << "\t### After assign(): ###" << std::endl;
+
+
+	vct_four.assign(6, 84);
+
+	std::cout << "\t### assign() on enough capacity and low size: ###" << std::endl;
+
+	vct.assign(5, 53);
+	vct_two.assign(vct_three.begin(), vct_three.begin() + 3);
 }
 
 void	test_is_integral() {
@@ -499,8 +596,8 @@ void	test_lexicographical_compare() {
 //}
 
 int	main() {
-	test_iterator();
-//	test_vector();
+//	test_iterator();
+	test_vector();
 //	test_is_integral();
 //	test_equal();
 //	test_relational_operator();
