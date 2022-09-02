@@ -15,15 +15,18 @@
 void	test_iterator() {
 	std::cout << "TESTING ITERATOR\n" << std::endl;
 
-//	int							n = 7;
-//	ft::vector<int>				vect(n);
-//	ft::vector<int>::iterator	it = vect.begin();
-//	ft::vector<int>::iterator	ite = vect.end();
-		
+	int							n = 7;
+	ft::vector<int>				vect(n);
+	std::cout << "TESTING ITERATOR\n" << std::endl;
+	ft::vector<int>::iterator	it = vect.begin();
+	ft::vector<int>::iterator	ite = vect.end();
+
 	typedef ft::iterator_traits<int*> traits;
-	if (typeid(traits::iterator_category)==typeid(std::random_access_iterator_tag))
-		std::cout << "int* is a random-access iterator";
-			/*
+
+	if (typeid(traits::iterator_category) == typeid(std::random_access_iterator_tag))
+		std::cout << "int* is a random-access iterator\n";
+	if (typeid(traits::iterator_category) == typeid(std::bidirectional_iterator_tag))
+		std::cout << "int* is a bidirectional iterator\n";
 	std::cout << "len = " << ite - it << '\n';
 	for (; it != ite; it++) {
 		*it = (ite - it);
@@ -85,7 +88,6 @@ void	test_iterator() {
 	std::cout << "BACK = " << vect.back() << std::endl;
 //	vect[i] = i;
 
-	*/
 
 	/*
 	std::cout << "TESTING REVERSE_ITERATOR\n" << std::endl;
@@ -368,6 +370,7 @@ void	test_vector() {
 	std::cout << '\n';
 	*/
 
+	/*
 	std::cout << "TESTING ASSIGN\n";
 	ft::vector<int>	first;
 	ft::vector<int>	second;
@@ -422,6 +425,7 @@ void	test_vector() {
 	for (size_t j = 0; j < myVector.size(); ++j)
 		std::cout << ' ' << myVector[j];
 	std::cout << '\n';
+	*/
 }
 
 void	test_is_integral() {

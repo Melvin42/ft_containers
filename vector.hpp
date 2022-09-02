@@ -20,9 +20,8 @@ namespace ft {
 				typedef std::ptrdiff_t							difference_type;
 				typedef T*										pointer;
 				typedef ft::iterator<std::random_access_iterator_tag, T>		iterator;
+//				typedef const iterator							const_iterator;
 				typedef const ft::iterator<std::random_access_iterator_tag, T>	const_iterator;
-//				typedef T*										iterator;
-//				typedef const T*								const_iterator;
 				typedef T&										reference;
 				typedef const T&								const_reference;
 				typedef Alloc									allocator_type;
@@ -31,9 +30,8 @@ namespace ft {
 
 			private:
 				Alloc		_alloc;
-//				iterator	_p;
-				pointer		_p;
-				pointer		_p_end;
+				iterator	_p;
+				iterator	_p_end;
 				size_type	_capacity;
 
 			public:
@@ -41,16 +39,16 @@ namespace ft {
 
 				vector	&operator=(const vector<T, Alloc> &vector) {
 					if (this != &vector) {
-						if (_p)
-							_alloc.deallocate(_p, size());
+						if (_p.base())
+							_alloc.deallocate(_p.base(), size());
 						_alloc = vector.get_allocator();//_alloc;
 						_capacity = vector._capacity;
 						_p = _alloc.allocate(_capacity);
 						size_t	i = 0;
 
 						_p_end = _p;
-						for (const_iterator it = vector.begin(); it != vector.end(); it++, i++) {
-							_alloc.construct(_p + i, *it);
+						for (iterator it = vector.begin(); it != vector.end(); it++, i++) {
+							_alloc.construct(_p.base() + i, *it);
 							++_p_end;
 						}
 					}
@@ -67,7 +65,7 @@ namespace ft {
 						_p = _alloc.allocate(_capacity);
 						_p_end = _p;
 						for (size_t i = 0; i < n; i++) {
-							_alloc.construct(_p + i, val);
+							_alloc.construct(_p.base() + i, val);
 							++_p_end;
 						}
 				}
@@ -83,7 +81,7 @@ namespace ft {
 							_p = _alloc.allocate(_capacity);
 							_p_end = _p;
 							for (size_t i = 0; first != last; i++) {
-								_alloc.construct(_p + i, *first);
+								_alloc.construct(_p.base() + i, *first);
 								++first;
 								++_p_end;
 							}
@@ -99,7 +97,7 @@ namespace ft {
 
 				~vector() {
 					if (_capacity > 0)
-						_alloc.deallocate(_p, _capacity);
+						_alloc.deallocate(_p.base(), _capacity);
 				}
 
 				template <class InputIterator>
@@ -111,7 +109,7 @@ namespace ft {
 							_p = _alloc.allocate(_capacity);
 							_p_end = _p;
 							for (size_t i = 0; first != last; i++) {
-								_alloc.construct(_p + i, *first);
+								_alloc.construct(_p.base() + i, *first);
 								++first;
 								++_p_end;
 							}
@@ -121,7 +119,7 @@ namespace ft {
 				void			assign(size_type n, const T& u) {
 					reserve(n);
 					for (size_t i = 0; i < n; i++) {
-						_alloc.construct(_p + i, u);
+						_alloc.construct(_p.base() + i, u);
 						if (size() <= i)
 							++_p_end;
 					}
@@ -135,15 +133,34 @@ namespace ft {
 				}
 
 				/* ITERATORS */
-				iterator				begin() { return _p; }
-				const_iterator			begin() const { return _p; }
-				iterator				end() { return _p_end; }
-				const_iterator			end() const { return _p_end; }
-//				reverse_iterator		rbegin() { return reverse_iterator(_p_end); }
+				iterator				begin() {
+					return iterator(_p);
+				}
+
+				const_iterator			begin() const {
+					return const_iterator(_p);
+				}
+
+				iterator				end() {
+					return iterator(_p_end);
+				}
+
+				const_iterator			end() const {
+					return const_iterator(_p_end);
+				}
+
+//				reverse_iterator		rbegin() {
+//					return reverse_iterator(_p_end);
+//				}
 //				const_reverse_iterator	rbegin() const { return const_reverse_iterator(_p_end); }
-//				reverse_iterator		rend() { return reverse_iterator(_p); }
-//				const_reverse_iterator	rend() const { return const_reverse_iterator(_p); }
-//				iterator_type			base() const { return ; }
+//
+//				reverse_iterator		rend() {
+//					return reverse_iterator(_p);
+//				}
+//
+//				const_reverse_iterator	rend() const {
+//					return const_reverse_iterator(_p);
+//				}
 
 				/* CAPACITY */
 				size_type	size() const { return _p_end - _p; }
@@ -179,7 +196,7 @@ namespace ft {
 						tmp[i] = *(_p + i);
 					}
 					if (_capacity > 0)
-						_alloc.deallocate(_p, _capacity);
+						_alloc.deallocate(_p.base(), _capacity);
 					if (_capacity <= n)
 						_capacity = n;
 					else
@@ -187,7 +204,7 @@ namespace ft {
 					_p = _alloc.allocate(_capacity);
 					_p_end = _p;
 					for (size_t i = 0; i < size_tmp; i++) {
-						_alloc.construct(_p + i, tmp[i]);
+						_alloc.construct(_p.base() + i, tmp[i]);
 						++_p_end;
 					}
 				}
@@ -229,13 +246,13 @@ namespace ft {
 //					std::cout << "CAPACITY = " << _capacity << '\n';
 					if (size() + 1 > _capacity)
 						reserve(_capacity + 1);
-					_alloc.construct(_p + size(), val);
+					_alloc.construct(_p.base() + size(), val);
 					++_p_end;
 				}
 
 				void		pop_back() {
-					if (_p + size()) {
-						_alloc.destroy(_p + size());
+					if (_p.base() + size()) {
+						_alloc.destroy(_p.base() + size());
 						_p_end--;
 					}
 				}
@@ -271,28 +288,28 @@ namespace ft {
 
 					i = 0;
 					while (i < size()) {
-						_alloc.destroy(_p + i);
+						_alloc.destroy(_p.base() + i);
 						i++;
 					}
 					i = 0;
 					if (!count) {
 						while (i < n) {
-							_alloc.construct(_p + i, val);
+							_alloc.construct(_p.base() + i, val);
 							++i;
 							++_p_end;
 						}
 					}
 					while (j < count) {
-						_alloc.construct(_p + j, tmp[j]);
+						_alloc.construct(_p.base() + j, tmp[j]);
 						++j;
 					}
 					while (i < n) {
-						_alloc.construct(_p + count + i, val);
+						_alloc.construct(_p.base() + count + i, val);
 						++_p_end;
 						++i;
 					}
 					while (j < size_tmp) {
-						_alloc.construct(_p + j + i, tmp[j]);
+						_alloc.construct(_p.base() + j + i, tmp[j]);
 						++j;
 					}
 				}
@@ -326,24 +343,24 @@ namespace ft {
 
 						if (!count) {
 							while (i < n) {
-								_alloc.construct(_p + i, *first);
+								_alloc.construct(_p.base() + i, *first);
 								++i;
 								++_p_end;
 								++first;
 							}
 						}
 						while (j < count) {
-							_alloc.construct(_p + j, tmp[j]);
+							_alloc.construct(_p.base() + j, tmp[j]);
 							++j;
 						}
 						while (i < n) {
-							_alloc.construct(_p + count + i, *first);
+							_alloc.construct(_p.base() + count + i, *first);
 							++_p_end;
 							++i;
 							++first;
 						}
 						while (j < size_tmp) {
-							_alloc.construct(_p + j + i, tmp[j]);
+							_alloc.construct(_p.base() + j + i, tmp[j]);
 							++j;
 						}
 					}
@@ -367,11 +384,11 @@ namespace ft {
 					}
 					i = 0;
 					for (i = 0; i < size(); i++) {
-						_alloc.destroy(_p + i);
+						_alloc.destroy(_p.base() + i);
 					}
 					_p_end = _p;
 					for (i = 0; i + 1 < len; i++) {
-						_alloc.construct(_p + i, tmp[i]);
+						_alloc.construct(_p.base() + i, tmp[i]);
 						++_p_end;
 					}
 					return _p + ret;
@@ -413,14 +430,14 @@ namespace ft {
 						}
 					}
 					for (i = 0; i < size(); i++) {
-						_alloc.destroy(_p + i);
+						_alloc.destroy(_p.base() + i);
 					}
 					_p_end = _p;
 					for (i = 0; i < len; i++) {
-						_alloc.construct(_p + i, tmp[i]);
+						_alloc.construct(_p.base() + i, tmp[i]);
 						++_p_end;
 					}
-					return _p + ret;
+					return _p.base() + ret;
 				}
 
 				void		swap(vector<T, Alloc> &x) {
@@ -442,7 +459,7 @@ namespace ft {
 
 				void		clear() {
 					for (iterator it = begin(); it != end(); it++) {
-						_alloc.destroy(it);
+						_alloc.destroy(it.base());
 					}
 					_p_end = _p;
 				}
