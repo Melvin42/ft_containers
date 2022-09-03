@@ -11,15 +11,16 @@ namespace ft {
 
 	template <class Iterator>
 		class	iterator_traits {
-			typedef std::ptrdiff_t					difference_type;
-			typedef Iterator						value_type;
-			typedef Iterator&						reference;
-			typedef Iterator*						pointer;
-			typedef std::random_access_iterator_tag	iterator_category;
+			public:
+				typedef std::ptrdiff_t					difference_type;
+				typedef Iterator						value_type;
+				typedef Iterator&						reference;
+				typedef Iterator*						pointer;
+				typedef std::random_access_iterator_tag	iterator_category;
 		};
 
 	template <class T>
-		class iterator_traits<T*> {
+		class	iterator_traits<T*> {
 			public:
 				typedef std::ptrdiff_t					difference_type;
 				typedef T								value_type;
@@ -29,7 +30,7 @@ namespace ft {
 		};
 
 	template <class T>
-		class iterator_traits<const T*> {
+		class	iterator_traits<const T*> {
 			public:
 				typedef std::ptrdiff_t					difference_type;
 				typedef T								value_type;

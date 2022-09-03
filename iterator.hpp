@@ -31,7 +31,6 @@ namespace ft {
 							*this = it;
 						}
 
-
 					template <class U>
 						iterator	&operator=(const iterator<Category, U> &it) {
 							_pos = it.base();
@@ -69,7 +68,7 @@ namespace ft {
 					}
 
 					iterator	&operator++() {
-						_pos++;
+						++_pos;
 						return *this;
 					}
 
@@ -81,7 +80,7 @@ namespace ft {
 					}
 
 					iterator	&operator--() {
-						_pos--;
+						--_pos;
 						return *this;
 					}
 
@@ -97,13 +96,13 @@ namespace ft {
 						return iterator(base() + n);
 					}
 
-					difference_type	operator-(const iterator &it) const {
-						return base() - it.base();
-					}
+//					difference_type	operator-(const iterator &it) const {
+//						return base() - it.base();
+//					}
 
-					iterator	operator-(difference_type v) const {
-						return iterator(_pos - v);
-					}
+//					iterator	operator-(difference_type v) const {
+//						return iterator(_pos - v);
+//					}
 
 					iterator	operator-(int n) {
 						return iterator(_pos - n);
@@ -144,7 +143,7 @@ namespace ft {
 
 	template <class Iterator>
 		bool	operator>=(const Iterator &lhs, const Iterator &rhs) {
-			return lhs._pos <= rhs._pos;
+			return lhs._pos >= rhs._pos;
 		}
 
 	template <class Iterator>
@@ -196,34 +195,36 @@ namespace ft {
 //			std::cout << "coucou\n";	
 //			return iterator<Category, T>(lhs.base() - rhs.base());
 //		}
-	
+
 	template <class Category, class T>
 		iterator<Category, T> operator+(std::ptrdiff_t v, iterator<Category, T> &it) {
 			return iterator<Category, T>(it.base() + v);
 		}
-	
+
+//	template <class Category, class T>
+//		iterator<Category, T> operator-(std::ptrdiff_t v, iterator<Category, T> &it) {
+//			return iterator<Category, T>(it.base() - v);
+//		}
+
 	template <class Category, class T>
-		iterator<Category, T> operator-(std::ptrdiff_t v, iterator<Category, T> &it) {
-			return iterator<Category, T>(it.base() + v);
+		typename iterator<Category, T>::difference_type operator+(const iterator<Category, T> &lhs, const iterator<Category, T> &rhs) {
+			return lhs.base() + rhs.base();
 		}
-	
+
 	template <class Category, class T>
 		typename iterator<Category, T>::difference_type operator-(const iterator<Category, T> &lhs, const iterator<Category, T> &rhs) {
 			return lhs.base() - rhs.base();
 		}
-	
+
+	template <class Category, class T, class U>
+		typename iterator<Category, T>::difference_type operator+(const iterator<Category, T> &lhs, const iterator<Category, U> &rhs) {
+			return lhs.base() + rhs.base();
+		}
+
 	template <class Category, class T, class U>
 		typename iterator<Category, T>::difference_type operator-(const iterator<Category, T> &lhs, const iterator<Category, U> &rhs) {
 			return lhs.base() - rhs.base();
 		}
-	
-	/*
-		template <class T>
-			typename iterator<T>::difference_type	operator-(const iterator<T> &lhs,
-					const iterator<T> &rhs) {
-				return lhs.base() - rhs.base();
-			}
-			*/
 
 //	template <class Category, class T>
 //		std::ostream	&operator<<(std::ostream &os, const iterator<Category, T> &it) {
