@@ -72,10 +72,10 @@ void	test_map() {
 		std::cout << "first  = " << ftIt->_pair.first << '\n';
 		std::cout << "second = " << ftIt->_pair.second << '\n';
 	}
-//	for (ftIt = ftMap.begin(); ftIt != ftMap.end(); ftIt++) {
-//		std::cout << "first  = " << ftIt->_pair.first << '\n';
-//		std::cout << "second = " << ftIt->_pair.second << '\n';
-//	}
+	for (ftIt = ftMap.begin(); ftIt != ftMap.end(); ftIt++) {
+		std::cout << "first  = " << ftIt->_pair.first << '\n';
+		std::cout << "second = " << ftIt->_pair.second << '\n';
+	}
 
 //	map1.insert(pair1);
 //	std::cout << "Count: " << ftMap.count(4) << '\n';
