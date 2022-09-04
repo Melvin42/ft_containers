@@ -8,6 +8,7 @@
 	namespace ft = std;
 #else
 	#include "map.hpp"
+	#include <map>
 	#include "iterator_traits.hpp"
 	#include "pair.hpp"
 	#include "utils.hpp"
@@ -35,14 +36,32 @@ void	test_iterator() {
 void	test_map() {
 	std::cout << "/******** TESTING MAP ********/\n" << std::endl;
 
-	ft::pair<int,int>	pair1;
-	ft::map<int, int>	map1;
+	ft::pair<int, int>	pair1;
+	std::pair<int, int>	pair2;
+	ft::map<int, int>	ftMap;
+	std::map<int, int>	stdMap;
 
 	pair1 = ft::make_pair(10,20);
+	pair2 = std::make_pair(10,20);
 
-	map1.insert(pair1);
+	ftMap.insert(pair1);
+	stdMap.insert(pair2);
+
+//	ft::map<int, int>::iterator		ftIt;
+	std::map<int, int>::iterator	stdIt;
+
+	for (stdIt = stdMap.begin(); stdIt != stdMap.end(); stdIt++) {
+		std::cout << "first  = " << stdIt->first << '\n';
+		std::cout << "second = " << stdIt->second << '\n';
+	}
+//	for (ftIt = ftMap.begin(); ftIt != ftMap.end(); ftIt++) {
+//		std::cout << "first  = " << ftIt->first << '\n';
+//		std::cout << "second = " << ftIt->second << '\n';
+//	}
+//	tree.insert(4);
+
 //	map1.insert(pair1);
-	std::cout << "Count: " << map1.count(4) << '\n';
+	std::cout << "Count: " << ftMap.count(4) << '\n';
 	std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
 
 	/*

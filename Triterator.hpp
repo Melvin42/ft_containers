@@ -1,5 +1,5 @@
-#ifndef ITERATOR_HPP
-#define ITERATOR_HPP
+#ifndef TRITERATOR_HPP
+#define TRITERATOR_HPP
 
 #include "iterator_traits.hpp"
 
@@ -9,7 +9,7 @@ namespace ft {
 				class Distance = typename iterator_traits<T*>::difference_type,
 				class Pointer = typename iterator_traits<T*>::pointer,
 				class Reference = typename iterator_traits<T*>::reference >
-		class	iterator {
+		class Triterator {
 			public:
 				typedef typename iterator_traits<T*>::value_type value_type;
 				typedef Pointer		pointer;
@@ -18,7 +18,7 @@ namespace ft {
 				typedef Category	iterator_category;
 
 			protected:
-				pointer	_pos;
+				node	_pos;
 
 			public:
 
