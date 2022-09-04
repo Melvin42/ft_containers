@@ -45,24 +45,40 @@ void	test_map() {
 	pair2 = std::make_pair(10,20);
 
 	ftMap.insert(pair1);
+	ftMap.insert(ft::make_pair(11,21));
+	ftMap.insert(ft::make_pair(12,22));
 	stdMap.insert(pair2);
 
-//	ft::map<int, int>::iterator		ftIt;
+	ft::map<int, int>::iterator		ftIt;
 	std::map<int, int>::iterator	stdIt;
 
+	std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
+
+	std::cout << "std-print\n";
 	for (stdIt = stdMap.begin(); stdIt != stdMap.end(); stdIt++) {
 		std::cout << "first  = " << stdIt->first << '\n';
 		std::cout << "second = " << stdIt->second << '\n';
 	}
-//	for (ftIt = ftMap.begin(); ftIt != ftMap.end(); ftIt++) {
+	std::cout << "ft-print\n";
+	ftIt = ftMap.begin();
+	for (size_t i = 0; i < ftMap.size(); i++, ftIt++) {
+		std::cout << "first  = " << ftIt->_pair.first << '\n';
+		std::cout << "second = " << ftIt->_pair.second << '\n';
 //		std::cout << "first  = " << ftIt->first << '\n';
 //		std::cout << "second = " << ftIt->second << '\n';
+	}
+	ftIt = ftMap.begin();
+	for (size_t i = 0; i < ftMap.size(); i++, ftIt++) {
+		std::cout << "first  = " << ftIt->_pair.first << '\n';
+		std::cout << "second = " << ftIt->_pair.second << '\n';
+	}
+//	for (ftIt = ftMap.begin(); ftIt != ftMap.end(); ftIt++) {
+//		std::cout << "first  = " << ftIt->_pair.first << '\n';
+//		std::cout << "second = " << ftIt->_pair.second << '\n';
 //	}
-//	tree.insert(4);
 
 //	map1.insert(pair1);
-	std::cout << "Count: " << ftMap.count(4) << '\n';
-	std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
+//	std::cout << "Count: " << ftMap.count(4) << '\n';
 
 	/*
 	std::cout << "TESTING RESIZE\n" << std::endl;

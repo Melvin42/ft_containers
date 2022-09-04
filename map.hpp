@@ -7,14 +7,43 @@
 #include <iostream>
 #include "utils.hpp"
 #include "pair.hpp"
+#include <map>
 #include "IteratorMap.hpp"
 #include "iterator_traits.hpp"
 
 namespace ft {
 	template <class Key, class T, class Compare, class Alloc> class map;
-//
-	class Tree;
-	class Node;
+
+	template <class Key, class T>
+		class Node {
+			public:
+				typedef Node*	pointer;
+				Node() {}
+				Node(const Node &node) { *this = node; }
+
+				~Node() {}
+
+				Node	&operator=(const Node &node) {
+					_pair = make_pair(node._pair.first, node._pair.second);
+//					first = node.first;
+//					second = node.second;
+					left = node.left;
+					right = node.right;
+					height = node.height;
+
+					return *this;
+				}
+
+//				pair<Key, T>	&operator*() const { return _pair; }
+//				pair<Key, T>	&operator->() const { return &_pair; }
+
+				pair<Key, T>	_pair;
+//				Key				first;
+//				T				second;
+				Node			*left;
+				Node			*right;
+				int				height;
+		};
 
 	template <class T> struct less : std::binary_function <T,T,bool> {
 		bool operator() (const T& x, const T& y) const {return x<y;}
@@ -24,27 +53,26 @@ namespace ft {
 				class T,
 				class Compare = less<Key>,
 				class Alloc = std::allocator<pair<const Key, T> > >
-//	class Node;
 		class map {
 			public:
 				/* TYPES */
-				typedef Key										key_type;
-				typedef T										mapped_type;
-				typedef ft::pair<const key_type, mapped_type>	value_type;
-				typedef Compare									key_compare;
-				typedef Alloc									allocator_type;
-				typedef std::less<key_type>						value_compare;
-				typedef std::size_t								size_type;
-				typedef std::ptrdiff_t							difference_type;
-				typedef value_type*								pointer;
-				typedef const value_type*						const_pointer;
-//				typedef value_type*								iterator;
-				typedef ft::IteratorMap<std::bidirectional_iterator_tag, value_type>	iterator;
-				typedef const value_type*						const_iterator;
-				typedef value_type&								reference;
-				typedef const value_type&						const_reference;
-				typedef std::reverse_iterator<iterator>			reverse_iterator;
-				typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
+				typedef Key																	key_type;
+				typedef T																	mapped_type;
+				typedef ft::pair<const key_type, mapped_type>								value_type;
+				typedef Compare																key_compare;
+				typedef std::less<key_type>													value_compare;
+				typedef Alloc																allocator_type;
+				typedef typename allocator_type::reference									reference;
+				typedef typename allocator_type::const_reference							const_reference;
+				typedef typename allocator_type::pointer									pointer;
+				typedef typename allocator_type::const_pointer								const_pointer;
+				typedef ft::IteratorMap<std::bidirectional_iterator_tag, Node<Key, T> >			iterator;
+				typedef ft::IteratorMap<std::bidirectional_iterator_tag, const Node<Key, T> >	const_iterator;
+				typedef std::reverse_iterator<iterator>										reverse_iterator;
+//				typedef std::reverse_iterator<const_iterator>								const_reverse_iterator;
+//				typedef std::ptrdiff_t														difference_type;
+				typedef typename iterator_traits<iterator>::difference_type					difference_type;
+				typedef std::size_t															size_type;
 
 			public:
 				/* CONSTRUCT/COPY/DESTROY */
@@ -52,16 +80,16 @@ namespace ft {
 				map	&operator=(const map<Key, T, Compare, Alloc> &map) {
 					_alloc = map.get_allocator();
 					_size = map.size();
-					_p = _alloc.allocate(_size);
+					_tree.setRoot(_alloc_node.allocate(_size));
+
 					return *this;
 				}
 
 				//empty (1)
 				explicit map(const key_compare &comp = key_compare(),
 						const allocator_type &alloc = allocator_type())
-					: _alloc(alloc), _p(NULL), _size(0) {
-						_p = _alloc.allocate(0);
-//						_p_end = _p;
+					: _alloc(alloc), _size(0) {
+						_tree.setRoot(_alloc_node.allocate(0));
 
 						if (!comp(0, 0))
 							std::cout << "coucou\n";
@@ -72,14 +100,14 @@ namespace ft {
 					map(InputIterator first, InputIterator last,
 							const key_compare &comp = key_compare(),
 							const allocator_type &alloc = allocator_type())
-							: _alloc(alloc), _p(NULL), _size(0) {
+							: _alloc(alloc), _size(0) {
 						size_t	n = 0;
 
 						if (last - first > 0)
 							n = last - first;
 
 						_size = n;
-						_p = _alloc.allocate(n);
+						_tree.setRoot(_alloc_node.allocate(n));
 						if (!comp(0, 0) || comp(0, 0))
 							std::cout << "Iterator Constructor\n";
 					}
@@ -97,21 +125,21 @@ namespace ft {
 				}
 
 				/* ITERATORS */
-				iterator				begin() { return iterator(_p); }
-				const_iterator			begin() const { return const_iterator(_p); }
-				iterator				end() { return iterator(_p); }
-				const_iterator			end() const { return const_iterator(_p); }
-				reverse_iterator		rbegin() { return reverse_iterator(_p); }
-				const_reverse_iterator	rbegin() const { return const_reverse_iterator(_p); }
-				reverse_iterator		rend() { return reverse_iterator(_p); }
-				const_reverse_iterator	rend() const { return const_reverse_iterator(_p); }
-//				iterator_type			base() const { return ; }
+				iterator				begin() { return iterator(_tree.getRoot()); }
+//				const_iterator			begin() const { return const_iterator(_tree.getRoot()); }
+				iterator				end() { return iterator(_tree.getRoot()); }
+//				const_iterator			end() const { return const_iterator(_tree.getRoot()); }
+//				reverse_iterator		rbegin() { return reverse_iterator(_tree.getRoot()); }
+//				const_reverse_iterator	rbegin() const { return const_reverse_iterator(_tree.getRoot()); }
+//				reverse_iterator		rend() { return reverse_iterator(_tree.getRoot()); }
+//				const_reverse_iterator	rend() const { return const_reverse_iterator(_tree.getRoot()); }
 
 				/* CAPACITY */
 				size_type	size() const { return _size; }
 
 				size_type	max_size() const {
-					return std::numeric_limits<size_type>::max() / sizeof(difference_type); }
+//					return std::numeric_limits<size_type>::max() / sizeof(difference_type); }
+					return _alloc.max_size(); }
 
 				bool		empty() const { return (size() == 0); }
 
@@ -202,13 +230,12 @@ namespace ft {
 
 					_tree.insert(make_pair(val.first, val.second));
 //					_tree.insert(ft::make_pair<key_type, mapped_type>(val.first, val.second));
-					iterator it = iterator(_p);
 //					return (ft::make_pair<iterator, bool>(iterator(_tree.insert(val)), true));
 					pair<iterator, bool>	ret;
 
 					++_size;
 					_tree.printTree();
-					return ft::make_pair<iterator, bool>(it, true);
+					return ft::make_pair<iterator, bool>(iterator(_tree.getRoot()), true);
 				}
 
 				//with hint (2)
@@ -252,42 +279,20 @@ namespace ft {
 //					return lhs - rhs;
 //				}
 				private:
-					class Node {
-						public:
-							Node() {}
-							Node(const Node &node) { *this = node; }
-
-							~Node() {}
-
-							Node	&operator=(const Node &node) {
-								_pair = make_pair(node._pair.first, node._pair.second);
-								left = node.left;
-								right = node.right;
-								height = node.height;
-
-								return *this;
-							}
-
-							pair<key_type, mapped_type>	_pair;
-							Node						*left;
-							Node						*right;
-							int							height;
-					};
-
 					class Tree {
 						public:
 							Tree() : _root(NULL) {}
 
-							Tree(const Tree &tree) { *this = tree; }
+								Tree(const Tree &tree) { *this = tree; }
 
-							Tree	&operator=(const Tree &tree) {
-								_root = tree.getRoot();
-								return *this;
-							}
+								Tree	&operator=(const Tree &tree) {
+									_root = tree.getRoot();
+									return *this;
+								}
 
 							~Tree() { destroyTree(); }
 
-							int	height(Node *node) {
+							int	height(Node<Key, T> *node) {
 								if (!node)
 									return 0;
 								return node->height;
@@ -297,11 +302,16 @@ namespace ft {
 								return (a > b) ? a : b;
 							}
 
-							Node	*getRoot() const {
+							Node<Key, T>	*getRoot() const {
 								return _root;
 							}
 
-							Node	*setRoot() const {
+							Node<Key, T>	*getRoot() {
+								return _root;
+							}
+
+							void	setRoot(Node<Key, T> *node) {
+								_root = node;
 							}
 
 							void	destroyTree() {
@@ -318,8 +328,8 @@ namespace ft {
 							}
 
 						private:
-							Node	*newNode(value_type pair) {
-								Node	*node = new Node();
+							Node<Key, T>	*newNode(value_type pair) {
+								Node<Key, T>	*node = new Node<Key, T>();
 
 								node->_pair = make_pair(pair.first, pair.second);
 								node->left = NULL;
@@ -329,9 +339,9 @@ namespace ft {
 								return (node);
 							}
 
-							Node	*rightRotate(Node *y) {
-								Node	*x = y->left;
-								Node	*T2 = x->right;
+							Node<Key, T>	*rightRotate(Node<Key, T> *y) {
+								Node<Key, T>	*x = y->left;
+								Node<Key, T>	*T2 = x->right;
 
 								x->right = y;
 								y->left = T2;
@@ -342,9 +352,9 @@ namespace ft {
 								return x;
 							}
 
-							Node	*leftRotate(Node *x) {
-								Node	*y = x->right;
-								Node	*T2 = y->left;
+							Node<Key, T>	*leftRotate(Node<Key, T> *x) {
+								Node<Key, T>	*y = x->right;
+								Node<Key, T>	*T2 = y->left;
 
 								y->left = x;
 								x->right = T2;
@@ -355,13 +365,21 @@ namespace ft {
 								return y;
 							}
 
-							int	getBalance(Node *node) {
+							int	getBalance(Node<Key, T> *node) {
 								if (!node)
 									return 0;
 								return height(node->left) - height(node->right);
 							}
 
-							Node	*insert(Node *node, value_type pair) {
+							Node<Key, T>	*search(const key_type &k) {
+								(void)k;
+
+								Node<Key, T>	*tmp = NULL;
+
+								return tmp;
+							}
+
+							Node<Key, T>	*insert(Node<Key, T> *node, value_type pair) {
 								if (!node)
 									return (newNode(pair));
 
@@ -394,7 +412,7 @@ namespace ft {
 								return node;
 							}
 
-							void	preOrder(Node *root) {
+							void	preOrder(Node<Key, T> *root) {
 								if (root) {
 									std::cout << "First: " << root->_pair.first
 										<< " " << root->_pair.second;
@@ -404,7 +422,7 @@ namespace ft {
 								std::cout << std::endl;
 							}
 
-							void	destroyTree(Node *leaf) {
+							void	destroyTree(Node<Key, T> *leaf) {
 								if (leaf) {
 									destroyTree(leaf->left);
 									destroyTree(leaf->right);
@@ -412,14 +430,13 @@ namespace ft {
 								}
 							}
 
-							Node	*_root;
+							Node<Key, T>	*_root;
 					};
 			private:
 				Alloc		_alloc;
-				pointer		_p;
-//				iterator		_p;
-//				pointer		_p_end;	
 				size_type	_size;
+				typename allocator_type::template rebind<Node<Key, T> >::other	_alloc_node;
+
 				Tree		_tree;
 
 

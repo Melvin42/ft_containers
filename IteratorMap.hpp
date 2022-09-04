@@ -2,8 +2,12 @@
 #define ITERATORMAP_HPP
 
 #include "iterator_traits.hpp"
+#include "map.hpp"
+
 
 namespace ft {
+	template <class Key, class T, class Compare, class Alloc> class map;
+
 	template <	class Category,
 				class T,
 				class Distance = std::ptrdiff_t,

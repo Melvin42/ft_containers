@@ -24,7 +24,7 @@ namespace ft {
 
 				~pair() {}
 
-				pair	&operator=(const pair &pair) {
+				pair	&operator=(const pair<const T1, T2> &pair) {
 					first = pair.first;
 					second = pair.second;
 					return *this;

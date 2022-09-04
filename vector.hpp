@@ -173,7 +173,8 @@ namespace ft {
 				size_type	capacity() const { return _capacity; }
 
 				size_type	max_size() const {
-					return std::numeric_limits<size_type>::max() / sizeof(difference_type); }
+//					return std::numeric_limits<size_type>::max() / sizeof(difference_type); }
+					return _alloc.max_size(); }
 
 				bool		empty() const { return (size() == 0); }
 
