@@ -41,41 +41,59 @@ void	test_map() {
 	ft::map<int, int>	ftMap;
 	std::map<int, int>	stdMap;
 
+	std::cout << "std Size = " << stdMap.size() << '\n';
+	std::cout << "ft Size = " << ftMap.size() << '\n';
 	pair1 = ft::make_pair(10,20);
 	pair2 = std::make_pair(10,20);
 
 	ftMap.insert(pair1);
 	ftMap.insert(ft::make_pair(11,21));
 	ftMap.insert(ft::make_pair(12,22));
+
 	stdMap.insert(pair2);
+	stdMap.insert(std::make_pair(12,22));
+	stdMap.insert(std::make_pair(11,21));
 
 	ft::map<int, int>::iterator		ftIt;
 	std::map<int, int>::iterator	stdIt;
 
 	std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
 
+	stdIt = stdMap.begin();
 	std::cout << "std-print\n";
-	for (stdIt = stdMap.begin(); stdIt != stdMap.end(); stdIt++) {
+//	std::cout << "stdMap[" << 0 << "]  = " << stdMap[0] << '\n';
+	std::cout << "stdMap[" << 10 << "]  = " << stdMap[10] << '\n';
+	std::cout << "stdMap[" << 11 << "]  = " << stdMap[11] << '\n';
+	std::cout << "stdMap[" << 12 << "]  = " << stdMap[12] << '\n';
+	std::cout << "Size = " << stdMap.size() << '\n';
+	for (size_t i = 0; i < stdMap.size(); i++, stdIt++) {
 		std::cout << "first  = " << stdIt->first << '\n';
 		std::cout << "second = " << stdIt->second << '\n';
 	}
+
 	std::cout << "ft-print\n";
 	ftIt = ftMap.begin();
+//	std::cout << "ftMap[" << 0 << "]  = " << ftMap[0] << '\n';
+	std::cout << "ftMap[" << 10 << "]  = " << ftMap[10] << '\n';
+	std::cout << "ftMap[" << 11 << "]  = " << ftMap[11] << '\n';
+	std::cout << "ftMap[" << 12 << "]  = " << ftMap[12] << '\n';
+	std::cout << "Size = " << ftMap.size() << '\n';
 	for (size_t i = 0; i < ftMap.size(); i++, ftIt++) {
+//		std::cout << "ftMap[" << i << "]  = " << ftMap[i] << '\n';
 		std::cout << "first  = " << ftIt->_pair.first << '\n';
 		std::cout << "second = " << ftIt->_pair.second << '\n';
 //		std::cout << "first  = " << ftIt->first << '\n';
 //		std::cout << "second = " << ftIt->second << '\n';
 	}
-	ftIt = ftMap.begin();
-	for (size_t i = 0; i < ftMap.size(); i++, ftIt++) {
-		std::cout << "first  = " << ftIt->_pair.first << '\n';
-		std::cout << "second = " << ftIt->_pair.second << '\n';
-	}
-	for (ftIt = ftMap.begin(); ftIt != ftMap.end(); ftIt++) {
-		std::cout << "first  = " << ftIt->_pair.first << '\n';
-		std::cout << "second = " << ftIt->_pair.second << '\n';
-	}
+//	ftIt = ftMap.begin();
+//	for (size_t i = 0; i < ftMap.size(); i++, ftIt++) {
+//		std::cout << "first  = " << ftIt->_pair.first << '\n';
+//		std::cout << "second = " << ftIt->_pair.second << '\n';
+//	}
+//	for (ftIt = ftMap.begin(); ftIt != ftMap.end(); ftIt++) {
+//		std::cout << "first  = " << ftIt->_pair.first << '\n';
+//		std::cout << "second = " << ftIt->_pair.second << '\n';
+//	}
 
 //	map1.insert(pair1);
 //	std::cout << "Count: " << ftMap.count(4) << '\n';

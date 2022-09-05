@@ -6,7 +6,7 @@
 
 
 namespace ft {
-	template <class Key, class T, class Compare, class Alloc> class map;
+//	template <class Key, class V, class Compare, class Alloc> class map;
 
 	template <	class Category,
 				class T,
@@ -22,12 +22,17 @@ namespace ft {
 				typedef Category	IteratorMap_category;
 
 			protected:
+//				Node	*node;
 				pointer	_pos;
 
 			public:
 				IteratorMap() : _pos(NULL) {}
 
-				IteratorMap(pointer it) : _pos(it) {}
+				IteratorMap(pointer it) : _pos(it) {
+
+					if (it)
+						std::cout << it->_pair.first << '\n';
+				}
 
 				template <class U>
 					IteratorMap(const IteratorMap<Category, U> &it) {
@@ -54,37 +59,37 @@ namespace ft {
 				pointer		operator->() const { return _pos; }
 
 				IteratorMap	operator-=(int n) {
-					for (int i = 0; i < n; i++, _pos--) ;
+					for (int i = 0; i < n; i++, _pos--)
+						*this = _pos->left;
 					return *this;
 				}
 
 				IteratorMap	operator+=(int n) {
-					for (int i = 0; i < n; i++, _pos++) ;
+					for (int i = 0; i < n; i++)
+						*this = _pos->right;
 					return *this;
 				}
 
 				IteratorMap	operator++(int) {
 					IteratorMap	tmp(*this);
 
-					++(*this);
+					*this = _pos->right;
 					return tmp;
 				}
 
 				IteratorMap	&operator++() {
-					++_pos;
-					return *this;
+					return _pos->right;
 				}
 
 				IteratorMap	operator--(int) {
 					IteratorMap	tmp = *this;
 
-					--(*this);
+					*this = _pos->left;
 					return tmp;
 				}
 
 				IteratorMap	&operator--() {
-					--_pos;
-					return *this;
+					return _pos->left;
 				}
 
 				difference_type	operator+(const IteratorMap &it) const {
