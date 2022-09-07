@@ -33,6 +33,7 @@ void	test_iterator() {
 //	std::cout << "TESTING BIDIR_ITERATOR\n" << std::endl;
 //	std::cout << "TESTING ITERATOR_TRAITS\n" << std::endl;
 }
+
 void	test_map() {
 	std::cout << "/******** TESTING MAP ********/\n" << std::endl;
 
@@ -83,18 +84,19 @@ void	test_map() {
 	std::cout << "Size = " << ftMap.size() << '\n';
 	std::cout << "find 10 = " << ftMap.find(10)->_pair.second << '\n';
 //	std::cout << "find 10 = " << ftMap.find(1000)->_pair.second << '\n';
-	for (size_t i = 0; i < ftMap.size(); i++, ftIt++) {
+//	for (size_t i = 0; i < ftMap.size(); i++, ftIt++) {
 //		std::cout << "ftMap[" << i << "]  = " << ftMap[i] << '\n';
-		std::cout << "first  = " << ftIt->_pair.first << '\n';
-		std::cout << "second = " << ftIt->_pair.second << '\n';
+	ftIt++;
+	std::cout << "first  = " << ftIt->_pair.first << '\n';
+//		std::cout << "second = " << ftIt->_pair.second << '\n';
 //		std::cout << "first  = " << ftIt->first << '\n';
 //		std::cout << "second = " << ftIt->second << '\n';
-	}
-	ftIt = ftMap.end();
-	for (size_t i = 0; i < ftMap.size(); i++, ftIt--) {
-		std::cout << "first  = " << ftIt->_pair.first << '\n';
-		std::cout << "second = " << ftIt->_pair.second << '\n';
-	}
+//	}
+//	ftIt = ftMap.end();
+//	for (size_t i = 0; i < ftMap.size(); i++, ftIt--) {
+//		std::cout << "first  = " << ftIt->_pair.first << '\n';
+//		std::cout << "second = " << ftIt->_pair.second << '\n';
+//	}
 //	ftIt = ftMap.begin();
 //	for (size_t i = 0; i < ftMap.size(); i++, ftIt++) {
 //		std::cout << "first  = " << ftIt->_pair.first << '\n';
@@ -106,23 +108,23 @@ void	test_map() {
 //	}
 
 //	map1.insert(pair1);
-	std::cout << "stdCount: " << stdMap.count(4) << '\n';
-	std::cout << "ftCount: " << ftMap.count(4) << '\n';
-	std::cout << "stdCount: " << stdMap.count(10) << '\n';
-	std::cout << "ftCount: " << ftMap.count(10) << '\n';
-
-	std::cout << "std_lower_bound: " << stdMap.lower_bound(10)->first << '\n';
-	std::cout << "ft_lower_bound: " << ftMap.lower_bound(10)->_pair.first << '\n';
-	std::cout << "std_lower_bound: " << stdMap.lower_bound(11)->first << '\n';
-	std::cout << "ft_lower_bound: " << ftMap.lower_bound(11)->_pair.first << '\n';
-//	std::cout << "std_lower_bound: " << stdMap.lower_bound(8)->first << '\n';
-//	std::cout << "ft_lower_bound: " << ftMap.lower_bound(8)->_pair.first << '\n';
-
-	std::cout << "std_upper_bound: " << stdMap.upper_bound(10)->first << '\n';
-	std::cout << "ft_upper_bound: " << ftMap.upper_bound(10)->_pair.first << '\n';
-	std::cout << "std_upper_bound: " << stdMap.upper_bound(11)->first << '\n';
-	std::cout << "ft_upper_bound: " << ftMap.upper_bound(11)->_pair.first << '\n';
-	std::cout << "ft_upper_bound: " << ftMap.upper_bound(11)->_pair.first << '\n';
+//	std::cout << "stdCount: " << stdMap.count(4) << '\n';
+//	std::cout << "ftCount: " << ftMap.count(4) << '\n';
+//	std::cout << "stdCount: " << stdMap.count(10) << '\n';
+//	std::cout << "ftCount: " << ftMap.count(10) << '\n';
+//
+//	std::cout << "std_lower_bound: " << stdMap.lower_bound(10)->first << '\n';
+//	std::cout << "ft_lower_bound: " << ftMap.lower_bound(10)->_pair.first << '\n';
+//	std::cout << "std_lower_bound: " << stdMap.lower_bound(11)->first << '\n';
+//	std::cout << "ft_lower_bound: " << ftMap.lower_bound(11)->_pair.first << '\n';
+////	std::cout << "std_lower_bound: " << stdMap.lower_bound(8)->first << '\n';
+////	std::cout << "ft_lower_bound: " << ftMap.lower_bound(8)->_pair.first << '\n';
+//
+//	std::cout << "std_upper_bound: " << stdMap.upper_bound(10)->first << '\n';
+//	std::cout << "ft_upper_bound: " << ftMap.upper_bound(10)->_pair.first << '\n';
+//	std::cout << "std_upper_bound: " << stdMap.upper_bound(11)->first << '\n';
+//	std::cout << "ft_upper_bound: " << ftMap.upper_bound(11)->_pair.first << '\n';
+//	std::cout << "ft_upper_bound: " << ftMap.upper_bound(11)->_pair.first << '\n';
 //	std::cout << "std_upper_bound: " << stdMap.upper_bound(8)->first << '\n';
 //	std::cout << "ft_upper_bound: " << ftMap.upper_bound(8)->_pair.first << '\n';
 

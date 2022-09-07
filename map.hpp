@@ -82,8 +82,8 @@ namespace ft {
 						_root_parent = _alloc_node.allocate(1);
 
 						_root_parent->parent = NULL;
-						_root_parent->left = _root;
-						_root_parent->right = _root;
+						_root_parent->left = NULL;
+						_root_parent->right = NULL;
 						_root_parent->height = 0;
 
 						std::cout << "Empty Constructor\n";
@@ -104,8 +104,8 @@ namespace ft {
 						_root_parent = _alloc_node.allocate(1);
 
 						_root_parent->parent = NULL;
-						_root_parent->left = _root;
-						_root_parent->right = _root;
+						_root_parent->left = NULL;
+						_root_parent->right = NULL;
 						_root_parent->height = 0;
 
 
@@ -305,7 +305,6 @@ namespace ft {
 					Node	*node = _alloc_node.allocate(1);
 
 					_alloc.construct(&node->_pair, pair);
-//					node->_pair = make_pair(pair.first, pair.second);
 					node->parent = NULL;
 					node->left = NULL;
 					node->right = NULL;
@@ -314,12 +313,34 @@ namespace ft {
 					return (node);
 				}
 
+
+/*
+T1, T2 and T3 are subtrees of the tree, rooted with y (on the left side) or x (on the right side)
+
+     y                               x
+    / \     Right Rotation          /  \
+   x   T3   - - - - - - - >        T1   y
+  / \       < - - - - - - -            / \
+ T1  T2     Left Rotation            T2  T3
+
+*/
+
+				/*
+					node->parent = parent;
+					std::cout << "New node, Parent detection = \n";
+					if (!parent)
+						std::cout << "parent addr = " << &parent << '\n';
+					std::cout << "this addr = " << &node << '\n';
+*/
+
 				Node	*rightRotate(Node *y) {
 					Node	*x = y->left;
 					Node	*T2 = x->right;
 
-					x->parent = y->left->parent;
+					std::cout << "Right Rotate, Parent detection = \n";
 					x->right = y;
+					x->parent = y->parent;
+					y->parent = x;
 					y->left = T2;
 
 					y->height = max(height(y->left), height(y->right)) + 1;
@@ -332,8 +353,10 @@ namespace ft {
 					Node	*y = x->right;
 					Node	*T2 = y->left;
 
-					x->parent = y->left->parent;
+					std::cout << "Left Rotate, Parent detection = \n";
 					y->left = x;
+					y->parent = x->parent;
+					x->parent = y;
 					x->right = T2;
 
 					x->height = max(height(x->left), height(x->right)) + 1;
@@ -366,13 +389,15 @@ namespace ft {
 						return (newNode(pair));
 
 					if (pair < node->_pair) {
+						node->parent = node;
 						std::cout << "Insert Recurs Left\n";
 						node->left = insert(node->left, pair);
 					} else if (pair > node->_pair) {
+						node->parent = node;
 						std::cout << "Insert Recurs Right\n";
 						node->right = insert(node->right, pair);
-					}
-					return node;
+					} else
+						return node;
 
 					node->height = 1 + max(height(node->left), height(node->right));
 
@@ -406,7 +431,7 @@ namespace ft {
 				void	preOrder(Node *root) {
 					if (root) {
 						std::cout << "First: " << root->_pair.first
-							<< " " << root->_pair.second;
+							<< " " << root->_pair.second << ", height = " << root->height << " " << "root addr = " << &root << ", parent addr = " << (root->parent) << '\n';
 						preOrder(root->left);
 						preOrder(root->right);
 					}

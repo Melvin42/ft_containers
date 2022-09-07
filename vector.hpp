@@ -402,6 +402,7 @@ namespace ft {
 						_alloc.construct(_p + i, tmp[i]);
 						++_p_end;
 					}
+//					return iterator(_p + ret); return iterator????
 					return _p + ret;
 				}
 
