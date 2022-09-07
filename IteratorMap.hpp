@@ -78,18 +78,26 @@ namespace ft {
 				}
 
 				IteratorMap	&operator++() {
-					return _pos->right;
+					*this = _pos->right;
+					return *this;
 				}
 
 				IteratorMap	operator--(int) {
 					IteratorMap	tmp = *this;
 
-					*this = _pos->left;
+					if (_pos->parent == NULL || _pos->parent->_pair.first > _pos->_pair.first)
+						*this = _pos->left;
+					else
+						*this = _pos->parent;
 					return tmp;
 				}
 
 				IteratorMap	&operator--() {
-					return _pos->left;
+					if (_pos->parent == NULL || _pos->parent->_pair.first > _pos->_pair.first)
+						*this = _pos->left;
+					else
+						*this = _pos->parent;
+					return *this;
 				}
 
 				difference_type	operator+(const IteratorMap &it) const {

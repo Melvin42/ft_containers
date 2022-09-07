@@ -20,7 +20,7 @@ namespace ft {
 
 	template <	class Key,
 				class T,
-				class Compare = less<Key>,
+				class Compare = std::less<Key>,
 				class Alloc = std::allocator<pair<const Key, T> > >
 		class map {
 
@@ -49,7 +49,6 @@ namespace ft {
 
 			private:
 				struct Node {
-//					typedef Node*	pointer;
 					value_type		_pair;
 					Node			*parent;
 					Node			*left;
@@ -66,7 +65,7 @@ namespace ft {
 						_size = map.size();
 //						Node	*tmp = map. 
 
-						_root = _alloc_node.allocate(0);
+//						_root = _alloc_node.allocate(0);
 
 //						_alloc.construct(&tmp->_pair, 
 
@@ -77,16 +76,17 @@ namespace ft {
 				//empty (1)
 				explicit map(const key_compare &comp = key_compare(),
 						const allocator_type &alloc = allocator_type())
-					: _alloc(alloc), _size(0) {
-						_root = _alloc_node.allocate(1);
+					: _alloc(alloc), _comp(comp), _size(0), _root(NULL),
+					_root_parent(NULL) {
 
-						_root->left = NULL;
-						_root->right = NULL;
-						_root->height = 0;
-						_root = NULL;
+						_root_parent = _alloc_node.allocate(1);
 
-						if (!comp(0, 0))
-							std::cout << "coucou\n";
+						_root_parent->parent = NULL;
+						_root_parent->left = _root;
+						_root_parent->right = _root;
+						_root_parent->height = 0;
+
+						std::cout << "Empty Constructor\n";
 					}
 
 				//fill (2)
@@ -94,16 +94,27 @@ namespace ft {
 					map(InputIterator first, InputIterator last,
 							const key_compare &comp = key_compare(),
 							const allocator_type &alloc = allocator_type())
-							: _alloc(alloc), _size(0) {
+					: _alloc(alloc), _comp(comp), _size(0), _root(NULL),
+					_root_parent(NULL) {
 						size_t	n = 0;
 
 						if (last - first > 0)
 							n = last - first;
 
-						_size = n;
-						_root = _alloc_node.allocate(n);
-						if (!comp(0, 0) || comp(0, 0))
-							std::cout << "Iterator Constructor\n";
+						_root_parent = _alloc_node.allocate(1);
+
+						_root_parent->parent = NULL;
+						_root_parent->left = _root;
+						_root_parent->right = _root;
+						_root_parent->height = 0;
+
+
+						for (size_t i = 0; i < n; i++) {
+							insert(first->_pair);
+							++first;
+						}
+//						_size = n;
+						std::cout << "Iterator Constructor\n";
 					}
 
 				//copy (3)
@@ -121,7 +132,7 @@ namespace ft {
 				/* ITERATORS */
 				iterator				begin() { return iterator(min(_root)); }
 //				const_iterator			begin() const { return const_iterator(_tree.getRoot()); }
-				iterator				end() { return iterator(_root); }
+				iterator				end() { return iterator(max(_root)); }
 //				const_iterator			end() const { return const_iterator(_tree.getRoot()); }
 //				reverse_iterator		rbegin() { return reverse_iterator(_tree.getRoot()); }
 //				const_reverse_iterator	rbegin() const { return const_reverse_iterator(_tree.getRoot()); }
@@ -156,42 +167,50 @@ namespace ft {
 				}
 
 				size_type		count(const key_type &k) const {
-					for (const_iterator it = begin(); it != end(); it++) {
-						(void)k;
-//						if (it.first == k)
-//							return 1;
-					}
+//					return (search(k) != NULL);
+					if (search(k))
+						return 1;
 					return 0;
 				}
 
 				iterator		find(const key_type &k) {
-					iterator	it = begin();
-
-					(void)k;
-					while (it != end()) {
-//						if (it.first == k)
-//							return it;
-//						++it;
-					}
-					return it;
+					return iterator(search(k));
 				}
 
 				const_iterator	find(const key_type &k) const {
-					const_iterator	it = begin();
-
-					(void)k;
-					while (it != end()) {
-//						if (it.first == k)
-//							return it;
-//						++it;
-					}
-					return it;
+					return const_iterator(search(k));
 				}
 
-				iterator		lower_bound(const key_type &k) {(void)k;}
-				const_iterator	lower_bound(const key_type &k) const {(void)k;}
-				iterator		upper_bound(const key_type &k) {(void)k;}
-				const_iterator	upper_bound(const key_type &k) const {(void)k;}
+				iterator		lower_bound(const key_type &k) {
+//					iterator	iterator(k);
+//					for (iterator it = begin();
+//					_comp(element_key, k);
+					return (iterator(find(k)));
+				}
+
+				const_iterator	lower_bound(const key_type &k) const {
+					return (const_iterator(find(k)));
+				}
+
+				iterator		upper_bound(const key_type &k) {
+					iterator	it(find(k));
+
+//					std::cout << "It val = " << it->_pair.first << '\n';
+					if (it != end())
+						++it;
+//					std::cout << "It val = " << it->_pair.first << '\n';
+					return it;
+					return find(k);
+				}
+
+				const_iterator	upper_bound(const key_type &k) const {
+					const_iterator	it(find(k));
+
+					if (it != end())
+						++it;
+					std::cout << "It val = " << it->_pair.first << '\n';
+					return it;
+				}
 
 				pair<const_iterator,
 					const_iterator>	equal_range(const key_type &k) const {
@@ -217,16 +236,11 @@ namespace ft {
 				//single element (1)
 				pair<iterator, bool>	insert(const value_type& val) {
 
-//					pair<key_type, mapped_type>	tmp;
-
 					_root = insert(_root, make_pair(val.first, val.second));
-//					_tree.insert(ft::make_pair<key_type, mapped_type>(val.first, val.second));
-//					return (ft::make_pair<iterator, bool>(iterator(_tree.insert(val)), true));
-					pair<iterator, bool>	ret;
 
 					++_size;
 					printTree();
-					return ft::make_pair<iterator, bool>(iterator(_root), true);
+					return ft::make_pair<iterator, bool>(find(val.first), true);
 				}
 
 				//with hint (2)
@@ -288,13 +302,11 @@ namespace ft {
 				}
 
 				Node	*newNode(value_type pair) {
-//					Node	*node = new Node();
 					Node	*node = _alloc_node.allocate(1);
 
-//					_alloc.construct(&node->_pair, make_pair(pair.first, pair.second));
 					_alloc.construct(&node->_pair, pair);
-//					_alloc_node.construct(&node->_pair, pair);
 //					node->_pair = make_pair(pair.first, pair.second);
+					node->parent = NULL;
 					node->left = NULL;
 					node->right = NULL;
 					node->height = 1;
@@ -306,6 +318,7 @@ namespace ft {
 					Node	*x = y->left;
 					Node	*T2 = x->right;
 
+					x->parent = y->left->parent;
 					x->right = y;
 					y->left = T2;
 
@@ -319,6 +332,7 @@ namespace ft {
 					Node	*y = x->right;
 					Node	*T2 = y->left;
 
+					x->parent = y->left->parent;
 					y->left = x;
 					x->right = T2;
 
@@ -334,15 +348,15 @@ namespace ft {
 					return height(node->left) - height(node->right);
 				}
 
-				Node	*search(const key_type &k) {
+				Node	*search(const key_type &k) const {
 					return searchRecurs(_root, k);
 				}
 
-				Node	*searchRecurs(Node *node, const key_type &k) {
+				Node	*searchRecurs(Node *node, const key_type &k) const {
 					if (!node || k == node->_pair.first) {
 						return node;
 					}
-					if (k < node->_pair.first)
+					if (_comp(k, node->_pair.first))
 						return searchRecurs(node->left, k);
 					return searchRecurs(node->right, k);
 				}
@@ -428,13 +442,14 @@ namespace ft {
 						destroyTree(leaf->left);
 						destroyTree(leaf->right);
 						_alloc.deallocate(leaf);
-//						delete leaf;
 					}
 				}
 
-				Node		*_root;
 				Alloc		_alloc;
+				key_compare	_comp;
 				size_type	_size;
+				Node		*_root;
+				Node		*_root_parent;
 				typename allocator_type::template rebind<Node>::other	_alloc_node;
 		};
 
