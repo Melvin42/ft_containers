@@ -44,12 +44,20 @@ void	test_map() {
 
 	std::cout << "std Size = " << stdMap.size() << '\n';
 	std::cout << "ft Size = " << ftMap.size() << '\n';
-	pair1 = ft::make_pair(10,20);
+	pair1 = ft::make_pair(10,27);
 	pair2 = std::make_pair(10,20);
 
 	ftMap.insert(pair1);
-	ftMap.insert(ft::make_pair(11,21));
-	ftMap.insert(ft::make_pair(12,22));
+	ftMap.insert(ft::make_pair(13,29));
+	ftMap.insert(ft::make_pair(4,23));
+	ftMap.insert(ft::make_pair(5,24));
+	ftMap.insert(ft::make_pair(6,25));
+	ftMap.insert(ft::make_pair(7,26));
+	ftMap.insert(pair1);
+	ftMap.insert(ft::make_pair(11,22));
+	ftMap.insert(ft::make_pair(11,28));
+	ftMap.insert(ft::make_pair(15,30));
+	ftMap.insert(ft::make_pair(16,31));
 
 	stdMap.insert(pair2);
 	stdMap.insert(std::make_pair(11,21));
@@ -86,6 +94,8 @@ void	test_map() {
 //	std::cout << "find 10 = " << ftMap.find(1000)->_pair.second << '\n';
 //	for (size_t i = 0; i < ftMap.size(); i++, ftIt++) {
 //		std::cout << "ftMap[" << i << "]  = " << ftMap[i] << '\n';
+	ftIt++;
+	std::cout << "first  = " << ftIt->_pair.first << '\n';
 	ftIt++;
 	std::cout << "first  = " << ftIt->_pair.first << '\n';
 //		std::cout << "second = " << ftIt->_pair.second << '\n';

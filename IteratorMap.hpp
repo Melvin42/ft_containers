@@ -78,8 +78,15 @@ namespace ft {
 						*this = _pos->right;
 					else if (_pos->parent->_pair.first > _pos->_pair.first)
 						*this = _pos->parent;
-//					else if (_pos->parent /*remonter jusquau bon noeud*/) {
-//					}
+					else {
+						*this = _pos->parent;
+							std::cout << "++ remonte\n";
+						if (this->_pos->right)
+						{
+							std::cout << "++ tourne a droite\n";
+							*this = _pos->right;
+						}
+					}
 					return tmp;
 				}
 
