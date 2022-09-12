@@ -478,7 +478,6 @@ T1, T2 and T3 are subtrees of the tree, rooted with y (on the left side) or x (o
 				typename allocator_type::template rebind<Node>::other	_alloc_node;
 		};
 
-	/*
 	template<class Key, class T, class Compare, class Alloc>
 		bool	operator==(const map<Key, T, Compare, Alloc> &lhs,
 							const map<Key, T, Compare, Alloc> &rhs)
@@ -538,7 +537,6 @@ T1, T2 and T3 are subtrees of the tree, rooted with y (on the left side) or x (o
 		void	swap(map<Key, T, Compare, Alloc> &x, map<Key, T, Compare, Alloc> &y) {
 			x.swap(y);
 		}
-	*/
 
 }
 

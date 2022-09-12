@@ -74,20 +74,18 @@ namespace ft {
 					IteratorMap	tmp(*this);
 
 					std::cout << "Call operator++\n";
-					T	pair_tmp = _pos->_pair;
-					
 					if (_pos->right)
 						*this = _pos->right;
 					else if (_pos->parent->_pair.first > _pos->_pair.first)
 						*this = _pos->parent;
-					else if (_pos->parent /*remonter jusquau bon noeud*/) {
-					}
+//					else if (_pos->parent /*remonter jusquau bon noeud*/) {
+//					}
 					return tmp;
 				}
 
 				IteratorMap	&operator++() {
 					std::cout << "Call ++operator\n";
-					if (_pos->right) {
+					if (_pos->right)
 						*this = _pos->right;
 					else
 						*this = _pos->parent;
@@ -98,7 +96,7 @@ namespace ft {
 					std::cout << "Call operator--\n";
 					IteratorMap	tmp = *this;
 
-					if (_pos->left) {
+					if (_pos->left)
 						*this = _pos->left;
 					else
 						*this = _pos->parent;
@@ -107,7 +105,7 @@ namespace ft {
 
 				IteratorMap	&operator--() {
 					std::cout << "Call --operator\n";
-					if (_pos->left) {
+					if (_pos->left)
 						*this = _pos->left;
 					else
 						*this = _pos->parent;
