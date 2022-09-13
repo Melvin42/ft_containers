@@ -108,32 +108,28 @@ void	test_map() {
 	std::cout << "MAP BEFORE IT\n";
 	ftMap.printTree();
 
+	std::cout << "operator++\n";
 	ftIt = ftMap.begin();
-	std::cout << "first  = " << ftIt->_pair.first << '\n';
-	ftIt++;
-	std::cout << "first  = " << ftIt->_pair.first << '\n';
-	ftIt++;
-	std::cout << "first  = " << ftIt->_pair.first << '\n';
-	ftIt++;
-	std::cout << "first  = " << ftIt->_pair.first << '\n';
-	ftIt++;
-	std::cout << "first  = " << ftIt->_pair.first << '\n';
-	ftIt++;
-	std::cout << "first  = " << ftIt->_pair.first << '\n';
-	ftIt++;
-	std::cout << "first  = " << ftIt->_pair.first << '\n';
-	ftIt++;
-	std::cout << "first  = " << ftIt->_pair.first << '\n';
-	ftIt++;
-	std::cout << "first  = " << ftIt->_pair.first << '\n';
-	ftIt++;
-	std::cout << "first  = " << ftIt->_pair.first << '\n';
-	ftIt++;
-	std::cout << "first  = " << ftIt->_pair.first << '\n';
-	ftIt++;
-	std::cout << "first  = " << ftIt->_pair.first << '\n';
-	ftIt++;
-	std::cout << "first  = " << ftIt->_pair.first << '\n';
+	for (size_t i = 1; ftIt != ftMap.end(); ftIt++, i++) {
+		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
+	}
+	std::cout << "++operator\n";
+	ftIt = ftMap.begin();
+	for (size_t i = 1; ftIt != ftMap.end(); ++ftIt, i++) {
+		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
+	}
+	std::cout << "operator--\n";
+	ftIt = ftMap.end();
+	for (size_t i = 1; ftIt != ftMap.begin(); ftIt--, i++) {
+		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
+	}
+	std::cout << " first  = " << ftIt->_pair.first << '\n';
+	std::cout << "--operator\n";
+	ftIt = ftMap.end();
+	for (size_t i = 1; ftIt != ftMap.begin(); ftIt--, i++) {
+		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
+	}
+	std::cout << " first  = " << ftIt->_pair.first << '\n';
 
 	ftMap.printTree();
 

@@ -376,24 +376,15 @@ namespace ft {
 				}
 
 				Node	*insert(Node *node, value_type pair) {
-					printTree();
 					if (!node)
 						return (newNode(pair));
 
 					if (pair.first < node->_pair.first) {
-						std::cout << "Insert Recurs Left\n";
 						node->left = insert(node->left, pair);
 						node->left->parent = node;
-//						if (node->left->parent)
-//							std::cout << "parent first = " << node->left->parent->_pair.first << ' ';
-//						std::cout << "left first = " << node->left->_pair.first << '\n';
 					} else if (pair.first > node->_pair.first) {
-//						std::cout << "Insert Recurs Right\n";
 						node->right = insert(node->right, pair);
 						node->right->parent = node;
-//						if (node->right->parent)
-//							std::cout << "parent first = " << node->right->parent->_pair.first << ' ';
-//						std::cout << "right first = " << node->right->_pair.first << '\n';
 					} else
 						return node;
 
