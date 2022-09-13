@@ -47,6 +47,7 @@ void	test_map() {
 	pair1 = ft::make_pair(10,27);
 	pair2 = std::make_pair(10,20);
 
+	ftMap.insert(ft::make_pair(3,34));
 	ftMap.insert(pair1);
 	ftMap.insert(ft::make_pair(13,29));
 	ftMap.insert(ft::make_pair(4,23));
@@ -54,9 +55,16 @@ void	test_map() {
 	ftMap.insert(ft::make_pair(5,24));
 	ftMap.insert(ft::make_pair(6,25));
 	ftMap.insert(ft::make_pair(7,26));
-	ftMap.insert(pair1);
+	ftMap.insert(ft::make_pair(2,34));
 	ftMap.insert(ft::make_pair(11,28));
 	ftMap.insert(ft::make_pair(14,34));
+	ftMap.insert(ft::make_pair(1,34));
+	ftMap.insert(ft::make_pair(19,30));
+	ftMap.insert(ft::make_pair(20,30));
+	ftMap.insert(ft::make_pair(9,30));
+	ftMap.insert(ft::make_pair(21,30));
+	ftMap.insert(ft::make_pair(22,30));
+	ftMap.insert(ft::make_pair(8,30));
 	ftMap.insert(ft::make_pair(15,30));
 	ftMap.insert(ft::make_pair(16,31));
 

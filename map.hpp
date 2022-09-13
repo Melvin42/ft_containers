@@ -316,24 +316,16 @@ namespace ft {
 					return (node);
 				}
 
-
 /*
-T1, T2 and T3 are subtrees of the tree, rooted with y (on the left side) or x (on the right side)
-
-     y                               x
-    / \     Right Rotation          /  \
-   x   T3   - - - - - - - >        T1   y
-  / \       < - - - - - - -            / \
- T1  T2     Left Rotation            T2  T3
-
-*/
-
-				/*
-					node->parent = parent;
-					std::cout << "New node, Parent detection = \n";
-					if (!parent)
-						std::cout << "parent addr = " << &parent << '\n';
-					std::cout << "this addr = " << &node << '\n';
+** T1, T2 and T3 are subtrees of the tree,
+** rooted with y (on the left side) or x (on the right side)
+**
+**     y                               x
+**    / \     Right Rotation          /  \
+**   x   T3   - - - - - - - >        T1   y
+**  / \       < - - - - - - -            / \
+** T1  T2     Left Rotation            T2  T3
+**
 */
 
 				Node	*rightRotate(Node *y) {
@@ -347,20 +339,6 @@ T1, T2 and T3 are subtrees of the tree, rooted with y (on the left side) or x (o
 
 					y->height = max(height(y->left), height(y->right)) + 1;
 					x->height = max(height(x->left), height(x->right)) + 1;
-
-					//std::cout << "Right Rotate = " << x->_pair.first << '\n';
-					//if (x->parent)
-					//	std::cout << "parent = " << x->parent->_pair.first << '\n';
-					//else
-					//	std::cout << "No Left\n";
-					//if (x->left)
-					//	std::cout << "left = "  << x->left->_pair.first << '\n';
-					//else
-					//	std::cout << "No Left\n";
-					//if (x->right)
-					//	std::cout << "right = " << x->right->_pair.first << '\n';
-					//else
-					//	std::cout << "No Left\n";
 					return x;
 				}
 
@@ -375,20 +353,6 @@ T1, T2 and T3 are subtrees of the tree, rooted with y (on the left side) or x (o
 
 					x->height = max(height(x->left), height(x->right)) + 1;
 					y->height = max(height(y->left), height(y->right)) + 1;
-
-					//std::cout << "Left Rotate = " << y->_pair.first << '\n';
-					//if (y->parent)
-					//	std::cout << "parent = " << y->parent->_pair.first << '\n';
-					//else
-					//	std::cout << "No Left\n";
-					//if (y->left)
-					//	std::cout << "left = "  << y->left->_pair.first << '\n';
-					//else
-					//	std::cout << "No Left\n";
-					//if (y->right)
-					//	std::cout << "right = " << y->right->_pair.first << '\n';
-					//else
-					//	std::cout << "No Left\n";
 					return y;
 				}
 
@@ -416,14 +380,14 @@ T1, T2 and T3 are subtrees of the tree, rooted with y (on the left side) or x (o
 					if (!node)
 						return (newNode(pair));
 
-					if (pair < node->_pair) {
+					if (pair.first < node->_pair.first) {
 						std::cout << "Insert Recurs Left\n";
 						node->left = insert(node->left, pair);
 						node->left->parent = node;
 //						if (node->left->parent)
 //							std::cout << "parent first = " << node->left->parent->_pair.first << ' ';
 //						std::cout << "left first = " << node->left->_pair.first << '\n';
-					} else if (pair > node->_pair) {
+					} else if (pair.first > node->_pair.first) {
 //						std::cout << "Insert Recurs Right\n";
 						node->right = insert(node->right, pair);
 						node->right->parent = node;
@@ -437,23 +401,23 @@ T1, T2 and T3 are subtrees of the tree, rooted with y (on the left side) or x (o
 
 					int balance = getBalance(node);
 
-					if (balance > 1 && pair < node->left->_pair) {
+					if (balance > 1 && pair.first < node->left->_pair.first) {
 						std::cout << "Right Rotate\n";
 						return rightRotate(node);
 					}
 
-					if (balance < -1 && pair > node->right->_pair) {
+					if (balance < -1 && pair.first > node->right->_pair.first) {
 						std::cout << "Left Rotate\n";
 						return leftRotate(node);
 					}
 
-					if (balance > 1 && pair > node->left->_pair) {
+					if (balance > 1 && pair.first > node->left->_pair.first) {
 						std::cout << "Right Rotate\n";
 						node->left = leftRotate(node->left);
 						return rightRotate(node);
 					}
 
-					if (balance < -1 && pair < node->right->_pair) {
+					if (balance < -1 && pair.first < node->right->_pair.first) {
 						std::cout << "Left Rotate\n";
 						node->right = rightRotate(node->right);
 						return leftRotate(node);
