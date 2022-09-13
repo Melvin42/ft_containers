@@ -30,8 +30,8 @@ namespace ft {
 
 				IteratorMap(pointer it) : _pos(it) {
 
-					if (it)
-						std::cout << it->_pair.first << '\n';
+//					if (it)
+//						std::cout << it->_pair.first << '\n';
 				}
 
 				template <class U>
@@ -74,17 +74,72 @@ namespace ft {
 					IteratorMap	tmp(*this);
 
 					std::cout << "Call operator++\n";
-					if (_pos->right)
-						*this = _pos->right;
-					else if (_pos->parent->_pair.first > _pos->_pair.first)
-						*this = _pos->parent;
-					else {
-						*this = _pos->parent;
-							std::cout << "++ remonte\n";
-						if (this->_pos->right)
-						{
-							std::cout << "++ tourne a droite\n";
-							*this = _pos->right;
+
+					if (_pos->right) {
+//						std::cout << "++ tourne a droite\n";
+						_pos = _pos->right;
+						if (this->_pos->left)
+							*this = _pos->left;
+					} else if (_pos->parent && _pos->parent->_pair.first > _pos->_pair.first) {
+						if (_pos->parent->_pair.first > _pos->_pair.first) {
+//							std::cout << "parent first > pair first\n";
+							*this = _pos->parent;
+//							if (_pos->left)
+//								std::cout << "left = " << _pos->left->_pair.first << '\n';
+//							if (_pos->right)
+//								std::cout << "right = " << _pos->right->_pair.first << "\n";
+//							if (_pos->parent) {
+//								std::cout << "parent = " << _pos->parent->_pair.first << '\n';
+//								std::cout << "parent left = " << _pos->parent->left->_pair.first << '\n';
+//								std::cout << "parent right = " << _pos->parent->right->_pair.first << '\n';
+//								std::cout << "parent right = " << _pos->parent->right->left->_pair.first << '\n';
+//								std::cout << "parent right = " << _pos->parent->right->right->_pair.first << '\n';
+						}
+					} else if (this->_pos->right) {
+						std::cout << "TEST\n";
+//						if (this->_pos->right->_pair.first
+						*this = this->_pos->right;
+						while (this->_pos->left) {
+							std::cout << "TEST2\n";
+							std::cout << _pos->left->_pair.first << "\n";
+							*this = _pos->left;
+						}
+					} else {
+//						std::cout << "le bon else first = " << _pos->_pair.first << '\n';
+//						if (_pos->left)
+//							std::cout << "left = " << _pos->left->_pair.first << '\n';
+//						if (_pos->right)
+//							std::cout << "right = " << _pos->right->_pair.first << "\n";
+						if (this->_pos->parent) {
+//							std::cout <<  "Go too parent bordel " << _pos->parent->_pair.first << '\n';
+//							std::cout << _pos->_pair.first << '\n';
+							if (_pos->parent->_pair.first < _pos->_pair.first)
+								*this = _pos->parent;
+//							std::cout << "par ici les parents\n";
+//							std::cout << _pos->_pair.first << '\n';
+							if (_pos->right)
+								*this = _pos->right;
+//							std::cout << "right = " << _pos->right->_pair.first << "\n";
+//								while (_pos->parent && _pos->_pair.first > _pos->parent->_pair.first) {
+//									std::cout << "par ici les parents\n";
+//									*this = _pos->parent;
+//								}
+//							}
+//							while (_pos->parent)
+//							*this = _pos->parent;
+						} else {
+							std::cout << "No parent go right\n";
+							if (_pos->right)
+								*this = _pos->right;
+
+
+//							if (this->_pos->right)
+//							{
+//								std::cout << "++ tourne a droite\n";
+//								*this = _pos->right;
+//								if (_pos->left)
+//									*this = _pos->left;
+//							}
 						}
 					}
 					return tmp;
@@ -95,7 +150,7 @@ namespace ft {
 					if (_pos->right)
 						*this = _pos->right;
 					else
-						*this = _pos->parent;
+						*this = *(_pos->parent);
 					return *this;
 				}
 

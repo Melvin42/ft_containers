@@ -85,6 +85,7 @@ namespace ft {
 						_root_parent->left = NULL;
 						_root_parent->right = NULL;
 						_root_parent->height = 0;
+//						_root_parent = NULL;
 
 						std::cout << "Empty Constructor\n";
 					}
@@ -127,6 +128,11 @@ namespace ft {
 
 				allocator_type	get_allocator() const {
 					return _alloc;
+				}
+
+				void	printTree() {
+					std::cout << "PRINT TREE!!! \n";
+					preOrder(_root);
 				}
 
 				/* ITERATORS */
@@ -236,10 +242,12 @@ namespace ft {
 				//single element (1)
 				pair<iterator, bool>	insert(const value_type& val) {
 
+					std::cout << "INSERTING = " << val.first << '\n';
 					_root = insert(_root, make_pair(val.first, val.second));
+					_root->parent = NULL;
 
 					++_size;
-					printTree();
+//					printTree();
 					return ft::make_pair<iterator, bool>(find(val.first), true);
 				}
 
@@ -296,11 +304,6 @@ namespace ft {
 					destroyTree(_root);
 				}
 
-				void	printTree() {
-					std::cout << "PRINT TREE!!! \n";
-					preOrder(_root);
-				}
-
 				Node	*newNode(value_type pair) {
 					Node	*node = _alloc_node.allocate(1);
 
@@ -337,7 +340,6 @@ T1, T2 and T3 are subtrees of the tree, rooted with y (on the left side) or x (o
 					Node	*x = y->left;
 					Node	*T2 = x->right;
 
-					std::cout << "Right Rotate, Parent detection = \n";
 					x->right = y;
 					x->parent = y->parent;
 					y->parent = x;
@@ -346,6 +348,19 @@ T1, T2 and T3 are subtrees of the tree, rooted with y (on the left side) or x (o
 					y->height = max(height(y->left), height(y->right)) + 1;
 					x->height = max(height(x->left), height(x->right)) + 1;
 
+					//std::cout << "Right Rotate = " << x->_pair.first << '\n';
+					//if (x->parent)
+					//	std::cout << "parent = " << x->parent->_pair.first << '\n';
+					//else
+					//	std::cout << "No Left\n";
+					//if (x->left)
+					//	std::cout << "left = "  << x->left->_pair.first << '\n';
+					//else
+					//	std::cout << "No Left\n";
+					//if (x->right)
+					//	std::cout << "right = " << x->right->_pair.first << '\n';
+					//else
+					//	std::cout << "No Left\n";
 					return x;
 				}
 
@@ -353,7 +368,6 @@ T1, T2 and T3 are subtrees of the tree, rooted with y (on the left side) or x (o
 					Node	*y = x->right;
 					Node	*T2 = y->left;
 
-					std::cout << "Left Rotate, Parent detection = \n";
 					y->left = x;
 					y->parent = x->parent;
 					x->parent = y;
@@ -362,6 +376,19 @@ T1, T2 and T3 are subtrees of the tree, rooted with y (on the left side) or x (o
 					x->height = max(height(x->left), height(x->right)) + 1;
 					y->height = max(height(y->left), height(y->right)) + 1;
 
+					//std::cout << "Left Rotate = " << y->_pair.first << '\n';
+					//if (y->parent)
+					//	std::cout << "parent = " << y->parent->_pair.first << '\n';
+					//else
+					//	std::cout << "No Left\n";
+					//if (y->left)
+					//	std::cout << "left = "  << y->left->_pair.first << '\n';
+					//else
+					//	std::cout << "No Left\n";
+					//if (y->right)
+					//	std::cout << "right = " << y->right->_pair.first << '\n';
+					//else
+					//	std::cout << "No Left\n";
 					return y;
 				}
 
@@ -385,17 +412,24 @@ T1, T2 and T3 are subtrees of the tree, rooted with y (on the left side) or x (o
 				}
 
 				Node	*insert(Node *node, value_type pair) {
+					printTree();
 					if (!node)
 						return (newNode(pair));
 
 					if (pair < node->_pair) {
-						node->parent = node;
 						std::cout << "Insert Recurs Left\n";
 						node->left = insert(node->left, pair);
+						node->left->parent = node;
+//						if (node->left->parent)
+//							std::cout << "parent first = " << node->left->parent->_pair.first << ' ';
+//						std::cout << "left first = " << node->left->_pair.first << '\n';
 					} else if (pair > node->_pair) {
-						node->parent = node;
-						std::cout << "Insert Recurs Right\n";
+//						std::cout << "Insert Recurs Right\n";
 						node->right = insert(node->right, pair);
+						node->right->parent = node;
+//						if (node->right->parent)
+//							std::cout << "parent first = " << node->right->parent->_pair.first << ' ';
+//						std::cout << "right first = " << node->right->_pair.first << '\n';
 					} else
 						return node;
 
@@ -431,20 +465,21 @@ T1, T2 and T3 are subtrees of the tree, rooted with y (on the left side) or x (o
 				void	preOrder(Node *root) {
 					if (root) {
 						std::cout << "First: " << root->_pair.first
-							<< " " << root->_pair.second << ", height = " << root->height << " " << "root addr = " << &root << ", parent addr = " << (root->parent) << '\n';
+							<< " " << root->_pair.second << ", height = " << root->height
+							<< " " << "root addr = " << &root << ", parent addr = " << root->parent << '\n';
 						preOrder(root->left);
 						preOrder(root->right);
 					}
-					std::cout << std::endl;
+//					std::cout << std::endl;
 				}
 
 				Node	*min(Node *root) {
 					if (!root->left) {
-						std::cout << "Recurs NO Left\n";
+//						std::cout << "Recurs NO Left\n";
 						return root;
 					}
 					if (root->left->_pair.first < root->_pair.first) {
-						std::cout << "Recurs Left\n";
+//						std::cout << "Recurs Left\n";
 						return min(root->left);
 					}
 					return root;
@@ -452,11 +487,11 @@ T1, T2 and T3 are subtrees of the tree, rooted with y (on the left side) or x (o
 
 				Node	*max(Node *root) {
 					if (!root->right) {
-						std::cout << "Recurs NO Right\n";
+//						std::cout << "Recurs NO Right\n";
 						return root;
 					}
 					if (root->right->_pair.first > root->_pair.first) {
-						std::cout << "Recurs Right\n";
+//						std::cout << "Recurs Right\n";
 						return max(root->right);
 					}
 					return root;
