@@ -153,11 +153,11 @@ void	test_map() {
 
 //	map3.printTree();
 //	std::cout << "operator++\n";
-//	ftIt = ftMap.begin();
-//	for (size_t i = 1; ftIt != ftMap.end(); ftIt++, i++) {
-//		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
-//		std::cout << "second = " << ftIt->_pair.second << '\n';
-//	}
+	ftIt = ftMap.begin();
+	for (size_t i = 1; ftIt != ftMap.end(); ftIt++, i++) {
+		std::cout << i << " first  = " << ftIt->first << '\n';
+		std::cout << "second = " << ftIt->second << '\n';
+	}
 //	std::cout << "++operator\n";
 //	ftIt = ftMap.begin();
 //	for (size_t i = 1; ftIt != ftMap.end(); ++ftIt, i++) {

@@ -8,7 +8,7 @@
 #include "utils.hpp"
 #include "pair.hpp"
 #include <map>
-#include "IteratorMap.hpp"
+//#include "IteratorMap.hpp"
 #include "iterator_traits.hpp"
 
 namespace ft {
@@ -39,13 +39,12 @@ namespace ft {
 				typedef typename allocator_type::const_reference						const_reference;
 				typedef typename allocator_type::pointer								pointer;
 				typedef typename allocator_type::const_pointer							const_pointer;
-				typedef ft::IteratorMap<std::bidirectional_iterator_tag, Node>			iterator;
-				typedef ft::IteratorMap<std::bidirectional_iterator_tag, Node>	const_iterator;
+//				typedef ft::IteratorMap<std::bidirectional_iterator_tag, Node>			iterator;
+//				typedef ft::IteratorMap<std::bidirectional_iterator_tag, Node>			const_iterator;
 //				typedef ft::IteratorMap<std::bidirectional_iterator_tag, const Node>	const_iterator;
-				typedef std::reverse_iterator<iterator>									reverse_iterator;
-				typedef std::reverse_iterator<const_iterator>							const_reverse_iterator;
+//				typedef std::reverse_iterator<iterator>									reverse_iterator;
+//				typedef std::reverse_iterator<const_iterator>							const_reverse_iterator;
 //				typedef std::ptrdiff_t													difference_type;
-				typedef typename iterator_traits<iterator>::difference_type				difference_type;
 				typedef std::size_t														size_type;
 
 			private:
@@ -56,6 +55,316 @@ namespace ft {
 					Node			*right;
 					int				height;
 				};
+
+//****************************************************************************//
+//*                            MAP ITERATOR                                  *//
+//****************************************************************************//
+
+	template <	class Category,
+				class U,
+				class Distance = std::ptrdiff_t,
+				class Pointer = U*,
+				class Reference = U& >
+		class	IteratorMap {
+			public:
+				typedef U			value_type;
+				typedef Pointer		pointer;
+				typedef Reference	reference;
+				typedef Distance	difference_type;
+				typedef Category	IteratorMap_category;
+
+			protected:
+				Node	*_pos;
+
+			public:
+				explicit IteratorMap() : _pos(NULL) {}
+
+				explicit IteratorMap(pointer it) : _pos(it) {
+
+//					if (it)
+//						std::cout << it->_pair.first << '\n';
+				}
+
+				template <class V>
+					explicit IteratorMap(const IteratorMap<Category, V> &it) {
+						*this = it;
+					}
+
+				template <class V>
+					IteratorMap	&operator=(const IteratorMap<Category, V> &it) {
+						_pos = it.base();
+						return *this;
+					}
+
+				~IteratorMap() {}
+
+				pointer	base() {
+					return _pos;
+				}
+
+				const pointer	base() const {
+					return _pos;
+				}
+
+				reference	operator*() const { return _pos->_pair; }
+				pointer		operator->() const { return &(_pos->_pair); }
+
+				IteratorMap	operator-=(int n) {
+					for (int i = 0; i < n; i++, _pos--)
+						*this = _pos->left;
+					return *this;
+				}
+
+				IteratorMap	operator+=(int n) {
+					for (int i = 0; i < n; i++)
+						*this = _pos->right;
+					return *this;
+				}
+
+				IteratorMap	operator++(int) {
+					IteratorMap	tmp(*this);
+
+					if (_pos->right) {
+						*this = _pos->right;
+						if (_pos->left) {
+							*this = _pos->left;
+							if (_pos->left && _pos->left->_pair.first > tmp->_pair.first)
+								*this = _pos->left;
+						}
+					} else if (_pos->parent && _pos->parent->_pair.first > _pos->_pair.first) {
+						if (_pos->parent->_pair.first > _pos->_pair.first)
+							*this = _pos->parent;
+					} else if (_pos->right) {
+						*this = _pos->right;
+						while (_pos->left)
+							*this = _pos->left;
+					} else {
+						if (_pos->parent) {
+							if (_pos->parent->_pair.first < _pos->_pair.first) {
+								while (_pos->parent && _pos->_pair.first > _pos->parent->_pair.first)
+									*this = _pos->parent;
+								*this = _pos->parent;
+							}
+							else if (_pos->right)
+								*this = _pos->right;
+						} else {
+							if (_pos->right)
+								*this = _pos->right;
+						}
+					}
+					return tmp;
+				}
+
+				IteratorMap	&operator++() {
+					IteratorMap	tmp(*this);
+
+					if (_pos->right) {
+						*this = _pos->right;
+						if (_pos->left) {
+							*this = _pos->left;
+							if (_pos->left && _pos->left->_pair.first > tmp->_pair.first)
+								*this = _pos->left;
+						}
+					} else if (_pos->parent && _pos->parent->_pair.first > _pos->_pair.first) {
+						if (_pos->parent->_pair.first > _pos->_pair.first)
+							*this = _pos->parent;
+					} else if (_pos->right) {
+						*this = _pos->right;
+						while (_pos->left)
+							*this = _pos->left;
+					} else {
+						if (_pos->parent) {
+							if (_pos->parent->_pair.first < _pos->_pair.first) {
+								while (_pos->parent && _pos->_pair.first > _pos->parent->_pair.first)
+									*this = _pos->parent;
+								*this = _pos->parent;
+							}
+							else if (_pos->right)
+								*this = _pos->right;
+						} else {
+							if (_pos->right)
+								*this = _pos->right;
+						}
+					}
+					return *this;
+				}
+
+				IteratorMap	operator--(int) {
+					IteratorMap	tmp(*this);
+
+					if (_pos->left) {
+						*this = _pos->left;
+						if (_pos->right) {
+							*this = _pos->right;
+							if (_pos->right && _pos->right->_pair.first > tmp->_pair.first)
+								*this = _pos->right;
+						}
+					} else if (_pos->parent && _pos->parent->_pair.first < _pos->_pair.first) {
+						if (_pos->parent->_pair.first < _pos->_pair.first)
+							*this = _pos->parent;
+					} else if (_pos->left) {
+						*this = _pos->left;
+						while (_pos->right)
+							*this = _pos->right;
+					} else {
+						if (_pos->parent) {
+							if (_pos->parent->_pair.first > _pos->_pair.first) {
+								while (_pos->parent && _pos->_pair.first < _pos->parent->_pair.first)
+									*this = _pos->parent;
+								*this = _pos->parent;
+							}
+							else if (_pos->left)
+								*this = _pos->left;
+						} else {
+							if (_pos->left)
+								*this = _pos->left;
+						}
+					}
+					return tmp;
+				}
+
+				IteratorMap	&operator--() {
+					IteratorMap	tmp(*this);
+
+					if (_pos->left) {
+						*this = _pos->left;
+						if (_pos->right) {
+							*this = _pos->right;
+							if (_pos->right && _pos->right->_pair.first > tmp->_pair.first)
+								*this = _pos->right;
+						}
+					} else if (_pos->parent && _pos->parent->_pair.first < _pos->_pair.first) {
+						if (_pos->parent->_pair.first < _pos->_pair.first)
+							*this = _pos->parent;
+					} else if (_pos->left) {
+						*this = _pos->left;
+						while (_pos->right)
+							*this = _pos->right;
+					} else {
+						if (_pos->parent) {
+							if (_pos->parent->_pair.first > _pos->_pair.first) {
+								while (_pos->parent && _pos->_pair.first < _pos->parent->_pair.first)
+									*this = _pos->parent;
+								*this = _pos->parent;
+							}
+							else if (_pos->left)
+								*this = _pos->left;
+						} else {
+							if (_pos->left)
+								*this = _pos->left;
+						}
+					}
+					return *this;
+				}
+
+				difference_type	operator+(const IteratorMap &it) const {
+					return base() + it.base();
+				}
+
+				IteratorMap	operator+(difference_type v) const {
+					return IteratorMap(_pos + v);
+				}
+
+				IteratorMap	operator+(int n) {
+					return IteratorMap(base() + n);
+				}
+
+//				difference_type	operator-(const IteratorMap &it) const {
+//					return base() - it.base();
+//				}
+
+//				IteratorMap	operator-(difference_type v) const {
+//					return IteratorMap(_pos - v);
+//				}
+
+				IteratorMap	operator-(int n) {
+					return IteratorMap(_pos - n);
+				}
+
+				reference	operator[](difference_type v) const {
+					return *(_pos + v);
+				}
+
+				template <class IteratorMap>
+					friend bool	operator==(const IteratorMap &lhs, const IteratorMap &rhs);
+				template <class IteratorMap>
+					friend bool	operator!=(const IteratorMap &lhs, const IteratorMap &rhs);
+				template <class IteratorMap>
+					friend bool	operator<=(const IteratorMap &lhs, const IteratorMap &rhs);
+				template <class IteratorMap>
+					friend bool	operator>=(const IteratorMap &lhs, const IteratorMap &rhs);
+				template <class IteratorMap>
+					friend bool	operator<(const IteratorMap &lhs, const IteratorMap &rhs);
+				template <class IteratorMap>
+					friend bool	operator>(const IteratorMap &lhs, const IteratorMap &rhs);
+		};
+
+	/*
+	template <class IteratorMap>
+		bool	operator==(const IteratorMap &lhs, const IteratorMap &rhs) {
+			return lhs._pos == rhs._pos;
+		}
+
+	template <class IteratorMap>
+		bool	operator!=(const IteratorMap &lhs, const IteratorMap &rhs) {
+			return lhs._pos != rhs._pos;
+		}
+
+	template <class IteratorMap>
+		bool	operator<=(const IteratorMap &lhs, const IteratorMap &rhs) {
+			return lhs._pos <= rhs._pos;
+		}
+
+	template <class IteratorMap>
+		bool	operator>=(const IteratorMap &lhs, const IteratorMap &rhs) {
+			return lhs._pos >= rhs._pos;
+		}
+
+	template <class IteratorMap>
+		bool	operator<(const IteratorMap &lhs, const IteratorMap &rhs) {
+			return lhs._pos < rhs._pos;
+		}
+
+	template <class IteratorMap>
+		bool	operator>(const IteratorMap &lhs, const IteratorMap &rhs) {
+			return lhs._pos > rhs._pos;
+		}
+
+	template <class Category, class T>
+		IteratorMap<Category, T> operator+(std::ptrdiff_t v, IteratorMap<Category, T> &it) {
+			return IteratorMap<Category, T>(it.base() + v);
+		}
+
+	template <class Category, class T>
+		typename IteratorMap<Category, T>::difference_type operator+(const IteratorMap<Category, T> &lhs, const IteratorMap<Category, T> &rhs) {
+			return lhs.base() + rhs.base();
+		}
+
+	template <class Category, class T>
+		typename IteratorMap<Category, T>::difference_type operator-(const IteratorMap<Category, T> &lhs, const IteratorMap<Category, T> &rhs) {
+			return lhs.base() - rhs.base();
+		}
+
+	template <class Category, class T, class U>
+		typename IteratorMap<Category, T>::difference_type operator+(const IteratorMap<Category, T> &lhs, const IteratorMap<Category, U> &rhs) {
+			return lhs.base() + rhs.base();
+		}
+
+	template <class Category, class T, class U>
+		typename IteratorMap<Category, T>::difference_type operator-(const IteratorMap<Category, T> &lhs, const IteratorMap<Category, U> &rhs) {
+			return lhs.base() - rhs.base();
+		}
+	*/
+
+			public:
+				typedef IteratorMap<std::bidirectional_iterator_tag, value_type>		iterator;
+				typedef IteratorMap<std::bidirectional_iterator_tag, value_type>		const_iterator;
+				typedef typename iterator_traits<iterator>::difference_type				difference_type;
+
+
+//****************************************************************************//
+//*                            MAP IMPLEMENTATION                            *//
+//****************************************************************************//
 
 			public:
 				/* CONSTRUCT/COPY/DESTROY */
@@ -112,10 +421,10 @@ namespace ft {
 				const_iterator			begin() const { return const_iterator(min(_root)); }
 				iterator				end() { return iterator(max(_root)); }
 				const_iterator			end() const { return const_iterator(max(_root)); }
-				reverse_iterator		rbegin() { return reverse_iterator(max(_root)); }
-				const_reverse_iterator	rbegin() const { return const_reverse_iterator(max(_root)); }
-				reverse_iterator		rend() { return reverse_iterator(min(_root)); }
-				const_reverse_iterator	rend() const { return const_reverse_iterator(min(_root)); }
+//				reverse_iterator		rbegin() { return reverse_iterator(max(_root)); }
+//				const_reverse_iterator	rbegin() const { return const_reverse_iterator(max(_root)); }
+//				reverse_iterator		rend() { return reverse_iterator(min(_root)); }
+//				const_reverse_iterator	rend() const { return const_reverse_iterator(min(_root)); }
 
 				/* CAPACITY */
 				size_type	size() const { return _size; }
@@ -256,6 +565,10 @@ namespace ft {
 				void		clear() {
 					destroyTree();
 				}
+
+//****************************************************************************//
+//*                              AVL TREE                                    *//
+//****************************************************************************//
 
 			private:
 				int	height(Node *node) {

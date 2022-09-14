@@ -23,6 +23,7 @@ namespace ft {
 
 			protected:
 //				Node	*node;
+				Node	*_pos;
 				pointer	_pos;
 
 			public:
@@ -55,8 +56,8 @@ namespace ft {
 					return _pos;
 				}
 
-				reference	operator*() const { return *_pos; }
-				pointer		operator->() const { return _pos; }
+				reference	operator*() const { return _pos->_pair; }
+				pointer		operator->() const { return &(_pos->_pair); }
 
 				IteratorMap	operator-=(int n) {
 					for (int i = 0; i < n; i++, _pos--)
