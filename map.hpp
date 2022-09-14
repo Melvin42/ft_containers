@@ -15,7 +15,7 @@ namespace ft {
 	template <class Key, class T, class Compare, class Alloc> class map;
 
 	template <class T> struct less : std::binary_function <T,T,bool> {
-		bool operator() (const T& x, const T& y) const {return x<y;}
+		bool operator() (const T& x, const T& y) const { return x < y; }
 	};
 
 	template <	class Key,
@@ -40,9 +40,10 @@ namespace ft {
 				typedef typename allocator_type::pointer								pointer;
 				typedef typename allocator_type::const_pointer							const_pointer;
 				typedef ft::IteratorMap<std::bidirectional_iterator_tag, Node>			iterator;
-				typedef ft::IteratorMap<std::bidirectional_iterator_tag, const Node>	const_iterator;
+				typedef ft::IteratorMap<std::bidirectional_iterator_tag, Node>	const_iterator;
+//				typedef ft::IteratorMap<std::bidirectional_iterator_tag, const Node>	const_iterator;
 				typedef std::reverse_iterator<iterator>									reverse_iterator;
-//				typedef std::reverse_iterator<const_iterator>							const_reverse_iterator;
+				typedef std::reverse_iterator<const_iterator>							const_reverse_iterator;
 //				typedef std::ptrdiff_t													difference_type;
 				typedef typename iterator_traits<iterator>::difference_type				difference_type;
 				typedef std::size_t														size_type;
@@ -62,13 +63,10 @@ namespace ft {
 				map	&operator=(const map<Key, T, Compare, Alloc> &map) {
 					if (this != &map) {
 						_alloc = map.get_allocator();
+//						_comp;
 						_size = map.size();
-//						Node	*tmp = map. 
-
-//						_root = _alloc_node.allocate(0);
-
-//						_alloc.construct(&tmp->_pair, 
-
+						for (iterator it = map.begin(); it != map.end(); it++)
+							this->insert(it);
 					}
 					return *this;
 				}
@@ -76,46 +74,20 @@ namespace ft {
 				//empty (1)
 				explicit map(const key_compare &comp = key_compare(),
 						const allocator_type &alloc = allocator_type())
-					: _alloc(alloc), _comp(comp), _size(0), _root(NULL),
-					_root_parent(NULL) {
-
-						_root_parent = _alloc_node.allocate(1);
-
-						_root_parent->parent = NULL;
-						_root_parent->left = NULL;
-						_root_parent->right = NULL;
-						_root_parent->height = 0;
-//						_root_parent = NULL;
-
-						std::cout << "Empty Constructor\n";
-					}
+					: _alloc(alloc), _comp(comp), _size(0), _root(NULL) {}
 
 				//fill (2)
 				template <class InputIterator>
 					map(InputIterator first, InputIterator last,
 							const key_compare &comp = key_compare(),
 							const allocator_type &alloc = allocator_type())
-					: _alloc(alloc), _comp(comp), _size(0), _root(NULL),
-					_root_parent(NULL) {
-						size_t	n = 0;
+					: _alloc(alloc), _comp(comp), _size(0), _root(NULL) {
 
-						if (last - first > 0)
-							n = last - first;
-
-						_root_parent = _alloc_node.allocate(1);
-
-						_root_parent->parent = NULL;
-						_root_parent->left = NULL;
-						_root_parent->right = NULL;
-						_root_parent->height = 0;
-
-
-						for (size_t i = 0; i < n; i++) {
+						std::cout << "Iterator Constructor\n";
+						while (first != last) {
 							insert(first->_pair);
 							++first;
 						}
-//						_size = n;
-						std::cout << "Iterator Constructor\n";
 					}
 
 				//copy (3)
@@ -137,20 +109,18 @@ namespace ft {
 
 				/* ITERATORS */
 				iterator				begin() { return iterator(min(_root)); }
-//				const_iterator			begin() const { return const_iterator(_tree.getRoot()); }
+				const_iterator			begin() const { return const_iterator(min(_root)); }
 				iterator				end() { return iterator(max(_root)); }
-//				const_iterator			end() const { return const_iterator(_tree.getRoot()); }
-//				reverse_iterator		rbegin() { return reverse_iterator(_tree.getRoot()); }
-//				const_reverse_iterator	rbegin() const { return const_reverse_iterator(_tree.getRoot()); }
-//				reverse_iterator		rend() { return reverse_iterator(_tree.getRoot()); }
-//				const_reverse_iterator	rend() const { return const_reverse_iterator(_tree.getRoot()); }
+				const_iterator			end() const { return const_iterator(max(_root)); }
+				reverse_iterator		rbegin() { return reverse_iterator(max(_root)); }
+				const_reverse_iterator	rbegin() const { return const_reverse_iterator(max(_root)); }
+				reverse_iterator		rend() { return reverse_iterator(min(_root)); }
+				const_reverse_iterator	rend() const { return const_reverse_iterator(min(_root)); }
 
 				/* CAPACITY */
 				size_type	size() const { return _size; }
 
-				size_type	max_size() const {
-//					return std::numeric_limits<size_type>::max() / sizeof(difference_type); }
-					return _alloc.max_size(); }
+				size_type	max_size() const { return _alloc.max_size(); }
 
 				bool		empty() const { return (size() == 0); }
 
@@ -188,9 +158,6 @@ namespace ft {
 				}
 
 				iterator		lower_bound(const key_type &k) {
-//					iterator	iterator(k);
-//					for (iterator it = begin();
-//					_comp(element_key, k);
 					return (iterator(find(k)));
 				}
 
@@ -201,12 +168,9 @@ namespace ft {
 				iterator		upper_bound(const key_type &k) {
 					iterator	it(find(k));
 
-//					std::cout << "It val = " << it->_pair.first << '\n';
 					if (it != end())
 						++it;
-//					std::cout << "It val = " << it->_pair.first << '\n';
 					return it;
-					return find(k);
 				}
 
 				const_iterator	upper_bound(const key_type &k) const {
@@ -214,8 +178,8 @@ namespace ft {
 
 					if (it != end())
 						++it;
-					std::cout << "It val = " << it->_pair.first << '\n';
 					return it;
+
 				}
 
 				pair<const_iterator,
@@ -242,9 +206,8 @@ namespace ft {
 				//single element (1)
 				pair<iterator, bool>	insert(const value_type& val) {
 
-					std::cout << "INSERTING = " << val.first << '\n';
+//					std::cout << "INSERTING = " << val.first << '\n';
 					_root = insert(_root, make_pair(val.first, val.second));
-					_root->parent = NULL;
 
 					++_size;
 //					printTree();
@@ -252,33 +215,38 @@ namespace ft {
 				}
 
 				//with hint (2)
-				iterator	insert(iterator pos, size_type n,
-								const value_type& val) {
-					(void)n;
-					(void)val;
+				iterator	insert(iterator pos, const value_type& val) {
+					insert(val);
 					return pos;
 				}
 
 				//range (3)
 				template <class InputIterator>
 					void	insert(InputIterator first, InputIterator last) {
-						(void)first;
-						(void)last;
+						while (first != last) {
+							insert(first->_pair);
+							++first;
+						}
 					}
 
 				void	erase(iterator pos) {
-					(void)pos;
+					deleteNode(pos.base(), pos->_pair);
 				}
 
 				size_type	erase(const key_type &k) {
-					(void)k;
+					Node	*node = search(k);
 
+//					std::cout << "ERASE " << k << '\n';
+					if (deleteNode(node, node->_pair))
+						return 1;
 					return 0;
 				}
 
 				void	erase(iterator first, iterator last) {
-					(void)first;
-					(void)last;
+					while (first != last) {
+						deleteNode(first, first->_pair->first);
+						++first;
+					}
 				}
 
 				void		swap(map<Key, T, Compare, Alloc> &x) {
@@ -286,7 +254,7 @@ namespace ft {
 				}
 
 				void		clear() {
-					destroyTree(); 
+					destroyTree();
 				}
 
 			private:
@@ -392,24 +360,18 @@ namespace ft {
 
 					int balance = getBalance(node);
 
-					if (balance > 1 && pair.first < node->left->_pair.first) {
-						std::cout << "Right Rotate\n";
+					if (balance > 0 && pair.first < node->left->_pair.first)
 						return rightRotate(node);
-					}
 
-					if (balance < -1 && pair.first > node->right->_pair.first) {
-						std::cout << "Left Rotate\n";
+					if (balance < -1 && pair.first > node->right->_pair.first)
 						return leftRotate(node);
-					}
 
 					if (balance > 1 && pair.first > node->left->_pair.first) {
-						std::cout << "Right Rotate\n";
 						node->left = leftRotate(node->left);
 						return rightRotate(node);
 					}
 
 					if (balance < -1 && pair.first < node->right->_pair.first) {
-						std::cout << "Left Rotate\n";
 						node->right = rightRotate(node->right);
 						return leftRotate(node);
 					}
@@ -425,31 +387,87 @@ namespace ft {
 						preOrder(root->left);
 						preOrder(root->right);
 					}
-//					std::cout << std::endl;
 				}
 
 				Node	*min(Node *root) {
-					if (!root->left) {
-//						std::cout << "Recurs NO Left\n";
+					if (!root->left)
 						return root;
-					}
-					if (root->left->_pair.first < root->_pair.first) {
-//						std::cout << "Recurs Left\n";
+					if (root->left->_pair.first < root->_pair.first)
 						return min(root->left);
-					}
 					return root;
 				}
 
 				Node	*max(Node *root) {
-					if (!root->right) {
-//						std::cout << "Recurs NO Right\n";
+					if (!root->right)
 						return root;
-					}
-					if (root->right->_pair.first > root->_pair.first) {
-//						std::cout << "Recurs Right\n";
+					if (root->right->_pair.first > root->_pair.first)
 						return max(root->right);
-					}
 					return root;
+				}
+
+				Node	*deleteNode(Node *node, const value_type &val) {
+					if (!node)
+						return node;
+					if (val.first < node->_pair.first)
+						node->left = deleteNode(node->left, val);
+					else if (val.first > node->_pair.first)
+						node->right = deleteNode(node->right, val);
+					else {
+						if (!node->left || !node->right) {
+							Node	*tmp;
+
+							tmp = node->left ? node->left : node->right;
+							if (!tmp) {
+								tmp = node;
+								node = NULL;
+							} else {
+
+								_alloc_node.destroy(node);
+//								node->_pair = make_pair(tmp->_pair.first, tmp->_pair.first);
+								_alloc.construct(&node->_pair, tmp->_pair);
+								node->parent = tmp->parent;
+								node->left = tmp->left;
+								node->right = tmp->right;
+								node->height = tmp->height;
+
+								_alloc_node.destroy(tmp);
+//								_alloc.deallocate(&tmp);
+//								free(tmp);
+							}
+						} else {
+							Node	*tmp = min(node->right);
+
+//							_alloc_node.destroy(node);
+//							node->_pair = make_pair(tmp->_pair.first, tmp->_pair.first);
+							_alloc.construct(&node->_pair, tmp->_pair);
+							node->right = deleteNode(node->right, tmp->_pair);
+						}
+					}
+					if (!node)
+						return node;
+
+					node->height = 1 + max(height(node->left),
+											height(node->right));
+
+					int	balance = getBalance(node);
+
+					if (balance > 1 && getBalance(node->left) >= 0)
+						return rightRotate(node);
+
+					if (balance > 1 && getBalance(node->left) < 0) {
+						node->left = leftRotate(node->left);
+						return rightRotate(node);
+					}
+
+					if (balance < -1 && getBalance(node->right) <= 0) {
+						return leftRotate(node);
+					}
+
+					if (balance < -1 && getBalance(node->right) > 0) {
+						node->right = rightRotate(node->right);
+						return leftRotate(node);
+					}
+					return node;
 				}
 
 				void	destroyTree(Node *leaf) {
@@ -464,7 +482,6 @@ namespace ft {
 				key_compare	_comp;
 				size_type	_size;
 				Node		*_root;
-				Node		*_root_parent;
 				typename allocator_type::template rebind<Node>::other	_alloc_node;
 		};
 
@@ -527,7 +544,6 @@ namespace ft {
 		void	swap(map<Key, T, Compare, Alloc> &x, map<Key, T, Compare, Alloc> &y) {
 			x.swap(y);
 		}
-
 }
 
 #endif

@@ -4,14 +4,14 @@
 #include <vector>
 
 #if STD
-	#include <map>
+#include <map>
 	namespace ft = std;
 #else
-	#include "map.hpp"
-	#include <map>
-	#include "iterator_traits.hpp"
-	#include "pair.hpp"
-	#include "utils.hpp"
+#include "map.hpp"
+#include <map>
+#include "iterator_traits.hpp"
+#include "pair.hpp"
+#include "utils.hpp"
 #endif
 
 void	test_pair() {
@@ -68,13 +68,45 @@ void	test_map() {
 	ftMap.insert(ft::make_pair(15,30));
 	ftMap.insert(ft::make_pair(16,31));
 
+	stdMap.insert(std::make_pair(3,34));
 	stdMap.insert(pair2);
-	stdMap.insert(std::make_pair(11,21));
-	stdMap.insert(std::make_pair(12,25));
+	stdMap.insert(std::make_pair(13,29));
+	stdMap.insert(std::make_pair(4,23));
+	stdMap.insert(std::make_pair(12,56));
+	stdMap.insert(std::make_pair(5,24));
+	stdMap.insert(std::make_pair(6,25));
+	stdMap.insert(std::make_pair(7,26));
+	stdMap.insert(std::make_pair(2,34));
+	stdMap.insert(std::make_pair(11,28));
+	stdMap.insert(std::make_pair(14,34));
+	stdMap.insert(std::make_pair(1,34));
+	stdMap.insert(std::make_pair(19,30));
+	stdMap.insert(std::make_pair(20,30));
+	stdMap.insert(std::make_pair(9,30));
+	stdMap.insert(std::make_pair(21,30));
+	stdMap.insert(std::make_pair(22,30));
+	stdMap.insert(std::make_pair(8,30));
+	stdMap.insert(std::make_pair(15,30));
+	stdMap.insert(std::make_pair(16,31));
 
 	ft::map<int, int>::iterator		ftIt;
 	std::map<int, int>::iterator	stdIt;
 
+//	ftMap.erase(ftMap.end() - 1);
+//	ftMap.erase(2);
+//	ftMap.erase(3);
+//	ftMap.erase(4);
+//	ftMap.erase(5);
+//	ftMap.erase(6);
+//	ftMap.erase(7);
+//	ftMap.erase(8);
+//	ftMap.erase(9);
+//	ftMap.erase(10);
+//	ftMap.erase(11);
+//	ftMap.erase(12);
+//	ftMap.erase(ftMap.end() - 1);
+//	ftMap.erase(ftMap.end() - 1);
+	ftMap.printTree();
 	/*
 	std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
 
@@ -105,54 +137,52 @@ void	test_map() {
 //	for (size_t i = 0; i < ftMap.size(); i++, ftIt++) {
 //		std::cout << "ftMap[" << i << "]  = " << ftMap[i] << '\n';
 	*/
-	std::cout << "MAP BEFORE IT\n";
-	ftMap.printTree();
 
-	std::cout << "operator++\n";
-	ftIt = ftMap.begin();
-	for (size_t i = 1; ftIt != ftMap.end(); ftIt++, i++) {
-		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
-	}
-	std::cout << "++operator\n";
-	ftIt = ftMap.begin();
-	for (size_t i = 1; ftIt != ftMap.end(); ++ftIt, i++) {
-		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
-	}
-	std::cout << "operator--\n";
-	ftIt = ftMap.end();
-	for (size_t i = 1; ftIt != ftMap.begin(); ftIt--, i++) {
-		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
-	}
-	std::cout << " first  = " << ftIt->_pair.first << '\n';
-	std::cout << "--operator\n";
-	ftIt = ftMap.end();
-	for (size_t i = 1; ftIt != ftMap.begin(); ftIt--, i++) {
-		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
-	}
-	std::cout << " first  = " << ftIt->_pair.first << '\n';
+//	std::cout << "MAP2 ITERATOR CONSTRUCTOR\n";
+//	ft::map<int, int>	map2(ftMap.begin(), ftMap.end());
 
-	ftMap.printTree();
+//	map2.printTree();
 
-//		std::cout << "second = " << ftIt->_pair.second << '\n';
-//		std::cout << "first  = " << ftIt->first << '\n';
-//		std::cout << "second = " << ftIt->second << '\n';
-//	}
-//	ftIt = ftMap.end();
-//	for (size_t i = 0; i < ftMap.size(); i++, ftIt--) {
-//		std::cout << "first  = " << ftIt->_pair.first << '\n';
-//		std::cout << "second = " << ftIt->_pair.second << '\n';
-//	}
+//	std::cout << "MAP3 INSERTING BY RANGE\n";
+//	ft::map<int, int>	map3;
+//	map3.insert(ftMap.begin(), ftMap.end());
+
+//	std::map<char,int>::iterator it = ftmap.begin();
+//	mymap.insert (it, std::pair<char,int>('b',300));  // max efficiency inserting
+//	mymap.insert (it, std::pair<char,int>('c',400));  // no max efficiency inserting
+
+//	map3.printTree();
+//	std::cout << "operator++\n";
 //	ftIt = ftMap.begin();
-//	for (size_t i = 0; i < ftMap.size(); i++, ftIt++) {
-//		std::cout << "first  = " << ftIt->_pair.first << '\n';
+//	for (size_t i = 1; ftIt != ftMap.end(); ftIt++, i++) {
+//		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
 //		std::cout << "second = " << ftIt->_pair.second << '\n';
 //	}
-//	for (ftIt = ftMap.begin(); ftIt != ftMap.end(); ftIt++) {
-//		std::cout << "first  = " << ftIt->_pair.first << '\n';
+//	std::cout << "++operator\n";
+//	ftIt = ftMap.begin();
+//	for (size_t i = 1; ftIt != ftMap.end(); ++ftIt, i++) {
+//		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
 //		std::cout << "second = " << ftIt->_pair.second << '\n';
 //	}
+//	std::cout << "operator--\n";
+//	ftIt = ftMap.end();
+//	for (size_t i = 1; ftIt != ftMap.begin(); ftIt--, i++) {
+//		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
+//		std::cout << "second = " << ftIt->_pair.second << '\n';
+//	}
+//	std::cout << " first  = " << ftIt->_pair.first << '\n';
+//	std::cout << "second = " << ftIt->_pair.second << '\n';
+//	std::cout << "--operator\n";
+//	ftIt = ftMap.end();
+//	for (size_t i = 1; ftIt != ftMap.begin(); ftIt--, i++) {
+//		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
+//		std::cout << "second = " << ftIt->_pair.second << '\n';
+//	}
+//	std::cout << " first  = " << ftIt->_pair.first << '\n';
+//	std::cout << "second = " << ftIt->_pair.second << '\n';
+//
+//	ftMap.printTree();
 
-//	map1.insert(pair1);
 //	std::cout << "stdCount: " << stdMap.count(4) << '\n';
 //	std::cout << "ftCount: " << ftMap.count(4) << '\n';
 //	std::cout << "stdCount: " << stdMap.count(10) << '\n';
@@ -162,13 +192,12 @@ void	test_map() {
 //	std::cout << "ft_lower_bound: " << ftMap.lower_bound(10)->_pair.first << '\n';
 //	std::cout << "std_lower_bound: " << stdMap.lower_bound(11)->first << '\n';
 //	std::cout << "ft_lower_bound: " << ftMap.lower_bound(11)->_pair.first << '\n';
-////	std::cout << "std_lower_bound: " << stdMap.lower_bound(8)->first << '\n';
-////	std::cout << "ft_lower_bound: " << ftMap.lower_bound(8)->_pair.first << '\n';
+//	std::cout << "std_lower_bound: " << stdMap.lower_bound(8)->first << '\n';
+//	std::cout << "ft_lower_bound: " << ftMap.lower_bound(8)->_pair.first << '\n';
 //
 //	std::cout << "std_upper_bound: " << stdMap.upper_bound(10)->first << '\n';
 //	std::cout << "ft_upper_bound: " << ftMap.upper_bound(10)->_pair.first << '\n';
 //	std::cout << "std_upper_bound: " << stdMap.upper_bound(11)->first << '\n';
-//	std::cout << "ft_upper_bound: " << ftMap.upper_bound(11)->_pair.first << '\n';
 //	std::cout << "ft_upper_bound: " << ftMap.upper_bound(11)->_pair.first << '\n';
 //	std::cout << "std_upper_bound: " << stdMap.upper_bound(8)->first << '\n';
 //	std::cout << "ft_upper_bound: " << ftMap.upper_bound(8)->_pair.first << '\n';
