@@ -28,7 +28,41 @@ void	test_pair() {
 
 void	test_iterator() {
 	std::cout << "TESTING ITERATOR\n" << std::endl;
+	std::list<ft::pair<int, int> > lst;
+	unsigned int lst_size = 7;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(ft::make_pair(lst_size - i, i));
 
+	ft::map<int, int> mp(lst.begin(), lst.end());
+
+	ft::map<int, int>::iterator it = mp.begin(), ite = mp.end();
+
+	std::cout << "size = " << mp.size() << '\n';
+	std::cout << "\t-- PART ONE --" << std::endl;
+	ft::map<int, int> mp_range(it, --(--ite));
+	std::cout << "\t-- PART ONE --" << std::endl;
+	for (int i = 0; it != ite; ++it)
+		it->second = ++i * 5;
+
+
+	std::cout << "\t-- PART ONE --" << std::endl;
+	it = mp.begin(); ite = --(--mp.end());
+	ft::map<int, int> mp_copy(mp);
+	for (int i = 0; it != ite; ++it)
+		it->second = ++i * 7;
+
+//	std::cout << "\t-- PART ONE --" << std::endl;
+//	printSize(mp);
+//	printSize(mp_range);
+//	printSize(mp_copy);
+
+	mp = mp_copy;
+	mp_copy = mp_range;
+	mp_range.clear();
+//	std::cout << "\t-- PART TWO --" << std::endl;
+//	printSize(mp);
+//	printSize(mp_range);
+//	printSize(mp_copy);
 //	std::cout << "TESTING REVERSE_ITERATOR\n" << std::endl;
 //	std::cout << "TESTING BIDIR_ITERATOR\n" << std::endl;
 //	std::cout << "TESTING ITERATOR_TRAITS\n" << std::endl;
@@ -90,6 +124,12 @@ void	test_map() {
 	stdMap.insert(std::make_pair(16,31));
 
 	ft::map<int, int>::iterator		ftIt;
+	ft::map<int, int>::const_iterator		c_ftIt = ftMap.begin();
+
+	for (; c_ftIt != ftMap.end(); c_ftIt++) {
+		std::cout << "first  = " << c_ftIt->first << '\n';
+		std::cout << "second = " << c_ftIt->second << '\n';
+	}
 	std::map<int, int>::iterator	stdIt;
 
 //	ftMap.erase(ftMap.end() - 1);
@@ -106,8 +146,7 @@ void	test_map() {
 //	ftMap.erase(12);
 //	ftMap.erase(ftMap.end() - 1);
 //	ftMap.erase(ftMap.end() - 1);
-	ftMap.printTree();
-	/*
+//	ftMap.printTree();
 	std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
 
 	stdIt = stdMap.begin();
@@ -132,75 +171,74 @@ void	test_map() {
 	std::cout << "ftMap[" << 11 << "]  = " << ftMap[11] << '\n';
 //	std::cout << "ftMap[" << 12 << "]  = " << ftMap[12] << '\n';
 	std::cout << "Size = " << ftMap.size() << '\n';
-	std::cout << "find 10 = " << ftMap.find(10)->_pair.second << '\n';
+	std::cout << "find 10 = " << ftMap.find(10)->second << '\n';
 //	std::cout << "find 10 = " << ftMap.find(1000)->_pair.second << '\n';
 //	for (size_t i = 0; i < ftMap.size(); i++, ftIt++) {
 //		std::cout << "ftMap[" << i << "]  = " << ftMap[i] << '\n';
-	*/
 
-//	std::cout << "MAP2 ITERATOR CONSTRUCTOR\n";
-//	ft::map<int, int>	map2(ftMap.begin(), ftMap.end());
+	std::cout << "MAP2 ITERATOR CONSTRUCTOR\n";
+	ft::map<int, int>	map2(ftMap.begin(), ftMap.end());
 
 //	map2.printTree();
 
-//	std::cout << "MAP3 INSERTING BY RANGE\n";
-//	ft::map<int, int>	map3;
-//	map3.insert(ftMap.begin(), ftMap.end());
+	std::cout << "MAP3 INSERTING BY RANGE\n";
+	ft::map<int, int>	map3;
+	map3.insert(ftMap.begin(), ftMap.end());
 
 //	std::map<char,int>::iterator it = ftmap.begin();
 //	mymap.insert (it, std::pair<char,int>('b',300));  // max efficiency inserting
 //	mymap.insert (it, std::pair<char,int>('c',400));  // no max efficiency inserting
 
 //	map3.printTree();
-//	std::cout << "operator++\n";
+	std::cout << "operator++\n";
 	ftIt = ftMap.begin();
 	for (size_t i = 1; ftIt != ftMap.end(); ftIt++, i++) {
 		std::cout << i << " first  = " << ftIt->first << '\n';
 		std::cout << "second = " << ftIt->second << '\n';
 	}
-//	std::cout << "++operator\n";
-//	ftIt = ftMap.begin();
-//	for (size_t i = 1; ftIt != ftMap.end(); ++ftIt, i++) {
-//		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
-//		std::cout << "second = " << ftIt->_pair.second << '\n';
-//	}
-//	std::cout << "operator--\n";
-//	ftIt = ftMap.end();
-//	for (size_t i = 1; ftIt != ftMap.begin(); ftIt--, i++) {
-//		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
-//		std::cout << "second = " << ftIt->_pair.second << '\n';
-//	}
-//	std::cout << " first  = " << ftIt->_pair.first << '\n';
-//	std::cout << "second = " << ftIt->_pair.second << '\n';
-//	std::cout << "--operator\n";
-//	ftIt = ftMap.end();
-//	for (size_t i = 1; ftIt != ftMap.begin(); ftIt--, i++) {
-//		std::cout << i << " first  = " << ftIt->_pair.first << '\n';
-//		std::cout << "second = " << ftIt->_pair.second << '\n';
-//	}
-//	std::cout << " first  = " << ftIt->_pair.first << '\n';
-//	std::cout << "second = " << ftIt->_pair.second << '\n';
-//
+	std::cout << "++operator\n";
+	ftIt = ftMap.begin();
+	for (size_t i = 1; ftIt != ftMap.end(); ++ftIt, i++) {
+		std::cout << i << " first  = " << ftIt->first << '\n';
+		std::cout << "second = " << ftIt->second << '\n';
+	}
+	std::cout << "operator--\n";
+	ftIt = ftMap.end();
+	for (size_t i = 1; ftIt != ftMap.begin(); ftIt--, i++) {
+		std::cout << i << " first  = " << ftIt->first << '\n';
+		std::cout << "second = " << ftIt->second << '\n';
+	}
+	std::cout << " first  = " << ftIt->first << '\n';
+	std::cout << "second = " << ftIt->second << '\n';
+	std::cout << "--operator\n";
+	ftIt = ftMap.end();
+	for (size_t i = 1; ftIt != ftMap.begin(); --ftIt, i++) {
+		std::cout << i << " first  = " << ftIt->first << '\n';
+		std::cout << "second = " << ftIt->second << '\n';
+	}
+	std::cout << " first  = " << ftIt->first << '\n';
+	std::cout << "second = " << ftIt->second << '\n';
+
 //	ftMap.printTree();
 
-//	std::cout << "stdCount: " << stdMap.count(4) << '\n';
-//	std::cout << "ftCount: " << ftMap.count(4) << '\n';
-//	std::cout << "stdCount: " << stdMap.count(10) << '\n';
-//	std::cout << "ftCount: " << ftMap.count(10) << '\n';
-//
-//	std::cout << "std_lower_bound: " << stdMap.lower_bound(10)->first << '\n';
-//	std::cout << "ft_lower_bound: " << ftMap.lower_bound(10)->_pair.first << '\n';
-//	std::cout << "std_lower_bound: " << stdMap.lower_bound(11)->first << '\n';
-//	std::cout << "ft_lower_bound: " << ftMap.lower_bound(11)->_pair.first << '\n';
-//	std::cout << "std_lower_bound: " << stdMap.lower_bound(8)->first << '\n';
-//	std::cout << "ft_lower_bound: " << ftMap.lower_bound(8)->_pair.first << '\n';
-//
-//	std::cout << "std_upper_bound: " << stdMap.upper_bound(10)->first << '\n';
-//	std::cout << "ft_upper_bound: " << ftMap.upper_bound(10)->_pair.first << '\n';
-//	std::cout << "std_upper_bound: " << stdMap.upper_bound(11)->first << '\n';
-//	std::cout << "ft_upper_bound: " << ftMap.upper_bound(11)->_pair.first << '\n';
-//	std::cout << "std_upper_bound: " << stdMap.upper_bound(8)->first << '\n';
-//	std::cout << "ft_upper_bound: " << ftMap.upper_bound(8)->_pair.first << '\n';
+	std::cout << "stdCount: " << stdMap.count(4) << '\n';
+	std::cout << "ftCount: " << ftMap.count(4) << '\n';
+	std::cout << "stdCount: " << stdMap.count(10) << '\n';
+	std::cout << "ftCount: " << ftMap.count(10) << '\n';
+
+	std::cout << "std_lower_bound: " << stdMap.lower_bound(10)->first << '\n';
+	std::cout << "ft_lower_bound: " << ftMap.lower_bound(10)->first << '\n';
+	std::cout << "std_lower_bound: " << stdMap.lower_bound(11)->first << '\n';
+	std::cout << "ft_lower_bound: " << ftMap.lower_bound(11)->first << '\n';
+	std::cout << "std_lower_bound: " << stdMap.lower_bound(8)->first << '\n';
+	std::cout << "ft_lower_bound: " << ftMap.lower_bound(8)->first << '\n';
+
+	std::cout << "std_upper_bound: " << stdMap.upper_bound(10)->first << '\n';
+	std::cout << "ft_upper_bound: " << ftMap.upper_bound(10)->first << '\n';
+	std::cout << "std_upper_bound: " << stdMap.upper_bound(11)->first << '\n';
+	std::cout << "ft_upper_bound: " << ftMap.upper_bound(11)->first << '\n';
+	std::cout << "std_upper_bound: " << stdMap.upper_bound(8)->first << '\n';
+	std::cout << "ft_upper_bound: " << ftMap.upper_bound(8)->first << '\n';
 
 	/*
 	std::cout << "TESTING RESIZE\n" << std::endl;
@@ -286,8 +324,8 @@ void	test_lexicographical_compare() {
 
 int	main() {
 //	test_pair();
-//	test_iterator();
-	test_map();
+	test_iterator();
+//	test_map();
 //	test_is_integral();
 //	test_equal();
 //	test_relational_operator();

@@ -29,23 +29,18 @@ namespace ft {
 
 			public:
 				/* TYPES */
-				typedef Key																key_type;
-				typedef T																mapped_type;
-				typedef ft::pair<const key_type, mapped_type>							value_type;
-				typedef Compare															key_compare;
-				typedef std::less<key_type>												value_compare;
-				typedef Alloc															allocator_type;
-				typedef typename allocator_type::reference								reference;
-				typedef typename allocator_type::const_reference						const_reference;
-				typedef typename allocator_type::pointer								pointer;
-				typedef typename allocator_type::const_pointer							const_pointer;
-//				typedef ft::IteratorMap<std::bidirectional_iterator_tag, Node>			iterator;
-//				typedef ft::IteratorMap<std::bidirectional_iterator_tag, Node>			const_iterator;
-//				typedef ft::IteratorMap<std::bidirectional_iterator_tag, const Node>	const_iterator;
-//				typedef std::reverse_iterator<iterator>									reverse_iterator;
-//				typedef std::reverse_iterator<const_iterator>							const_reverse_iterator;
-//				typedef std::ptrdiff_t													difference_type;
-				typedef std::size_t														size_type;
+				typedef Key											key_type;
+				typedef T											mapped_type;
+				typedef ft::pair<const key_type, mapped_type>		value_type;
+				typedef Compare										key_compare;
+				typedef std::less<key_type>							value_compare;
+				typedef Alloc										allocator_type;
+				typedef typename allocator_type::reference			reference;
+				typedef typename allocator_type::const_reference	const_reference;
+				typedef typename allocator_type::pointer			pointer;
+				typedef typename allocator_type::const_pointer		const_pointer;
+//				typedef std::ptrdiff_t								difference_type;
+				typedef std::size_t									size_type;
 
 			private:
 				struct Node {
@@ -66,6 +61,9 @@ namespace ft {
 				class Pointer = U*,
 				class Reference = U& >
 		class	IteratorMap {
+
+			friend class map<Key, T, Compare, Alloc>;
+
 			public:
 				typedef U			value_type;
 				typedef Pointer		pointer;
@@ -79,77 +77,76 @@ namespace ft {
 			public:
 				explicit IteratorMap() : _pos(NULL) {}
 
-				explicit IteratorMap(pointer it) : _pos(it) {
-
-//					if (it)
-//						std::cout << it->_pair.first << '\n';
+			private:
+				IteratorMap(Node *pos/*, comp*/) : _pos(pos) {
 				}
 
+
+			public:
 				template <class V>
 					explicit IteratorMap(const IteratorMap<Category, V> &it) {
 						*this = it;
 					}
 
+				/*
 				template <class V>
 					IteratorMap	&operator=(const IteratorMap<Category, V> &it) {
-						_pos = it.base();
+						std::cout << "operator = iterator\n";
+						_pos = it._pos;
+//						_pos->parent = it._pos->parent;
+//						_pos->left = it._pos->left;
+//						_pos->right = it._pos->right;
+//						_pos->height = it._pos->height;
+//						this = it.base();
 						return *this;
 					}
+					*/
 
 				~IteratorMap() {}
 
-				pointer	base() {
-					return _pos;
-				}
+//				pointer	base() {
+//					return _pos;
+//				}
 
-				const pointer	base() const {
-					return _pos;
-				}
+//				const pointer	base() const {
+//					return _pos;
+//				}
 
 				reference	operator*() const { return _pos->_pair; }
 				pointer		operator->() const { return &(_pos->_pair); }
-
-				IteratorMap	operator-=(int n) {
-					for (int i = 0; i < n; i++, _pos--)
-						*this = _pos->left;
-					return *this;
-				}
-
-				IteratorMap	operator+=(int n) {
-					for (int i = 0; i < n; i++)
-						*this = _pos->right;
-					return *this;
-				}
 
 				IteratorMap	operator++(int) {
 					IteratorMap	tmp(*this);
 
 					if (_pos->right) {
-						*this = _pos->right;
+						_pos = _pos->right;
 						if (_pos->left) {
-							*this = _pos->left;
-							if (_pos->left && _pos->left->_pair.first > tmp->_pair.first)
-								*this = _pos->left;
+							_pos = _pos->left;
+							if (_pos->left && _pos->left->_pair.first > tmp->first)
+								_pos = _pos->left;
 						}
 					} else if (_pos->parent && _pos->parent->_pair.first > _pos->_pair.first) {
 						if (_pos->parent->_pair.first > _pos->_pair.first)
-							*this = _pos->parent;
+							_pos = _pos->parent;
 					} else if (_pos->right) {
-						*this = _pos->right;
+						_pos = _pos->right;
 						while (_pos->left)
-							*this = _pos->left;
+							_pos = _pos->left;
 					} else {
 						if (_pos->parent) {
 							if (_pos->parent->_pair.first < _pos->_pair.first) {
 								while (_pos->parent && _pos->_pair.first > _pos->parent->_pair.first)
-									*this = _pos->parent;
-								*this = _pos->parent;
+									_pos = _pos->parent;
+								if (_pos->parent)
+									_pos = _pos->parent;
+								else if (_pos->right)
+									_pos = _pos->right;
 							}
 							else if (_pos->right)
-								*this = _pos->right;
+								_pos = _pos->right;
 						} else {
 							if (_pos->right)
-								*this = _pos->right;
+								_pos = _pos->right;
 						}
 					}
 					return tmp;
@@ -159,31 +156,35 @@ namespace ft {
 					IteratorMap	tmp(*this);
 
 					if (_pos->right) {
-						*this = _pos->right;
+						_pos = _pos->right;
 						if (_pos->left) {
-							*this = _pos->left;
-							if (_pos->left && _pos->left->_pair.first > tmp->_pair.first)
-								*this = _pos->left;
+							_pos = _pos->left;
+							if (_pos->left && _pos->left->_pair.first > tmp->first)
+								_pos = _pos->left;
 						}
 					} else if (_pos->parent && _pos->parent->_pair.first > _pos->_pair.first) {
 						if (_pos->parent->_pair.first > _pos->_pair.first)
-							*this = _pos->parent;
+							_pos = _pos->parent;
 					} else if (_pos->right) {
-						*this = _pos->right;
+						_pos = _pos->right;
 						while (_pos->left)
-							*this = _pos->left;
+							_pos = _pos->left;
 					} else {
 						if (_pos->parent) {
 							if (_pos->parent->_pair.first < _pos->_pair.first) {
-								while (_pos->parent && _pos->_pair.first > _pos->parent->_pair.first)
-									*this = _pos->parent;
-								*this = _pos->parent;
+								while (_pos->parent && _pos->_pair.first > _pos->parent->_pair.first) {
+									_pos = _pos->parent;
+								}
+								if (_pos->parent)
+									_pos = _pos->parent;
+								else if (_pos->right)
+									_pos = _pos->right;
 							}
 							else if (_pos->right)
-								*this = _pos->right;
+								_pos = _pos->right;
 						} else {
 							if (_pos->right)
-								*this = _pos->right;
+								_pos = _pos->right;
 						}
 					}
 					return *this;
@@ -193,31 +194,34 @@ namespace ft {
 					IteratorMap	tmp(*this);
 
 					if (_pos->left) {
-						*this = _pos->left;
+						_pos = _pos->left;
 						if (_pos->right) {
-							*this = _pos->right;
-							if (_pos->right && _pos->right->_pair.first > tmp->_pair.first)
-								*this = _pos->right;
+							_pos = _pos->right;
+							if (_pos->right && _pos->right->_pair.first > tmp->first)
+								_pos = _pos->right;
 						}
 					} else if (_pos->parent && _pos->parent->_pair.first < _pos->_pair.first) {
 						if (_pos->parent->_pair.first < _pos->_pair.first)
-							*this = _pos->parent;
+							_pos = _pos->parent;
 					} else if (_pos->left) {
-						*this = _pos->left;
+						_pos = _pos->left;
 						while (_pos->right)
-							*this = _pos->right;
+							_pos = _pos->right;
 					} else {
 						if (_pos->parent) {
 							if (_pos->parent->_pair.first > _pos->_pair.first) {
 								while (_pos->parent && _pos->_pair.first < _pos->parent->_pair.first)
-									*this = _pos->parent;
-								*this = _pos->parent;
+									_pos = _pos->parent;
+								if (_pos->parent)
+									_pos = _pos->parent;
+								else if (_pos->left)
+									_pos = _pos->left;
 							}
 							else if (_pos->left)
-								*this = _pos->left;
+								_pos = _pos->left;
 						} else {
 							if (_pos->left)
-								*this = _pos->left;
+								_pos = _pos->left;
 						}
 					}
 					return tmp;
@@ -227,138 +231,53 @@ namespace ft {
 					IteratorMap	tmp(*this);
 
 					if (_pos->left) {
-						*this = _pos->left;
+						_pos = _pos->left;
 						if (_pos->right) {
-							*this = _pos->right;
-							if (_pos->right && _pos->right->_pair.first > tmp->_pair.first)
-								*this = _pos->right;
+							_pos = _pos->right;
+							if (_pos->right && _pos->right->_pair.first > tmp->first)
+								_pos = _pos->right;
 						}
 					} else if (_pos->parent && _pos->parent->_pair.first < _pos->_pair.first) {
 						if (_pos->parent->_pair.first < _pos->_pair.first)
-							*this = _pos->parent;
+							_pos = _pos->parent;
 					} else if (_pos->left) {
-						*this = _pos->left;
+						_pos = _pos->left;
 						while (_pos->right)
-							*this = _pos->right;
+							_pos = _pos->right;
 					} else {
 						if (_pos->parent) {
 							if (_pos->parent->_pair.first > _pos->_pair.first) {
 								while (_pos->parent && _pos->_pair.first < _pos->parent->_pair.first)
-									*this = _pos->parent;
-								*this = _pos->parent;
+									_pos = _pos->parent;
+								if (_pos->parent)
+									_pos = _pos->parent;
+								else if (_pos->left)
+									_pos = _pos->left;
 							}
 							else if (_pos->left)
-								*this = _pos->left;
+								_pos = _pos->left;
 						} else {
 							if (_pos->left)
-								*this = _pos->left;
+								_pos = _pos->left;
 						}
 					}
 					return *this;
 				}
 
-				difference_type	operator+(const IteratorMap &it) const {
-					return base() + it.base();
+				bool	operator==(const IteratorMap &it) const {
+					return _pos == it._pos;
 				}
 
-				IteratorMap	operator+(difference_type v) const {
-					return IteratorMap(_pos + v);
+				bool	operator!=(const IteratorMap &it) const {
+					return _pos != it._pos;
 				}
-
-				IteratorMap	operator+(int n) {
-					return IteratorMap(base() + n);
-				}
-
-//				difference_type	operator-(const IteratorMap &it) const {
-//					return base() - it.base();
-//				}
-
-//				IteratorMap	operator-(difference_type v) const {
-//					return IteratorMap(_pos - v);
-//				}
-
-				IteratorMap	operator-(int n) {
-					return IteratorMap(_pos - n);
-				}
-
-				reference	operator[](difference_type v) const {
-					return *(_pos + v);
-				}
-
-				template <class IteratorMap>
-					friend bool	operator==(const IteratorMap &lhs, const IteratorMap &rhs);
-				template <class IteratorMap>
-					friend bool	operator!=(const IteratorMap &lhs, const IteratorMap &rhs);
-				template <class IteratorMap>
-					friend bool	operator<=(const IteratorMap &lhs, const IteratorMap &rhs);
-				template <class IteratorMap>
-					friend bool	operator>=(const IteratorMap &lhs, const IteratorMap &rhs);
-				template <class IteratorMap>
-					friend bool	operator<(const IteratorMap &lhs, const IteratorMap &rhs);
-				template <class IteratorMap>
-					friend bool	operator>(const IteratorMap &lhs, const IteratorMap &rhs);
 		};
-
-	/*
-	template <class IteratorMap>
-		bool	operator==(const IteratorMap &lhs, const IteratorMap &rhs) {
-			return lhs._pos == rhs._pos;
-		}
-
-	template <class IteratorMap>
-		bool	operator!=(const IteratorMap &lhs, const IteratorMap &rhs) {
-			return lhs._pos != rhs._pos;
-		}
-
-	template <class IteratorMap>
-		bool	operator<=(const IteratorMap &lhs, const IteratorMap &rhs) {
-			return lhs._pos <= rhs._pos;
-		}
-
-	template <class IteratorMap>
-		bool	operator>=(const IteratorMap &lhs, const IteratorMap &rhs) {
-			return lhs._pos >= rhs._pos;
-		}
-
-	template <class IteratorMap>
-		bool	operator<(const IteratorMap &lhs, const IteratorMap &rhs) {
-			return lhs._pos < rhs._pos;
-		}
-
-	template <class IteratorMap>
-		bool	operator>(const IteratorMap &lhs, const IteratorMap &rhs) {
-			return lhs._pos > rhs._pos;
-		}
-
-	template <class Category, class T>
-		IteratorMap<Category, T> operator+(std::ptrdiff_t v, IteratorMap<Category, T> &it) {
-			return IteratorMap<Category, T>(it.base() + v);
-		}
-
-	template <class Category, class T>
-		typename IteratorMap<Category, T>::difference_type operator+(const IteratorMap<Category, T> &lhs, const IteratorMap<Category, T> &rhs) {
-			return lhs.base() + rhs.base();
-		}
-
-	template <class Category, class T>
-		typename IteratorMap<Category, T>::difference_type operator-(const IteratorMap<Category, T> &lhs, const IteratorMap<Category, T> &rhs) {
-			return lhs.base() - rhs.base();
-		}
-
-	template <class Category, class T, class U>
-		typename IteratorMap<Category, T>::difference_type operator+(const IteratorMap<Category, T> &lhs, const IteratorMap<Category, U> &rhs) {
-			return lhs.base() + rhs.base();
-		}
-
-	template <class Category, class T, class U>
-		typename IteratorMap<Category, T>::difference_type operator-(const IteratorMap<Category, T> &lhs, const IteratorMap<Category, U> &rhs) {
-			return lhs.base() - rhs.base();
-		}
-	*/
 
 			public:
 				typedef IteratorMap<std::bidirectional_iterator_tag, value_type>		iterator;
-				typedef IteratorMap<std::bidirectional_iterator_tag, value_type>		const_iterator;
+				typedef IteratorMap<std::bidirectional_iterator_tag, value_type>		const_iterator; // rajouter const
+				typedef std::reverse_iterator<iterator>									reverse_iterator;
+				typedef std::reverse_iterator<const_iterator>							const_reverse_iterator;
 				typedef typename iterator_traits<iterator>::difference_type				difference_type;
 
 
@@ -375,7 +294,7 @@ namespace ft {
 //						_comp;
 						_size = map.size();
 						for (iterator it = map.begin(); it != map.end(); it++)
-							this->insert(it);
+							this->insert(*it);
 					}
 					return *this;
 				}
@@ -392,11 +311,7 @@ namespace ft {
 							const allocator_type &alloc = allocator_type())
 					: _alloc(alloc), _comp(comp), _size(0), _root(NULL) {
 
-						std::cout << "Iterator Constructor\n";
-						while (first != last) {
-							insert(first->_pair);
-							++first;
-						}
+						insert(first, last);
 					}
 
 				//copy (3)
@@ -421,10 +336,10 @@ namespace ft {
 				const_iterator			begin() const { return const_iterator(min(_root)); }
 				iterator				end() { return iterator(max(_root)); }
 				const_iterator			end() const { return const_iterator(max(_root)); }
-//				reverse_iterator		rbegin() { return reverse_iterator(max(_root)); }
-//				const_reverse_iterator	rbegin() const { return const_reverse_iterator(max(_root)); }
-//				reverse_iterator		rend() { return reverse_iterator(min(_root)); }
-//				const_reverse_iterator	rend() const { return const_reverse_iterator(min(_root)); }
+				reverse_iterator		rbegin() { return reverse_iterator(max(_root)); }
+				const_reverse_iterator	rbegin() const { return const_reverse_iterator(max(_root)); }
+				reverse_iterator		rend() { return reverse_iterator(min(_root)); }
+				const_reverse_iterator	rend() const { return const_reverse_iterator(min(_root)); }
 
 				/* CAPACITY */
 				size_type	size() const { return _size; }
@@ -514,12 +429,9 @@ namespace ft {
 
 				//single element (1)
 				pair<iterator, bool>	insert(const value_type& val) {
-
-//					std::cout << "INSERTING = " << val.first << '\n';
 					_root = insert(_root, make_pair(val.first, val.second));
 
 					++_size;
-//					printTree();
 					return ft::make_pair<iterator, bool>(find(val.first), true);
 				}
 
@@ -533,13 +445,13 @@ namespace ft {
 				template <class InputIterator>
 					void	insert(InputIterator first, InputIterator last) {
 						while (first != last) {
-							insert(first->_pair);
+							insert(*first);
 							++first;
 						}
 					}
 
 				void	erase(iterator pos) {
-					deleteNode(pos.base(), pos->_pair);
+					deleteNode(pos.base(), *pos);
 				}
 
 				size_type	erase(const key_type &k) {
@@ -553,7 +465,7 @@ namespace ft {
 
 				void	erase(iterator first, iterator last) {
 					while (first != last) {
-						deleteNode(first, first->_pair->first);
+						deleteNode(first, *(first->first));
 						++first;
 					}
 				}
@@ -702,7 +614,7 @@ namespace ft {
 					}
 				}
 
-				Node	*min(Node *root) {
+				Node	*min(Node *root) const {
 					if (!root->left)
 						return root;
 					if (root->left->_pair.first < root->_pair.first)
@@ -710,7 +622,7 @@ namespace ft {
 					return root;
 				}
 
-				Node	*max(Node *root) {
+				Node	*max(Node *root) const {
 					if (!root->right)
 						return root;
 					if (root->right->_pair.first > root->_pair.first)
@@ -787,7 +699,7 @@ namespace ft {
 					if (leaf) {
 						destroyTree(leaf->left);
 						destroyTree(leaf->right);
-						_alloc.deallocate(leaf);
+//						_alloc.deallocate(leaf, size());
 					}
 				}
 
@@ -802,6 +714,10 @@ namespace ft {
 		bool	operator==(const map<Key, T, Compare, Alloc> &lhs,
 							const map<Key, T, Compare, Alloc> &rhs)
 		{
+			std::cout << "OPERATOR ==\n";
+			return (lexicographical_compare(lhs.begin(), lhs.end(),
+										rhs.begin(), rhs.begin()));
+					/*
 			if (lhs.size() == rhs.size()) {
 				for (size_t i = 0; i < lhs.size(); i++) {
 					if (lhs[i] != rhs[i])
@@ -810,29 +726,34 @@ namespace ft {
 				return true;
 			}
 			return false;
+			*/
 		}
 
 	template<class Key, class T, class Compare, class Alloc>
 		bool	operator!=(const map<Key, T, Compare, Alloc> &lhs,
 							const map<Key, T, Compare, Alloc> &rhs) {
+			std::cout << "OPERATOR !=\n";
 			return (!(lhs == rhs));
 		}
 
 	template<class Key, class T, class Compare, class Alloc>
 		bool	operator<(const map<Key, T, Compare, Alloc> &lhs,
 							const map<Key, T, Compare, Alloc> &rhs) {
-			size_t i;
 
-			for (i = 0; i < lhs.size() && i < rhs.size(); i++) {
-				if (lhs[i] < rhs[i])
-					return true;
-				else if (lhs[i] > rhs[i])
-					return false;
-			}
-			if (i == lhs.size() && i < rhs.size())
-				return true;
-			else
-				return false;
+			return (lexicographical_compare(lhs.begin(), lhs.end(),
+											rhs.begin(), rhs.begin()));
+//			size_t i;
+//
+//			for (i = 0; i < lhs.size() && i < rhs.size(); i++) {
+//				if (lhs[i] < rhs[i])
+//					return true;
+//				else if (lhs[i] > rhs[i])
+//					return false;
+//			}
+//			if (i == lhs.size() && i < rhs.size())
+//				return true;
+//			else
+//				return false;
 		}
 
 	template<class Key, class T, class Compare, class Alloc>
