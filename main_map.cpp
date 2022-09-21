@@ -14,6 +14,35 @@
 #include "utils.hpp"
 #endif
 
+	/*
+static int iter = 0;
+
+template <typename MAP, typename U>
+	void	ft_insert(MAP &mp, U param)
+	{
+		std::pair<std::map<int, std::string>::iterator, bool> tmp;
+//		ft::pair<ft::map<int, std::string>::iterator, bool> tmp;
+	
+		std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+		tmp = mp.insert(param);
+	//	std::cout << "insert return: " << printPair(tmp.first);
+		std::cout << "Created new node: " << tmp.second << std::endl;
+		mp.printTree();
+	}
+
+template <typename MAP, typename U, typename V>
+	void	ft_insert(MAP &mp, U param, V param2)
+	{
+//		std::map<U, V>::iterator tmp;
+		std::pair<std::map<int, std::string>::iterator, bool> tmp;
+	
+		std::cout << "\t-- [" << iter++ << "] --" << std::endl;
+		tmp = mp.insert(param, param2);
+	//	std::cout << "insert return: " << printPair(tmp);
+		mp.printTree();
+	}
+	*/
+
 void	test_pair() {
 	std::cout << "/******** TESTING PAIR ********/\n" << std::endl;
 		ft::pair <int,int> pair1;
@@ -126,6 +155,15 @@ void	test_map() {
 	ft::map<int, int>::iterator		ftIt;
 	ft::map<int, int>::const_iterator		c_ftIt = ftMap.begin();
 
+	ft::map<int, int>	testtest(ftMap.begin(), ftMap.end());
+	ftMap.printTree();
+//		std::cout << " first  = " << ftMap.end()->first << ' '
+//		<< "second = " << ftMap.end()->second << '\n';
+	for (ftIt = ftMap.begin(); ftIt != ftMap.end(); ftIt++) {
+		std::cout << " first  = " << ftIt->first << ' '
+		<< "second = " << ftIt->second << '\n';
+	}
+	/*
 	for (; c_ftIt != ftMap.end(); c_ftIt++) {
 		std::cout << "first  = " << c_ftIt->first << '\n';
 		std::cout << "second = " << c_ftIt->second << '\n';
@@ -239,6 +277,54 @@ void	test_map() {
 	std::cout << "ft_upper_bound: " << ftMap.upper_bound(11)->first << '\n';
 	std::cout << "std_upper_bound: " << stdMap.upper_bound(8)->first << '\n';
 	std::cout << "ft_upper_bound: " << ftMap.upper_bound(8)->first << '\n';
+*/
+	/*
+	ft::map<int, std::string>	strMap;
+
+	strMap.insert(ft::make_pair(3, "ocuudou"));
+	strMap.insert(ft::make_pair(2, "oou"));
+	strMap.insert(ft::make_pair(1, "oudou"));
+	strMap.insert(ft::make_pair(4, "cdasdaoudou"));
+	strMap.insert(ft::make_pair(5, "oudouaasfsgsdfgsgd"));
+
+	ft::map<int, std::string>	strMap2(strMap.begin(), strMap.end());
+
+	for (ft::map<int, std::string>::iterator ftIt = strMap.begin(); ftIt != strMap.end(); ftIt++) {
+		std::cout << " first  = " << ftIt->first << ' '
+		<< "second = " << ftIt->second << '\n';
+	}
+	std::cout << " first  = " << strMap.end()->first;
+	std::cout << " second = " << strMap.end()->second<< '\n';
+	bool res[2];
+
+	for (ft::map<int, std::string>::const_iterator it1 = strMap.begin(); it1 != strMap.end(); ++it1) {
+		for (ft::map<int, std::string>::const_iterator it2 = strMap.begin(); it2 != strMap.end(); ++it2) {
+			res[0] = strMap.key_comp()(it1->first, it2->first);
+			res[1] = strMap.value_comp()(*it1, *it2);
+			std::cout << "with [" << it1->first << " and " << it2->first << "]: ";
+			std::cout << "key_comp: " << res[0] << " | " << "value_comp: " << res[1] << std::endl;
+		}
+	}
+	*/
+	
+//	ft_insert(strMap, ft::map<int, std::string>::value_type(42, "lol"));
+//	ft_insert(strMap, ft::map<int, std::string>::value_type(42, "lol"));
+//	ft_insert(mp, T3(42, "mdr"));
+//	
+//	ft_insert(mp, T3(50, "mdr"));
+//	ft_insert(mp, T3(35, "funny"));
+//	
+//	ft_insert(mp, T3(45, "bunny"));
+//	ft_insert(mp, T3(21, "fizz"));
+//	ft_insert(mp, T3(38, "buzz"));
+//	
+//	ft_insert(mp, mp.begin(), ft::pair<int, std::string>(55, "fuzzy"));
+//	
+//	ft_insert(mp2, mp2.begin(), T3(1337, "beauty"));
+//	ft_insert(mp2, mp2.end(), T3(1000, "Hello"));
+//	ft_insert(mp2, mp2.end(), T3(1500, "World"));
+
+
 
 	/*
 	std::cout << "TESTING RESIZE\n" << std::endl;
@@ -295,6 +381,18 @@ void	test_enable_if() {
 void	test_relational_operator() {
 	std::cout << "TESTING RELATIONAL_OPERATOR\n" << std::endl;
 
+	ft::map<int, int> mp1;
+	ft::map<int, int> mp2;
+
+//	mp1['a'] = 2; mp1['b'] = 3; mp1['c'] = 4; mp1['d'] = 5;
+	mp2['a'] = 2; mp2['b'] = 3; mp2['c'] = 4; mp2['d'] = 5;
+
+	std::cout << "==: " << (mp1 == mp2) << std::endl;
+	std::cout << "!=: " << (mp1 != mp2) << std::endl;
+	std::cout << "< : " << (mp1 <  mp2) << std::endl;
+	std::cout << "<=: " << (mp1 <= mp2) << std::endl;
+	std::cout << "> : " << (mp1 >  mp2) << std::endl;
+	std::cout << ">=: " << (mp1 >= mp2) << std::endl;
 //	std::cout << "== " << (vect1 == vect2) << '\n';
 //	std::cout << "!= " << (vect1 != vect2) << '\n';
 //	std::cout << "< " << (vect1 < vect2) << '\n';
@@ -324,8 +422,8 @@ void	test_lexicographical_compare() {
 
 int	main() {
 //	test_pair();
-	test_iterator();
-//	test_map();
+//	test_iterator();
+	test_map();
 //	test_is_integral();
 //	test_equal();
 //	test_relational_operator();

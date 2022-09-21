@@ -20,8 +20,8 @@ namespace ft {
 
 	template <	class Key,
 				class T,
-				class Compare = std::less<Key>,
-				class Alloc = std::allocator<pair<const Key, T> > >
+				class Compare = ft::less<Key>,
+				class Alloc = std::allocator<ft::pair<const Key, T> > >
 		class map {
 
 			private:
@@ -33,13 +33,11 @@ namespace ft {
 				typedef T											mapped_type;
 				typedef ft::pair<const key_type, mapped_type>		value_type;
 				typedef Compare										key_compare;
-				typedef std::less<key_type>							value_compare;
 				typedef Alloc										allocator_type;
 				typedef typename allocator_type::reference			reference;
 				typedef typename allocator_type::const_reference	const_reference;
 				typedef typename allocator_type::pointer			pointer;
 				typedef typename allocator_type::const_pointer		const_pointer;
-//				typedef std::ptrdiff_t								difference_type;
 				typedef std::size_t									size_type;
 
 			private:
@@ -51,6 +49,22 @@ namespace ft {
 					int				height;
 				};
 
+				class value_compare
+				{   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
+					friend class map;
+
+					protected:
+						Compare comp;
+						value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
+					public:
+						typedef bool result_type;
+						typedef value_type first_argument_type;
+						typedef value_type second_argument_type;
+
+						bool	operator() (const value_type& x, const value_type& y) const {
+								return comp(x.first, y.first);
+						}
+				};
 //****************************************************************************//
 //*                            MAP ITERATOR                                  *//
 //****************************************************************************//
@@ -65,21 +79,24 @@ namespace ft {
 			friend class map<Key, T, Compare, Alloc>;
 
 			public:
-				typedef U			value_type;
-				typedef Pointer		pointer;
-				typedef Reference	reference;
-				typedef Distance	difference_type;
-				typedef Category	IteratorMap_category;
+				typedef U							value_type;
+				typedef Pointer						pointer;
+				typedef Reference					reference;
+				typedef Distance					difference_type;
+				typedef Category					IteratorMap_category;
+				typedef typename map::key_compare	key_compare;
 
 			protected:
-				Node	*_pos;
+				Node		*_pos;
+				Node		*_p_end;
+				key_compare	_comp;
 
 			public:
 				explicit IteratorMap() : _pos(NULL) {}
 
 			private:
-				IteratorMap(Node *pos/*, comp*/) : _pos(pos) {
-				}
+				IteratorMap(Node *pos, Node *end, key_compare comp)
+					: _pos(pos), _p_end(end), _comp(comp) {}
 
 
 			public:
@@ -119,73 +136,30 @@ namespace ft {
 					IteratorMap	tmp(*this);
 
 					if (_pos->right) {
-						_pos = _pos->right;
-						if (_pos->left) {
-							_pos = _pos->left;
-							if (_pos->left && _pos->left->_pair.first > tmp->first)
-								_pos = _pos->left;
-						}
-					} else if (_pos->parent && _pos->parent->_pair.first > _pos->_pair.first) {
-						if (_pos->parent->_pair.first > _pos->_pair.first)
+						if (!_pos->right->left || _pos->right == _p_end)
+							_pos = _pos->right;
+						else
+							_pos = ft::map<Key, T, Compare, Alloc>::minValueNode(_pos->right);
+					} else if (!_pos->parent) {
+						Node	*tmpNode = _pos;
+						_pos = _pos->parent;
+						while (_comp(tmpNode->_pair.first, _pos->_pair.first) == false)
 							_pos = _pos->parent;
-					} else if (_pos->right) {
-						_pos = _pos->right;
-						while (_pos->left)
-							_pos = _pos->left;
-					} else {
-						if (_pos->parent) {
-							if (_pos->parent->_pair.first < _pos->_pair.first) {
-								while (_pos->parent && _pos->_pair.first > _pos->parent->_pair.first)
-									_pos = _pos->parent;
-								if (_pos->parent)
-									_pos = _pos->parent;
-								else if (_pos->right)
-									_pos = _pos->right;
-							}
-							else if (_pos->right)
-								_pos = _pos->right;
-						} else {
-							if (_pos->right)
-								_pos = _pos->right;
-						}
 					}
 					return tmp;
 				}
 
 				IteratorMap	&operator++() {
-					IteratorMap	tmp(*this);
-
 					if (_pos->right) {
-						_pos = _pos->right;
-						if (_pos->left) {
-							_pos = _pos->left;
-							if (_pos->left && _pos->left->_pair.first > tmp->first)
-								_pos = _pos->left;
-						}
-					} else if (_pos->parent && _pos->parent->_pair.first > _pos->_pair.first) {
-						if (_pos->parent->_pair.first > _pos->_pair.first)
+						if (!_pos->right->left || _pos->right == _p_end)
+							_pos = _pos->right;
+						else
+							_pos = ft::map<Key, T, Compare, Alloc>::minValueNode(_pos->right);
+					} else if (!_pos->parent) {
+						Node	*tmpNode = _pos;
+						_pos = _pos->parent;
+						while (_comp(tmpNode->_pair.first, _pos->_pair.first) == false)
 							_pos = _pos->parent;
-					} else if (_pos->right) {
-						_pos = _pos->right;
-						while (_pos->left)
-							_pos = _pos->left;
-					} else {
-						if (_pos->parent) {
-							if (_pos->parent->_pair.first < _pos->_pair.first) {
-								while (_pos->parent && _pos->_pair.first > _pos->parent->_pair.first) {
-									_pos = _pos->parent;
-								}
-								if (_pos->parent)
-									_pos = _pos->parent;
-								else if (_pos->right)
-									_pos = _pos->right;
-							}
-							else if (_pos->right)
-								_pos = _pos->right;
-						} else {
-							if (_pos->right)
-								_pos = _pos->right;
-						}
 					}
 					return *this;
 				}
@@ -193,73 +167,49 @@ namespace ft {
 				IteratorMap	operator--(int) {
 					IteratorMap	tmp(*this);
 
+					if (_pos == _p_end) {
+						if (_p_end->left != NULL)
+							_pos = _p_end->left;
+						return tmp;
+					} else if (_pos == _p_end->right) {
+						_pos = _p_end;
+						return tmp;
+					}
 					if (_pos->left) {
-						_pos = _pos->left;
-						if (_pos->right) {
-							_pos = _pos->right;
-							if (_pos->right && _pos->right->_pair.first > tmp->first)
-								_pos = _pos->right;
-						}
-					} else if (_pos->parent && _pos->parent->_pair.first < _pos->_pair.first) {
-						if (_pos->parent->_pair.first < _pos->_pair.first)
+						if (!_pos->left->right)
+							_pos = _pos->left;
+						else
+							_pos = ft::map<Key, T, Compare, Alloc>::maxValueNode(_pos->left);
+					} else if (_pos->parent != NULL) {
+						Node *tmpNode = _pos;
+
+						_pos = _pos->parent;
+						while (_comp(_pos->_pair.first, tmpNode->_pair.first) == false)
 							_pos = _pos->parent;
-					} else if (_pos->left) {
-						_pos = _pos->left;
-						while (_pos->right)
-							_pos = _pos->right;
-					} else {
-						if (_pos->parent) {
-							if (_pos->parent->_pair.first > _pos->_pair.first) {
-								while (_pos->parent && _pos->_pair.first < _pos->parent->_pair.first)
-									_pos = _pos->parent;
-								if (_pos->parent)
-									_pos = _pos->parent;
-								else if (_pos->left)
-									_pos = _pos->left;
-							}
-							else if (_pos->left)
-								_pos = _pos->left;
-						} else {
-							if (_pos->left)
-								_pos = _pos->left;
-						}
 					}
 					return tmp;
 				}
 
 				IteratorMap	&operator--() {
-					IteratorMap	tmp(*this);
-
+					if (_pos == _p_end) {
+						if (_p_end->left != NULL)
+							_pos = _p_end->left;
+						return *this;
+					} else if (_pos == _p_end->right) {
+						_pos = _p_end;
+						return *this;
+					}
 					if (_pos->left) {
-						_pos = _pos->left;
-						if (_pos->right) {
-							_pos = _pos->right;
-							if (_pos->right && _pos->right->_pair.first > tmp->first)
-								_pos = _pos->right;
-						}
-					} else if (_pos->parent && _pos->parent->_pair.first < _pos->_pair.first) {
-						if (_pos->parent->_pair.first < _pos->_pair.first)
+						if (!_pos->left->right)
+							_pos = _pos->left;
+						else
+							_pos = ft::map<Key, T, Compare, Alloc>::maxValueNode(_pos->left);
+					} else if (_pos->parent != NULL) {
+						Node *tmpNode = _pos;
+
+						_pos = _pos->parent;
+						while (_comp(_pos->_pair.first, tmpNode->_pair.first) == false)
 							_pos = _pos->parent;
-					} else if (_pos->left) {
-						_pos = _pos->left;
-						while (_pos->right)
-							_pos = _pos->right;
-					} else {
-						if (_pos->parent) {
-							if (_pos->parent->_pair.first > _pos->_pair.first) {
-								while (_pos->parent && _pos->_pair.first < _pos->parent->_pair.first)
-									_pos = _pos->parent;
-								if (_pos->parent)
-									_pos = _pos->parent;
-								else if (_pos->left)
-									_pos = _pos->left;
-							}
-							else if (_pos->left)
-								_pos = _pos->left;
-						} else {
-							if (_pos->left)
-								_pos = _pos->left;
-						}
 					}
 					return *this;
 				}
@@ -291,10 +241,14 @@ namespace ft {
 				map	&operator=(const map<Key, T, Compare, Alloc> &map) {
 					if (this != &map) {
 						_alloc = map.get_allocator();
-//						_comp;
-						_size = map.size();
-						for (iterator it = map.begin(); it != map.end(); it++)
-							this->insert(*it);
+						_comp = map._comp;
+						_size = 0;
+						_p_end = _alloc_node.allocate(1);
+//						_p_end->parent = NULL;
+						_p_end->left = NULL;
+						_p_end->right = NULL;
+						_p_end->height = 0;
+						insert(map.begin(), map.end());
 					}
 					return *this;
 				}
@@ -302,7 +256,13 @@ namespace ft {
 				//empty (1)
 				explicit map(const key_compare &comp = key_compare(),
 						const allocator_type &alloc = allocator_type())
-					: _alloc(alloc), _comp(comp), _size(0), _root(NULL) {}
+					: _alloc(alloc), _comp(comp), _size(0), _root(NULL) {
+						_p_end = _alloc_node.allocate(1);
+						_p_end->parent = _root;
+						_p_end->left = NULL;
+						_p_end->right = NULL;
+						_p_end->height = 0;
+					}
 
 				//fill (2)
 				template <class InputIterator>
@@ -310,6 +270,11 @@ namespace ft {
 							const key_compare &comp = key_compare(),
 							const allocator_type &alloc = allocator_type())
 					: _alloc(alloc), _comp(comp), _size(0), _root(NULL) {
+						_p_end = _alloc_node.allocate(1);
+						_p_end->parent = _root;
+						_p_end->left = NULL;
+						_p_end->right = NULL;
+						_p_end->height = 0;
 
 						insert(first, last);
 					}
@@ -332,27 +297,61 @@ namespace ft {
 				}
 
 				/* ITERATORS */
-				iterator				begin() { return iterator(min(_root)); }
-				const_iterator			begin() const { return const_iterator(min(_root)); }
-				iterator				end() { return iterator(max(_root)); }
-				const_iterator			end() const { return const_iterator(max(_root)); }
-				reverse_iterator		rbegin() { return reverse_iterator(max(_root)); }
-				const_reverse_iterator	rbegin() const { return const_reverse_iterator(max(_root)); }
-				reverse_iterator		rend() { return reverse_iterator(min(_root)); }
-				const_reverse_iterator	rend() const { return const_reverse_iterator(min(_root)); }
+				iterator				begin() {
+					return iterator(minValueNode(_root), _p_end, _comp);
+				}
+
+				const_iterator			begin() const {
+					return const_iterator(minValueNode(_root), _p_end, _comp);
+				}
+
+				iterator				end() {
+					if (_size == 0)
+						return begin();
+					return iterator(_p_end, _p_end, _comp);
+				}
+
+				const_iterator			end() const {
+					if (_size == 0)
+						return begin();
+					return const_iterator(_p_end, _p_end, _comp);
+				}
+
+				reverse_iterator		rbegin() {
+					if (_size == 0)
+						return begin();
+					return reverse_iterator(_p_end, _p_end, _comp);
+				}
+
+				const_reverse_iterator	rbegin() const {
+					if (_size == 0)
+						return begin();
+					return const_reverse_iterator(_p_end, _p_end, _comp);
+				}
+
+				reverse_iterator		rend() {
+					return reverse_iterator(minValueNode(_root, _p_end, _comp));
+				}
+
+				const_reverse_iterator	rend() const {
+					return const_reverse_iterator(minValueNode(_root, _p_end, _comp));
+				}
 
 				/* CAPACITY */
 				size_type	size() const { return _size; }
 
 				size_type	max_size() const { return _alloc.max_size(); }
 
-				bool		empty() const { return (size() == 0); }
+				bool		empty() const { return (_size == 0); }
 
 				/* ELEMENT ACCES */
 
 				mapped_type	&operator[](const key_type &k) {
 					Node	*tmp = search(k);
 
+					if (!tmp)
+						insert(ft::make_pair(k, mapped_type()));
+					tmp = search(k);
 					return tmp->_pair.second;
 				}
 
@@ -363,7 +362,7 @@ namespace ft {
 				}
 
 				value_compare	value_comp() const {
-					return value_compare();
+					return value_compare(key_comp());
 				}
 
 				size_type		count(const key_type &k) const {
@@ -374,23 +373,23 @@ namespace ft {
 				}
 
 				iterator		find(const key_type &k) {
-					return iterator(search(k));
+					return iterator(search(k), _p_end, _comp);
 				}
 
 				const_iterator	find(const key_type &k) const {
-					return const_iterator(search(k));
+					return const_iterator(search(k), _p_end, _comp);
 				}
 
 				iterator		lower_bound(const key_type &k) {
-					return (iterator(find(k)));
+					return (iterator(find(k), _p_end, _comp));
 				}
 
 				const_iterator	lower_bound(const key_type &k) const {
-					return (const_iterator(find(k)));
+					return (const_iterator(find(k), _p_end, _comp));
 				}
 
 				iterator		upper_bound(const key_type &k) {
-					iterator	it(find(k));
+					iterator	it(find(k), _p_end, _comp);
 
 					if (it != end())
 						++it;
@@ -398,7 +397,7 @@ namespace ft {
 				}
 
 				const_iterator	upper_bound(const key_type &k) const {
-					const_iterator	it(find(k));
+					const_iterator	it(find(k), _p_end, _comp);
 
 					if (it != end())
 						++it;
@@ -406,21 +405,13 @@ namespace ft {
 
 				}
 
-				pair<const_iterator,
-					const_iterator>	equal_range(const key_type &k) const {
-						pair<const_iterator, const_iterator>	ret;
-
-						(void)k;
-//						for (const_iterator it = begin(); it != end(); it++) {
-//						}
-						return ret;
-					}
+				pair<const_iterator, const_iterator>	equal_range(
+						const key_type &k) const {
+					return (ft::make_pair(lower_bound(k), upper_bound(k)));
+				}
 
 				pair<iterator, iterator>	equal_range(const key_type &k) {
-					pair<iterator, iterator>	ret;
-
-					(void)k;
-					return ret;
+					return (ft::make_pair(lower_bound(k), upper_bound(k)));
 				}
 
 				/* MODIFIERS */
@@ -429,9 +420,31 @@ namespace ft {
 
 				//single element (1)
 				pair<iterator, bool>	insert(const value_type& val) {
-					_root = insert(_root, make_pair(val.first, val.second));
 
 					++_size;
+//					Node	*tmp = max(_root);
+
+//					_p_end->parent = tmp;
+					if (!_p_end->parent) {
+//						std::cout << _root << '\n';// = _root->right;
+						_p_end->parent = _alloc_node.allocate(1);
+						_p_end->parent->parent = NULL;
+						_p_end->parent->left = NULL;
+						_p_end->parent->right = _p_end;
+						_p_end->left = _p_end->parent;
+						_p_end->right = _p_end->parent;
+
+						_root = insert(_root, ft::make_pair(val.first, val.second));
+						return ft::make_pair<iterator, bool>(find(val.first), false);
+					}
+					Node	*tmp;
+
+					tmp = search(val.first);
+					if (!tmp)
+						return ft::make_pair<iterator, bool>(find(val.first), false);
+					_root = insert(_root, ft::make_pair(val.first, val.second));
+//					tmp->right = _p_end;
+
 					return ft::make_pair<iterator, bool>(find(val.first), true);
 				}
 
@@ -471,7 +484,23 @@ namespace ft {
 				}
 
 				void		swap(map<Key, T, Compare, Alloc> &x) {
-					(void)x;
+					Node	*tmp;
+
+					tmp = _root;
+					_root = x._root;
+					x._root = tmp;
+
+					size_type	tmp_size;
+
+					tmp_size = _size;
+					_size = x._size;
+					x._size = tmp_size;
+
+					key_compare	tmp_comp;
+
+					tmp_comp = _comp;
+					_comp = x._comp;
+					x._comp = tmp_comp;
 				}
 
 				void		clear() {
@@ -560,9 +589,8 @@ namespace ft {
 				}
 
 				Node	*searchRecurs(Node *node, const key_type &k) const {
-					if (!node || k == node->_pair.first) {
+					if (!node || k == node->_pair.first)
 						return node;
-					}
 					if (_comp(k, node->_pair.first))
 						return searchRecurs(node->left, k);
 					return searchRecurs(node->right, k);
@@ -614,19 +642,19 @@ namespace ft {
 					}
 				}
 
-				Node	*min(Node *root) const {
+				static Node	*minValueNode(Node *root) {
 					if (!root->left)
 						return root;
 					if (root->left->_pair.first < root->_pair.first)
-						return min(root->left);
+						return minValueNode(root->left);
 					return root;
 				}
 
-				Node	*max(Node *root) const {
+				static Node	*maxValueNode(Node *root) {
 					if (!root->right)
 						return root;
 					if (root->right->_pair.first > root->_pair.first)
-						return max(root->right);
+						return maxValueNode(root->right);
 					return root;
 				}
 
@@ -684,9 +712,8 @@ namespace ft {
 						return rightRotate(node);
 					}
 
-					if (balance < -1 && getBalance(node->right) <= 0) {
+					if (balance < -1 && getBalance(node->right) <= 0)
 						return leftRotate(node);
-					}
 
 					if (balance < -1 && getBalance(node->right) > 0) {
 						node->right = rightRotate(node->right);
@@ -699,7 +726,8 @@ namespace ft {
 					if (leaf) {
 						destroyTree(leaf->left);
 						destroyTree(leaf->right);
-//						_alloc.deallocate(leaf, size());
+						_alloc_node.deallocate(leaf, 1);
+						--_size;
 					}
 				}
 
@@ -707,53 +735,29 @@ namespace ft {
 				key_compare	_comp;
 				size_type	_size;
 				Node		*_root;
+				Node		*_p_end;
 				typename allocator_type::template rebind<Node>::other	_alloc_node;
 		};
 
 	template<class Key, class T, class Compare, class Alloc>
 		bool	operator==(const map<Key, T, Compare, Alloc> &lhs,
-							const map<Key, T, Compare, Alloc> &rhs)
-		{
-			std::cout << "OPERATOR ==\n";
-			return (lexicographical_compare(lhs.begin(), lhs.end(),
-										rhs.begin(), rhs.begin()));
-					/*
-			if (lhs.size() == rhs.size()) {
-				for (size_t i = 0; i < lhs.size(); i++) {
-					if (lhs[i] != rhs[i])
-						return false;
-				}
-				return true;
-			}
-			return false;
-			*/
+							const map<Key, T, Compare, Alloc> &rhs) {
+			if (lhs.size() != rhs.size())
+				return false;
+			return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 		}
 
 	template<class Key, class T, class Compare, class Alloc>
 		bool	operator!=(const map<Key, T, Compare, Alloc> &lhs,
 							const map<Key, T, Compare, Alloc> &rhs) {
-			std::cout << "OPERATOR !=\n";
 			return (!(lhs == rhs));
 		}
 
 	template<class Key, class T, class Compare, class Alloc>
 		bool	operator<(const map<Key, T, Compare, Alloc> &lhs,
 							const map<Key, T, Compare, Alloc> &rhs) {
-
-			return (lexicographical_compare(lhs.begin(), lhs.end(),
+			return (ft::lexicographical_compare(lhs.begin(), lhs.end(),
 											rhs.begin(), rhs.begin()));
-//			size_t i;
-//
-//			for (i = 0; i < lhs.size() && i < rhs.size(); i++) {
-//				if (lhs[i] < rhs[i])
-//					return true;
-//				else if (lhs[i] > rhs[i])
-//					return false;
-//			}
-//			if (i == lhs.size() && i < rhs.size())
-//				return true;
-//			else
-//				return false;
 		}
 
 	template<class Key, class T, class Compare, class Alloc>
