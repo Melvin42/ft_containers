@@ -135,12 +135,14 @@ namespace ft {
 				IteratorMap	operator++(int) {
 					IteratorMap	tmp(*this);
 
+//					std::cout << "operator ++\n";// = _root->right;
+//					std::cout << _pos->_pair.first << '\n';// = _root->right;
 					if (_pos->right) {
 						if (!_pos->right->left || _pos->right == _p_end)
 							_pos = _pos->right;
 						else
 							_pos = ft::map<Key, T, Compare, Alloc>::minValueNode(_pos->right);
-					} else if (!_pos->parent) {
+					} else if (_pos->parent) {
 						Node	*tmpNode = _pos;
 						_pos = _pos->parent;
 						while (_comp(tmpNode->_pair.first, _pos->_pair.first) == false)
@@ -155,7 +157,7 @@ namespace ft {
 							_pos = _pos->right;
 						else
 							_pos = ft::map<Key, T, Compare, Alloc>::minValueNode(_pos->right);
-					} else if (!_pos->parent) {
+					} else if (_pos->parent) {
 						Node	*tmpNode = _pos;
 						_pos = _pos->parent;
 						while (_comp(tmpNode->_pair.first, _pos->_pair.first) == false)
@@ -168,19 +170,18 @@ namespace ft {
 					IteratorMap	tmp(*this);
 
 					if (_pos == _p_end) {
-						if (_p_end->left != NULL)
-							_pos = _p_end->left;
+						_pos = _p_end->parent;
 						return tmp;
-					} else if (_pos == _p_end->right) {
-						_pos = _p_end;
-						return tmp;
+//					} else if (_pos == _p_end->right) {
+//						_pos = _p_end;
+//						return tmp;
 					}
 					if (_pos->left) {
 						if (!_pos->left->right)
 							_pos = _pos->left;
 						else
 							_pos = ft::map<Key, T, Compare, Alloc>::maxValueNode(_pos->left);
-					} else if (_pos->parent != NULL) {
+					} else if (_pos->parent) {
 						Node *tmpNode = _pos;
 
 						_pos = _pos->parent;
@@ -192,11 +193,12 @@ namespace ft {
 
 				IteratorMap	&operator--() {
 					if (_pos == _p_end) {
-						if (_p_end->left != NULL)
-							_pos = _p_end->left;
-						return *this;
-					} else if (_pos == _p_end->right) {
-						_pos = _p_end;
+						_pos = _p_end->parent;
+//						if (_p_end->left != NULL)
+//							_pos = _p_end->left;
+//						return *this;
+//					} else if (_pos == _p_end->right) {
+//						_pos = _p_end;
 						return *this;
 					}
 					if (_pos->left) {
@@ -244,11 +246,18 @@ namespace ft {
 						_comp = map._comp;
 						_size = 0;
 						_p_end = _alloc_node.allocate(1);
-//						_p_end->parent = NULL;
+						_p_end->parent = NULL;
 						_p_end->left = NULL;
 						_p_end->right = NULL;
 						_p_end->height = 0;
+						std::cout << "fucking operator =\n";
+						std::cout << " first  = " << map.begin()->first << ' '
+						<< "second = " << map.begin()->second << '\n';
+
+						std::cout << " first  = " << map.end()->first << ' '
+						<< "second = " << map.end()->second << '\n';
 						insert(map.begin(), map.end());
+//						printTree();
 					}
 					return *this;
 				}
@@ -421,28 +430,34 @@ namespace ft {
 				//single element (1)
 				pair<iterator, bool>	insert(const value_type& val) {
 
-					++_size;
 //					Node	*tmp = max(_root);
 
 //					_p_end->parent = tmp;
-					if (!_p_end->parent) {
+//					if (!_p_end->parent) {
 //						std::cout << _root << '\n';// = _root->right;
-						_p_end->parent = _alloc_node.allocate(1);
-						_p_end->parent->parent = NULL;
-						_p_end->parent->left = NULL;
-						_p_end->parent->right = _p_end;
-						_p_end->left = _p_end->parent;
-						_p_end->right = _p_end->parent;
+//						_p_end->parent = _alloc_node.allocate(1);
+//						_p_end->parent->parent = NULL;
+//						_p_end->parent->left = NULL;
+//						_p_end->parent->right = _p_end;
+//						_p_end->left = _p_end->parent;
+//						_p_end->right = _p_end->parent;
 
-						_root = insert(_root, ft::make_pair(val.first, val.second));
-						return ft::make_pair<iterator, bool>(find(val.first), false);
-					}
+//						_root = insert(_root, ft::make_pair(val.first, val.second));
+//						return ft::make_pair<iterator, bool>(find(val.first), false);
+//					}
 					Node	*tmp;
 
+					std::cout << "INSERT ca mere\n";
+					std::cout << "segault\n";
+					unlinkEnd();
 					tmp = search(val.first);
-					if (!tmp)
+					linkEnd();
+					std::cout << "segault\n";
+					++_size;
+					if (tmp)
 						return ft::make_pair<iterator, bool>(find(val.first), false);
 					_root = insert(_root, ft::make_pair(val.first, val.second));
+//					std::cout << _root->_pair.first << '\n';// = _root->right;
 //					tmp->right = _p_end;
 
 					return ft::make_pair<iterator, bool>(find(val.first), true);
@@ -458,6 +473,7 @@ namespace ft {
 				template <class InputIterator>
 					void	insert(InputIterator first, InputIterator last) {
 						while (first != last) {
+							std::cout << "coucou\n";
 							insert(*first);
 							++first;
 						}
@@ -600,6 +616,7 @@ namespace ft {
 					if (!node)
 						return (newNode(pair));
 
+					unlinkEnd();
 					if (pair.first < node->_pair.first) {
 						node->left = insert(node->left, pair);
 						node->left->parent = node;
@@ -629,6 +646,7 @@ namespace ft {
 						return leftRotate(node);
 					}
 
+					linkEnd();
 					return node;
 				}
 
@@ -640,6 +658,21 @@ namespace ft {
 						preOrder(root->left);
 						preOrder(root->right);
 					}
+				}
+
+				void	linkEnd() {
+					Node	*tmp = maxValueNode(_root);
+
+					tmp->right = _p_end;
+					std::cout << tmp << '\n';
+					_p_end->parent = tmp;
+				}
+
+				void	unlinkEnd() {
+					Node	*tmp = maxValueNode(_root);
+
+					tmp->right = NULL;
+//					tmp->parent = NULL;
 				}
 
 				static Node	*minValueNode(Node *root) {

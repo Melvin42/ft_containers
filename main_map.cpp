@@ -152,17 +152,31 @@ void	test_map() {
 	stdMap.insert(std::make_pair(15,30));
 	stdMap.insert(std::make_pair(16,31));
 
+	ft::map<int, int>	ftMapCpy(ftMap);
+
 	ft::map<int, int>::iterator		ftIt;
 	ft::map<int, int>::const_iterator		c_ftIt = ftMap.begin();
 
-	ft::map<int, int>	testtest(ftMap.begin(), ftMap.end());
-	ftMap.printTree();
+//	ft::map<int, int>	testtest(ftMap.begin(), ftMap.end());
+//	ftMap.printTree();
 //		std::cout << " first  = " << ftMap.end()->first << ' '
 //		<< "second = " << ftMap.end()->second << '\n';
-	for (ftIt = ftMap.begin(); ftIt != ftMap.end(); ftIt++) {
+//		std::cout << "size = " << ftMap.size() << '\n';
+//	ftIt = ftMap.begin();
+//	for (ftIt = ftMap.begin(); ftIt != ftMap.end(); ftIt++) {
+//		std::cout << " first  = " << ftIt->first << ' '
+//		<< "second = " << ftIt->second << '\n';
+//	}
+	for (ftIt = ftMapCpy.begin(); ftIt != ftMapCpy.end(); ftIt++) {
 		std::cout << " first  = " << ftIt->first << ' '
 		<< "second = " << ftIt->second << '\n';
 	}
+	for (ftIt = ftMap.end(); ftIt != ftMap.begin(); ftIt--) {
+		std::cout << " first  = " << ftIt->first << ' '
+		<< "second = " << ftIt->second << '\n';
+	}
+	std::cout << " first  = " << ftIt->first << ' '
+		<< "second = " << ftIt->second << '\n';
 	/*
 	for (; c_ftIt != ftMap.end(); c_ftIt++) {
 		std::cout << "first  = " << c_ftIt->first << '\n';
