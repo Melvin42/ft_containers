@@ -454,7 +454,7 @@ namespace ft {
 							std::cout << "NO ROOOOOOT\n";
 							++_size;
 							_root = insert(_root, ft::make_pair(val.first, val.second));
-							linkEnd();
+//							linkEnd();
 							return ft::make_pair<iterator, bool>(find(val.first), false);
 						}
 						Node	*tmp;
@@ -631,11 +631,12 @@ namespace ft {
 				}
 
 				Node	*searchRecurs(Node *node, const key_type &k) const {
-					if (!node)// || node->right == _p_end)
-						return node;
-					if (k == node->_pair.first)
-						return node;
-					if (node->left && _comp(k, node->_pair.first))
+					if (!node || node->right == _p_end || node==_p_end)
+						return NULL;
+//					else if (k == node->_pair.first)
+//						return node;
+//					if (node->left && _comp(k, node->_pair.first))
+					if (node->left && k < node->_pair.first)
 						return searchRecurs(node->left, k);
 					else if (node->right && node->right != _p_end)
 						return searchRecurs(node->right, k);
