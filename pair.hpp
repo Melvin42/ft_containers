@@ -18,13 +18,15 @@ namespace ft {
 					pair(const pair<U, V> &pr)
 					: first(pr.first), second(pr.second) {}
 
+//				operator pair<const T1, const T2>() const { return pair<const T1, const T2>(first, second); }
+
 				//initialization (3)
 				pair(const first_type &a, const second_type &b)
 					: first(a), second(b) {}
 
 				~pair() {}
 
-				pair	&operator=(const pair<const T1, T2> &pair) {
+				pair	&operator=(const pair &pair) {
 					first = pair.first;
 					second = pair.second;
 					return *this;
@@ -67,13 +69,11 @@ namespace ft {
 				}
 		};
 
-			template <class T1, class T2>
-				pair<T1, T2> make_pair(T1 first, T2 second) {
-					return (pair<T1, T2>(first, second));
-				}
-};
+		template <class T1, class T2>
+			pair<T1, T2> make_pair(T1 first, T2 second) {
+				return (pair<T1, T2>(first, second));
+			}
 
-	/*
 	template <class T1, class T2>
 		bool	operator==(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
 			return lhs.first == rhs.first && lhs.second == rhs.second;
@@ -104,10 +104,5 @@ namespace ft {
 			return lhs.first > rhs.first && lhs.second > rhs.second;
 		}
 
-	template <class T1, class T2>
-		pair<T1, T2> make_pair(T1 first, T2 second) {
-			return (pair<T1, T2>(first, second));
-		}
-		*/
-
+};
 #endif

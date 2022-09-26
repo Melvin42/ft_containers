@@ -9,7 +9,8 @@ vector: main_vector.cpp
 
 map: main_map.cpp
 	rm -f ft_exec_map
-	clang++ -Wall -Wextra -Werror -std=c++98 main_map.cpp -o ft_exec_map
+	clang++ -Wall -Wextra -Werror main_map.cpp -o ft_exec_map
+	#clang++ -Wall -Wextra -Werror -std=c++98 main_map.cpp -o ft_exec_map
 
 std-vector: main_vector.cpp
 	rm -f std_exec_vector
@@ -25,7 +26,8 @@ debug-vector: main_vector.cpp
 
 debug-map: main_map.cpp
 	rm -f debug_exec_map
-	c++ -Wall -Wextra -Werror -g3 -std=c++98 main_map.cpp -o debug_exec_map
+	clang++ -Wall -Wextra -Werror -g3 main_map.cpp -o debug_exec_map
+#	c++ -Wall -Wextra -Werror -g3 -std=c++98 main_map.cpp -o debug_exec_map
 
 clean:
 	rm -f *.o
