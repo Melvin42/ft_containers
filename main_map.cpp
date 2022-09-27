@@ -195,30 +195,42 @@ void	test_map() {
 		std::cout << "second = " << ftIt->second << '\n';
 	}
 	std::list<ft::pair<int, int> > lst;
-	unsigned int lst_size = 7;
-	for (unsigned int i = 0; i < lst_size; ++i)
+	unsigned int lst_size = 40;
+	for (unsigned int i = 0; i < lst_size; ++i) {
 		lst.push_back(ft::pair<int, int>((lst_size - i), i));
+		std::cout << lst_size - i << '\n';
+	}
 
 	ft::map<int, int> mplst(lst.begin(), lst.end());
-	ft::map<int, int>::iterator itlst = mplst.begin(), itelst = mplst.end();
+//	for (ft::map<int, int>::iterator it = mplst.begin(); it != mplst.end(); it++) {
 
-//	ft::map<str
-	
-	ft::map<int, std::string> strtest;
-
-	strtest.insert(ft::make_pair(1, "coucou"));
+//		std::cout << "first = " << it->first << '\n';
+//	}
+	mplst.printTree();
 	std::cout << "\t-- TEEEEST --" << std::endl;
-	ft::map<int, int> mp_rangelst(itlst, --(--itelst));
-	std::cout << "\t-- TEEEEST --" << std::endl;
-//	itelst--;
-//	tlst->second = ++i * 5;
 //	mplst.printTree();
+//	std::cout << (--mplst.end())->first << '\n';
+	ft::map<int, int>::iterator itlst(mplst.begin()), itelst(mplst.end());
+//	ft::map<int, int>::iterator itlst = mplst.begin(), itelst = mplst.end();
+
+//	ft::map<int, int>::iterator itlst2(mplst.begin()), itelst2(mplst.end());
+//	while (itlst2 != itelst2) {
+//		std::cout << "first = " << itlst2->first << '\n';
+//		++itlst2;
+//	}
+	std::cout << "\t-- TEEEEST --" << std::endl;
+//	ft::map<int, int> mp_rangelst(itlst, --(--itelst));
+	ft::map<int, int> mp_rangelst(itlst, itelst);
+
+	mp_rangelst.printTree();
+	std::cout << "\t-- TEEEEST --" << std::endl;
+//	tlst->second = ++i * 5;
+//	mp_rangelst.printTree();
 //	for (int i = 0; itlst != itelst; itlst++)
 //		itlst->second = ++i * 5;
 //		itlst->second = 1 * 5;
 
 
-//	std::map<int, int>::iterator	stdIt;
 //	std::map<int, int>::iterator	stdIt;
 
 //	ftMap.erase(ftMap.end() - 1);
@@ -329,8 +341,7 @@ void	test_map() {
 	std::cout << "ft_upper_bound: " << ftMap.upper_bound(11)->first << '\n';
 	std::cout << "std_upper_bound: " << stdMap.upper_bound(8)->first << '\n';
 	std::cout << "ft_upper_bound: " << ftMap.upper_bound(8)->first << '\n';
-*/
-	/*
+
 	ft::map<int, std::string>	strMap;
 
 	strMap.insert(ft::make_pair(3, "ocuudou"));
@@ -357,7 +368,6 @@ void	test_map() {
 			std::cout << "key_comp: " << res[0] << " | " << "value_comp: " << res[1] << std::endl;
 		}
 	}
-	*/
 	
 //	ft_insert(strMap, ft::map<int, std::string>::value_type(42, "lol"));
 //	ft_insert(strMap, ft::map<int, std::string>::value_type(42, "lol"));
@@ -376,9 +386,6 @@ void	test_map() {
 //	ft_insert(mp2, mp2.end(), T3(1000, "Hello"));
 //	ft_insert(mp2, mp2.end(), T3(1500, "World"));
 
-
-
-	/*
 	std::cout << "TESTING RESIZE\n" << std::endl;
 	std::cout << "TESTING ERASE\n" << std::endl;
 	std::cout << "TESTING OPERATOR[]\n" << std::endl;

@@ -97,10 +97,12 @@ namespace ft {
 //				}
 
 				IteratorMap(const IteratorMap<typename std::remove_const<U>::type> &it)
-					: _pos(it._pos), _p_end(it._p_end), _comp(it._comp) {}
+					: _pos(it._pos), _p_end(it._p_end), _comp(it._comp) {
+//						*this = it;
+					}
 
 			private:
-				IteratorMap(Node *pos, Node *end, key_compare comp)
+				explicit IteratorMap(Node *pos, Node *end, key_compare comp)
 					: _pos(pos), _p_end(end), _comp(comp) {}
 
 
@@ -112,6 +114,10 @@ namespace ft {
 //					IteratorMap	&operator=(const IteratorMap<U> &it) {
 //						std::cout << "operator = iterator\n";
 //						_pos = it._pos;
+//						_pos->parent = it._pos->parent;
+//						_pos->left = it._pos->left;
+//						_pos->right = it._pos->right;
+//
 //						_p_end = it._p_end;
 //						_comp = it._comp;
 //						return *this;
@@ -141,6 +147,16 @@ namespace ft {
 				}
 
 				IteratorMap	&operator++() {
+
+//					if (_pos != _p_end)
+//						std::cout << "pos = " << _pos->_pair.first << '\n';
+//					if (_pos->parent)
+//						std::cout << "parent = " << _pos->parent->_pair.first << '\n';
+//					if (_pos->left)
+//						std::cout << "left = " << _pos->left->_pair.first << '\n';
+//					if (_pos->right && _pos->right != _p_end)
+//						std::cout << "right = " << _pos->right->_pair.first << '\n';
+//					std::cout << std::endl;
 					if (_pos->right) {
 						if (!_pos->right->left || _pos->right == _p_end)
 							_pos = _pos->right;
@@ -228,10 +244,11 @@ namespace ft {
 			public:
 				/* CONSTRUCT/COPY/DESTROY */
 
-				map	&operator=(const map<Key, T, Compare, Alloc> &map) {
+				map	&operator=(const ft::map<Key, T, Compare, Alloc> &map) {
 					if (this != &map) {
 						_alloc = map.get_allocator();
 						_comp = map._comp;
+						clear();
 						_size = 0;
 						_p_end = _alloc_node.allocate(1);
 						_p_end->parent = NULL;
@@ -277,11 +294,11 @@ namespace ft {
 					}
 
 				//copy (3)
-				map(const map<Key, T, Compare, Alloc> &map) {
+				map(const ft::map<Key, T, Compare, Alloc> &map) {
 
 //					clear();
-					_alloc = map.get_allocator();
-					_comp = map._comp;
+//					_alloc = map.get_allocator();
+//					_comp = map._comp;
 					_size = 0;
 					_p_end = _alloc_node.allocate(1);
 					_root = NULL;
@@ -289,9 +306,6 @@ namespace ft {
 					_p_end->left = NULL;
 					_p_end->right = NULL;
 					_p_end->height = 0;
-//					std::cout << "copy operator\n" << std::endl;
-//					std::cout << "first = " << map.begin()->first
-//						<< " second = " << map.begin()->first;
 
 					insert(map.begin(), map.end());
 				}
@@ -434,56 +448,24 @@ namespace ft {
 				//INSERT
 
 				//single element (1)
-//				pair<iterator, bool>	insert(const value_type& val) {
 				pair<iterator, bool>	insert(const value_type& val) {
 
-//					Node	*tmp = max(_root);
-
-//					_p_end->parent = tmp;
-//					if (!_p_end->parent) {
-//						std::cout << _root << '\n';// = _root->right;
-//						_p_end->parent->parent = NULL;
-//						_p_end->parent->left = NULL;
-//						_p_end->parent->right = _p_end;
-//						_root = insert(_root, ft::make_pair(val.first, val.second));
-//						return ft::make_pair<iterator, bool>(find(val.first), false);
-//					}
-//					if (_root && _p_end->parent) {
-//					if (val.first != _p_end->parent->_pair.first) {
 						if (!_root) {
-							std::cout << "NO ROOOOOOT\n";
-							++_size;
+//							linkEnd();
 							_root = insert(_root, ft::make_pair(val.first, val.second));
-							linkEnd();
-							return ft::make_pair<iterator, bool>(find(val.first), false);
+							return ft::make_pair<iterator, bool>(find(val.first), true);
 						}
+						linkEnd();
 						Node	*tmp;
 
-//						std::cout << "INSERT\n";
-//						std::cout << "segault\n";
-//						unlinkEnd();
-//						if (!_root)
-//							std::cout << this-> << " " << val"\n";
-//						unlinkEnd();
 						tmp = search(val.first);
-//						std::cout << "ROOT = " << _root << '\n';
-//						std::cout << "Size = " << size() << '\n';
-//						std::cout << "_p_end = " << _p_end << '\n';
-//						std::cout << "val = " << val.first << '\n';
-//						std::cout << "ROOT = " << _root << '\n';
-//						std::cout << "_p_end = " << _p_end << '\n';
-//						tmp = search(val.first);
-//						linkEnd();
-//						std::cout << "segault" << std::endl;;
+						//CA CRASH ICI
+
 						if (tmp)
 							return ft::make_pair<iterator, bool>(find(val.first), false);
+//							return ft::make_pair<iterator, bool>(find(val.first), false);
 //					}
-						++_size;
 					_root = insert(_root, ft::make_pair(val.first, val.second));
-//					std::cout << _root->_pair.first << '\n';// = _root->right;
-//					tmp->right = _p_end;
-
-//					linkEnd();
 					return ft::make_pair<iterator, bool>(find(val.first), true);
 				}
 
@@ -498,8 +480,7 @@ namespace ft {
 					void	insert(InputIterator first, InputIterator last) {
 //					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0) {
 						while (first != last) {
-							 this->insert(*first);
-//							_root =  this->insert(_root, *first);
+							this->insert(*first);
 							++first;
 						}
 					}
@@ -525,19 +506,21 @@ namespace ft {
 				}
 
 				void		swap(map<Key, T, Compare, Alloc> &x) {
-					Node	*tmp;
+					Node		*tmp;
+					size_type	tmp_size;
+					key_compare	tmp_comp;
 
 					tmp = _root;
 					_root = x._root;
 					x._root = tmp;
 
-					size_type	tmp_size;
+					tmp = _p_end;
+					_p_end = x._p_end;
+					x._p_end = tmp;
 
 					tmp_size = _size;
 					_size = x._size;
 					x._size = tmp_size;
-
-					key_compare	tmp_comp;
 
 					tmp_comp = _comp;
 					_comp = x._comp;
@@ -631,10 +614,19 @@ namespace ft {
 				}
 
 				Node	*searchRecurs(Node *node, const key_type &k) const {
-					if (!node)// || node->right == _p_end)
+					if (!node || node == _p_end) {
+						return NULL;
+					}
+					if (node->left == NULL && node->right == _p_end && k ==  node->_pair.first)
 						return node;
-					if (k == node->_pair.first)
+					else if (node->left == NULL && node->right == _p_end)
+						return NULL;
+					else if ( node->right == NULL)
+						return NULL;
+
+					if (node != _p_end && k == node->_pair.first)
 						return node;
+
 					if (node->left && _comp(k, node->_pair.first))
 						return searchRecurs(node->left, k);
 					else if (node->right && node->right != _p_end)
@@ -643,10 +635,12 @@ namespace ft {
 				}
 
 				Node	*insert(Node *node, value_type pair) {
+					++_size;
 					if (!node)
 						return (newNode(pair));
 
-					unlinkEnd();
+					if (_root)
+						unlinkEnd();
 					if (pair.first < node->_pair.first) {
 						node->left = insert(node->left, pair);
 						node->left->parent = node;
@@ -679,6 +673,7 @@ namespace ft {
 					}
 
 					linkEnd();
+//						std::cout << "parent first = " <<  _p_end->parent->right << '\n';
 					return node;
 				}
 
@@ -693,23 +688,15 @@ namespace ft {
 				}
 
 				void	linkEnd() {
-//					if (_p_end) {
-						Node	*tmp = maxValueNode(_root, _p_end);
+					Node	*tmp;
 
-						tmp->right = _p_end;
-//						std::cout << tmp << '\n';
-						_p_end->parent = tmp;
-//					}
+					tmp = maxValueNode(_root, _p_end);
+					tmp->right = _p_end;
+					_p_end->parent = tmp;
 				}
 
 				void	unlinkEnd() {
-//					if (_p_end) {
-						Node	*tmp = maxValueNode(_root, _p_end);
-
-//						std::cout <<
-						tmp->right = NULL;
-//						tmp->parent = NULL;
-//					}
+					_p_end->parent->right = NULL;
 				}
 
 				static Node	*minValueNode(Node *root) {
