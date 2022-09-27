@@ -290,7 +290,6 @@ namespace ft {
 				//copy (3)
 				map(const ft::map<Key, T, Compare, Alloc> &map) {
 
-//					clear();
 					_alloc = map.get_allocator();
 					_comp = map._comp;
 					_size = 0;
@@ -520,8 +519,10 @@ namespace ft {
 				}
 
 				void		clear() {
-					destroyTree();
-					_size = 0;
+					if (_size != 0) {
+						destroyTree();
+						_size = 0;
+					}
 				}
 
 //****************************************************************************//
@@ -539,10 +540,6 @@ namespace ft {
 					return (a > b) ? a : b;
 				}
 
-				void	destroyTree() {
-					destroyTree(_root);
-				}
-
 				Node	*newNode(value_type pair) {
 					Node	*node = _alloc_node.allocate(1);
 
@@ -551,6 +548,7 @@ namespace ft {
 					node->left = NULL;
 					node->right = NULL;
 					node->height = 1;
+					++_size;
 
 					return (node);
 				}
@@ -571,21 +569,6 @@ namespace ft {
 					Node	*x = y->left;
 					Node	*T2 = x->right;
 
-					/*
-					std::cout << "REAL RIGHT ROTATE\n";
-					if (x)
-						std::cout << "X = " << x->_pair.first << "\n";
-					if (x && x->parent)
-						std::cout << "X parent = " << x->parent->_pair.first << "\n";
-					if (y)
-						std::cout << "y = " << y->_pair.first << "\n";
-					if (y && y->parent)
-						std::cout << "Y parent = " << y->parent->_pair.first << "\n";
-					if (T2)
-						std::cout << "T2 = " << T2->_pair.first << "\n";
-					if (T2 && T2->parent)
-						std::cout << "T2 parent = " << T2->parent->_pair.first << "\n";
-						*/
 					x->right = y;
 					x->parent = y->parent;
 					y->parent = x;
@@ -602,7 +585,6 @@ namespace ft {
 					Node	*y = x->right;
 					Node	*T2 = y->left;
 
-//					std::cout << "REAL LEFT ROTATE\n";
 					y->left = x;
 					y->parent = x->parent;
 					x->parent = y;
@@ -648,7 +630,7 @@ namespace ft {
 				}
 
 				Node	*insert(Node *node, value_type pair) {
-					++_size;
+//					++_size;
 //					std::cout << "INSERTING KEY : " << pair.first << '\n';
 					if (!node) {
 //						std::cout << std::endl;
@@ -826,11 +808,18 @@ namespace ft {
 					return node;
 				}
 
+				void	destroyTree() {
+					destroyTree(_root);
+				}
+
 				void	destroyTree(Node *leaf) {
 					if (leaf) {
-						destroyTree(leaf->left);
-						destroyTree(leaf->right);
-						_alloc_node.deallocate(leaf, 1);
+						if (leaf->left)
+							destroyTree(leaf->left);
+						else if (leaf->right)// && leaf->right != _p_end)
+							destroyTree(leaf->right);
+						_alloc_node.destroy(&leaf->_pair);
+//						_alloc_node.deallocate(leaf, 1);
 						--_size;
 					}
 				}

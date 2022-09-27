@@ -207,29 +207,14 @@ void	test_map() {
 
 	ft::map<int, int>	ftMapCpy(ftMap);
 
-	ft::map<int, int>::iterator		ftIt;
+	std::cout << "FIRST CLEAR!!!\n";
+	ftMapCpy.clear();
+	std::cout << "END CLEAR!!!\n";
 //	ft::map<int, int>::const_iterator		c_ftIt = ftMap.begin();
 
-//	ft::map<int, int>	testtest(ftMap.begin(), ftMap.end());
-//	ftMap.printTree();
-//		std::cout << " first  = " << ftMap.end()->first << ' '
-//		<< "second = " << ftMap.end()->second << '\n';
-//		std::cout << "size = " << ftMap.size() << '\n';
+	ft::map<int, int>::iterator		ftIt;
 	ftIt = ftMap.begin();
-	for (ftIt = ftMap.begin(); ftIt != ftMap.end(); ftIt++) {
-		std::cout << " first  = " << ftIt->first << ' '
-		<< "second = " << ftIt->second << '\n';
-	}
-	for (ftIt = ftMapCpy.begin(); ftIt != ftMapCpy.end(); ftIt++) {
-		std::cout << " first  = " << ftIt->first << ' '
-		<< "second = " << ftIt->second << '\n';
-	}
-//	for (ftIt = ftMap.end(); ftIt != ftMap.begin(); --ftIt) {
-//		std::cout << " first  = " << ftIt->first << ' '
-//		<< "second = " << ftIt->second << '\n';
-//	}
 
-	ftIt = ftMap.begin();
 	ft::map<int, int>::iterator		ftIte = ftMap.end();
 	ft::map<int, int> mp_range(ftIt, --(--ftIte));
 	ftIt = mp_range.begin();
@@ -252,34 +237,38 @@ void	test_map() {
 	}
 
 	ft::map<int, int> mplst(lst.begin(), lst.end());
-//	mplst.printTree();
-//	for (ft::map<int, int>::iterator it = mplst.begin(); it != mplst.end();) {
-//		std::cout << "first = " << it->first << "\n\n";
-//		++it;
-//	}
-//	mplst.printTree();
+
 	std::cout << "\t-- TEEEEST --" << std::endl;
 	mplst.printTree();
 //	std::cout << (--mplst.end())->first << '\n';
-	ft::map<int, int>::iterator itlst(mplst.begin()), itelst(mplst.end());
-//	ft::map<int, int>::iterator itlst = mplst.begin(), itelst = mplst.end();
+//	ft::map<int, int>::iterator itlst(mplst.begin()), itelst(mplst.end());
+	ft::map<int, int>::iterator itlst = mplst.begin(), itelst = mplst.end();
 
-	ft::map<int, int>::iterator itlst2(mplst.begin()), itelst2(mplst.end());
-	while (itlst2 != itelst2) {
-		std::cout << "first = " << itlst2->first << '\n';
-		++itlst2;
-	}
-//	std::cout << "\t-- TEEEEST --" << std::endl;
-//	ft::map<int, int> mp_rangelst(itlst, --(--itelst));
-//	ft::map<int, int> mp_rangelst(itlst, itelst);
+	ft::map<int, int> mp_rangelst(itlst, --(--itelst));
+	for (int i = 0; itlst != itelst; ++itlst)
+		itlst->second = ++i * 5;
 
+	mp_rangelst.printTree();
+	std::cout << "\t-- TEEEEST222222--" << std::endl;
+	itlst = mplst.begin();
+	itelst = --(--mplst.end());
+
+	ft::map<int, int> mp_cpy(mplst);
+
+	for (int i = 0; itlst != itelst; ++itlst)
+		itlst->second = ++i * 7;
+	mp_cpy.printTree();
+
+	mplst = mp_cpy;
+//	mp_cpy = mp_range;
+	// REPRENDRE ICIIIII
+
+//	itlst = mplst.begin();
+//	itelst = --(--mplst.end());
 //	mp_rangelst.printTree();
-//	std::cout << "\t-- TEEEEST --" << std::endl;
-//	tlst->second = ++i * 5;
-//	mp_rangelst.printTree();
+
 //	for (int i = 0; itlst != itelst; itlst++)
 //		itlst->second = ++i * 5;
-//		itlst->second = 1 * 5;
 
 
 //	std::map<int, int>::iterator	stdIt;
