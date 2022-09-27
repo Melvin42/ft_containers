@@ -78,11 +78,11 @@ namespace ft {
 			friend class map<Key, T, Compare, Alloc>;
 
 			public:
-				typedef U								value_type;
-				typedef Pointer							pointer;
-				typedef Reference						reference;
-				typedef Distance						difference_type;
-				typedef typename map::key_compare		key_compare;
+				typedef U							value_type;
+				typedef Pointer						pointer;
+				typedef Reference					reference;
+				typedef Distance					difference_type;
+				typedef typename map::key_compare	key_compare;
 
 			protected:
 				Node		*_pos;
