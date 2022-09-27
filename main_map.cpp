@@ -113,6 +113,7 @@ void	test_map() {
 	pair1 = ft::make_pair(10,27);
 	pair2 = std::make_pair(10,20);
 
+	/*
 	ftMap.insert(ft::make_pair(3,34));
 	ftMap.insert(pair1);
 	ftMap.insert(ft::make_pair(13,29));
@@ -133,6 +134,55 @@ void	test_map() {
 	ftMap.insert(ft::make_pair(8,30));
 	ftMap.insert(ft::make_pair(15,30));
 	ftMap.insert(ft::make_pair(16,31));
+	*/
+
+	ftMap.insert(ft::make_pair(9,1));
+	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
+	ftMap.printTree();
+	std::cout << std::endl;
+	ftMap.insert(ft::make_pair(8,1));
+	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
+	ftMap.printTree();
+	std::cout << std::endl;
+	ftMap.insert(ft::make_pair(7,1));
+	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
+	ftMap.printTree();
+	std::cout << std::endl;
+	ftMap.insert(ft::make_pair(6,1));
+	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
+	ftMap.printTree();
+	std::cout << std::endl;
+	ftMap.insert(ft::make_pair(5,1));
+	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
+	ftMap.printTree();
+	std::cout << std::endl;
+	ftMap.insert(ft::make_pair(4,1));
+	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
+	ftMap.printTree();
+	std::cout << std::endl;
+	ftMap.insert(ft::make_pair(3,1));
+	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
+	ftMap.printTree();
+	std::cout << std::endl;
+	ftMap.insert(ft::make_pair(2,1));
+	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
+	ftMap.printTree();
+	std::cout << std::endl;
+	ftMap.insert(ft::make_pair(1,1));
+	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
+	ftMap.printTree();
+	std::cout << std::endl;
+
+	/*
+	ftMap.insert(ft::make_pair(1,1));
+	ftMap.insert(ft::make_pair(2,1));
+	ftMap.insert(ft::make_pair(3,1));
+	ftMap.insert(ft::make_pair(4,1));
+	ftMap.insert(ft::make_pair(5,1));
+	ftMap.insert(ft::make_pair(6,1));
+	ftMap.insert(ft::make_pair(7,1));
+	ftMap.insert(ft::make_pair(8,1));
+	*/
 
 	stdMap.insert(std::make_pair(3,34));
 	stdMap.insert(pair2);
@@ -195,35 +245,36 @@ void	test_map() {
 		std::cout << "second = " << ftIt->second << '\n';
 	}
 	std::list<ft::pair<int, int> > lst;
-	unsigned int lst_size = 40;
+	unsigned int lst_size = 7;
 	for (unsigned int i = 0; i < lst_size; ++i) {
 		lst.push_back(ft::pair<int, int>((lst_size - i), i));
 		std::cout << lst_size - i << '\n';
 	}
 
 	ft::map<int, int> mplst(lst.begin(), lst.end());
-//	for (ft::map<int, int>::iterator it = mplst.begin(); it != mplst.end(); it++) {
-
-//		std::cout << "first = " << it->first << '\n';
-//	}
-	mplst.printTree();
-	std::cout << "\t-- TEEEEST --" << std::endl;
 //	mplst.printTree();
+//	for (ft::map<int, int>::iterator it = mplst.begin(); it != mplst.end();) {
+//		std::cout << "first = " << it->first << "\n\n";
+//		++it;
+//	}
+//	mplst.printTree();
+	std::cout << "\t-- TEEEEST --" << std::endl;
+	mplst.printTree();
 //	std::cout << (--mplst.end())->first << '\n';
 	ft::map<int, int>::iterator itlst(mplst.begin()), itelst(mplst.end());
 //	ft::map<int, int>::iterator itlst = mplst.begin(), itelst = mplst.end();
 
-//	ft::map<int, int>::iterator itlst2(mplst.begin()), itelst2(mplst.end());
-//	while (itlst2 != itelst2) {
-//		std::cout << "first = " << itlst2->first << '\n';
-//		++itlst2;
-//	}
-	std::cout << "\t-- TEEEEST --" << std::endl;
+	ft::map<int, int>::iterator itlst2(mplst.begin()), itelst2(mplst.end());
+	while (itlst2 != itelst2) {
+		std::cout << "first = " << itlst2->first << '\n';
+		++itlst2;
+	}
+//	std::cout << "\t-- TEEEEST --" << std::endl;
 //	ft::map<int, int> mp_rangelst(itlst, --(--itelst));
-	ft::map<int, int> mp_rangelst(itlst, itelst);
+//	ft::map<int, int> mp_rangelst(itlst, itelst);
 
-	mp_rangelst.printTree();
-	std::cout << "\t-- TEEEEST --" << std::endl;
+//	mp_rangelst.printTree();
+//	std::cout << "\t-- TEEEEST --" << std::endl;
 //	tlst->second = ++i * 5;
 //	mp_rangelst.printTree();
 //	for (int i = 0; itlst != itelst; itlst++)

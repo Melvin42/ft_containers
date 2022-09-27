@@ -148,26 +148,20 @@ namespace ft {
 
 				IteratorMap	&operator++() {
 
-//					if (_pos != _p_end)
-//						std::cout << "pos = " << _pos->_pair.first << '\n';
-//					if (_pos->parent)
-//						std::cout << "parent = " << _pos->parent->_pair.first << '\n';
-//					if (_pos->left)
-//						std::cout << "left = " << _pos->left->_pair.first << '\n';
-//					if (_pos->right && _pos->right != _p_end)
-//						std::cout << "right = " << _pos->right->_pair.first << '\n';
-//					std::cout << std::endl;
 					if (_pos->right) {
-						if (!_pos->right->left || _pos->right == _p_end)
+						if (!_pos->right->left || _pos->right == _p_end) {
 							_pos = _pos->right;
-						else
+						}
+						else {
 							_pos = ft::map<Key, T, Compare, Alloc>::minValueNode(_pos->right);
+						}
 					} else if (_pos->parent) {
 						Node	*tmpNode = _pos;
 
 						_pos = _pos->parent;
-						while (_pos && _comp(tmpNode->_pair.first, _pos->_pair.first) == false)
-							_pos = _pos->parent;
+						while (_pos && _comp(tmpNode->_pair.first, _pos->_pair.first) == false) {
+								_pos = _pos->parent;
+						}
 					}
 					return *this;
 				}
@@ -297,8 +291,8 @@ namespace ft {
 				map(const ft::map<Key, T, Compare, Alloc> &map) {
 
 //					clear();
-//					_alloc = map.get_allocator();
-//					_comp = map._comp;
+					_alloc = map.get_allocator();
+					_comp = map._comp;
 					_size = 0;
 					_p_end = _alloc_node.allocate(1);
 					_root = NULL;
@@ -459,11 +453,9 @@ namespace ft {
 						Node	*tmp;
 
 						tmp = search(val.first);
-						//CA CRASH ICI
 
 						if (tmp)
 							return ft::make_pair<iterator, bool>(find(val.first), false);
-//							return ft::make_pair<iterator, bool>(find(val.first), false);
 //					}
 					_root = insert(_root, ft::make_pair(val.first, val.second));
 					return ft::make_pair<iterator, bool>(find(val.first), true);
@@ -579,10 +571,27 @@ namespace ft {
 					Node	*x = y->left;
 					Node	*T2 = x->right;
 
+					/*
+					std::cout << "REAL RIGHT ROTATE\n";
+					if (x)
+						std::cout << "X = " << x->_pair.first << "\n";
+					if (x && x->parent)
+						std::cout << "X parent = " << x->parent->_pair.first << "\n";
+					if (y)
+						std::cout << "y = " << y->_pair.first << "\n";
+					if (y && y->parent)
+						std::cout << "Y parent = " << y->parent->_pair.first << "\n";
+					if (T2)
+						std::cout << "T2 = " << T2->_pair.first << "\n";
+					if (T2 && T2->parent)
+						std::cout << "T2 parent = " << T2->parent->_pair.first << "\n";
+						*/
 					x->right = y;
 					x->parent = y->parent;
 					y->parent = x;
 					y->left = T2;
+					if (y->left)
+						y->left->parent = y;
 
 					y->height = max(height(y->left), height(y->right)) + 1;
 					x->height = max(height(x->left), height(x->right)) + 1;
@@ -593,10 +602,14 @@ namespace ft {
 					Node	*y = x->right;
 					Node	*T2 = y->left;
 
+//					std::cout << "REAL LEFT ROTATE\n";
 					y->left = x;
 					y->parent = x->parent;
 					x->parent = y;
 					x->right = T2;
+
+					if (x->right)
+						x->right->parent = x;
 
 					x->height = max(height(x->left), height(x->right)) + 1;
 					y->height = max(height(y->left), height(y->right)) + 1;
@@ -636,11 +649,13 @@ namespace ft {
 
 				Node	*insert(Node *node, value_type pair) {
 					++_size;
-					if (!node)
+//					std::cout << "INSERTING KEY : " << pair.first << '\n';
+					if (!node) {
+//						std::cout << std::endl;
 						return (newNode(pair));
+					}
 
-					if (_root)
-						unlinkEnd();
+					unlinkEnd();
 					if (pair.first < node->_pair.first) {
 						node->left = insert(node->left, pair);
 						node->left->parent = node;
@@ -649,6 +664,16 @@ namespace ft {
 						node->right->parent = node;
 					} else {
 						linkEnd();
+						/*
+						if (node->parent)
+							std::cout << "INSERT PARENT : " << node->parent->_pair.first << '\n';
+						if (node->left)
+							std::cout << "INSERT LEFT : " << node->left->_pair.first << '\n';
+						if (node->right)
+							std::cout << "INSERT RIGHT : " << node->right->_pair.first << '\n';
+						std::cout << std::endl;
+						printTree();
+						*/
 						return node;
 					}
 
@@ -673,7 +698,17 @@ namespace ft {
 					}
 
 					linkEnd();
-//						std::cout << "parent first = " <<  _p_end->parent->right << '\n';
+					/*
+					std::cout << "INSERT AFTER ROTATE: " << node->_pair.first << '\n';
+					if (node->parent)
+						std::cout << "INSERT PARENT : " << node->parent->_pair.first << '\n';
+					if (node->left)
+						std::cout << "INSERT LEFT : " << node->left->_pair.first << '\n';
+					if (node->right)
+						std::cout << "INSERT RIGHT : " << node->right->_pair.first << '\n';
+					std::cout << std::endl;
+					printTree();
+					*/
 					return node;
 				}
 
@@ -690,13 +725,25 @@ namespace ft {
 				void	linkEnd() {
 					Node	*tmp;
 
+//					if (_p_end->parent)
+//						unlinkEnd();
 					tmp = maxValueNode(_root, _p_end);
-					tmp->right = _p_end;
+//					if (_p_end->parent != tmp)
+						tmp->right = _p_end;
 					_p_end->parent = tmp;
+//					std::cout << "TMP = " << tmp->_pair.first << std::endl;
+//					if (tmp->parent)
+//						std::cout << "TMP_PARENT = " << tmp->parent->_pair.first << std::endl;
+//					if (tmp->right && tmp->right != _p_end)
+//						std::cout << "TMP_right = " << tmp->right->_pair.first << std::endl;
+//					else if (tmp->right && tmp->right == _p_end)
+//						std::cout << "tmp right == p_end impossible\n";
+
 				}
 
 				void	unlinkEnd() {
-					_p_end->parent->right = NULL;
+					if (_p_end->parent)
+						_p_end->parent->right = NULL;
 				}
 
 				static Node	*minValueNode(Node *root) {
@@ -708,7 +755,7 @@ namespace ft {
 				}
 
 				static Node	*maxValueNode(Node *root, Node *end) {
-					if (!root || root->right == end || !root->right)
+					if (!root || !root->right || root->right == end)
 						return root;
 					if (root->right->_pair.first > root->_pair.first)
 						return maxValueNode(root->right, end);
