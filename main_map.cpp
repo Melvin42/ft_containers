@@ -42,6 +42,19 @@ template <typename MAP, typename U, typename V>
 		mp.printTree();
 	}
 	*/
+template<class T1, class T2>
+	void printMap(const ft::map<T1, T2> &mp) {
+		typename ft::map<T1, T2>::const_iterator it = mp.begin();
+		typename ft::map<T1, T2>::const_iterator ite = mp.end();
+
+		std::cout << "\n************PRINT MAP************\n";
+
+		std::cout << "Size = " << mp.size() << '\n';
+		while (it != ite) {
+			std::cout << "First = " << it->first << " | Second = " << it->second << std::endl;
+			++it;
+		}
+	}
 
 void	test_pair() {
 	std::cout << "/******** TESTING PAIR ********/\n" << std::endl;
@@ -137,40 +150,17 @@ void	test_map() {
 	*/
 
 	ftMap.insert(ft::make_pair(9,1));
-	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
-	ftMap.printTree();
-	std::cout << std::endl;
 	ftMap.insert(ft::make_pair(8,1));
-	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
-	ftMap.printTree();
-	std::cout << std::endl;
 	ftMap.insert(ft::make_pair(7,1));
-	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
-	ftMap.printTree();
-	std::cout << std::endl;
 	ftMap.insert(ft::make_pair(6,1));
-	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
-	ftMap.printTree();
-	std::cout << std::endl;
 	ftMap.insert(ft::make_pair(5,1));
-	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
-	ftMap.printTree();
-	std::cout << std::endl;
 	ftMap.insert(ft::make_pair(4,1));
-	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
-	ftMap.printTree();
-	std::cout << std::endl;
 	ftMap.insert(ft::make_pair(3,1));
-	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
-	ftMap.printTree();
-	std::cout << std::endl;
 	ftMap.insert(ft::make_pair(2,1));
-	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
-	ftMap.printTree();
-	std::cout << std::endl;
 	ftMap.insert(ft::make_pair(1,1));
 	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
 	ftMap.printTree();
+	printMap(ftMap);
 	std::cout << std::endl;
 
 	/*
@@ -205,12 +195,60 @@ void	test_map() {
 	stdMap.insert(std::make_pair(15,30));
 	stdMap.insert(std::make_pair(16,31));
 
+	ft::map<int, int>::iterator	it = ftMap.begin();
+	ft::map<int, int>::iterator	ite = --(--ftMap.end());
+
+	ft::map<int, int>	mp_range(it, --(--ite));
+
+	for (int i = 0; it != ite; ++it)
+		it->second = ++i * 5;
+
+	it = ftMap.begin();
+	ite = --(--ftMap.end());
+
 	ft::map<int, int>	ftMapCpy(ftMap);
 
-	std::cout << "FIRST CLEAR!!!\n";
-	ftMapCpy.clear();
-	std::cout << "END CLEAR!!!\n";
-//	ft::map<int, int>::const_iterator		c_ftIt = ftMap.begin();
+	for (int i = 0; it != ite; ++it)
+		it->second = ++i * 7;
+
+	printMap(ftMap);
+	printMap(mp_range);
+	printMap(ftMapCpy);
+
+	ftMap.printTree();
+	ftMap = ftMapCpy;
+
+	std::cout << "PAR ICI\n";
+	ftMap.printTree();
+	printMap(ftMap);
+	printMap(ftMapCpy);
+
+//	ft::map<int, int>	ftMapOp;
+
+//	ftMapOp = ftMap;
+
+
+
+
+//	ftMap.erase(4);
+	
+//	std::cout << "ftMap[10] !!!\n";
+//	ftMap[-1] = 81;
+//	ftMap[10] = 81;
+//	ftMap[8] = 81;
+//	ftMap[1] = 81;
+//	ftMap.printTree();
+//	std::cout << "bizar\n";
+//	stdMap[-2] = 81;
+//	ftMap.erase(4);
+//	ftMap.printTree();
+//	std::cout << "FIRST CLEAR!!!\n";
+//	ftMapCpy.clear();
+//	std::cout << "END CLEAR!!!\n";
+//	ftMap.printTree();
+//	ftMapCpy.printTree();
+	/*
+//	ft::map<int, int>::const_iterator		c_ftIt = ftMap.begin();;
 
 	ft::map<int, int>::iterator		ftIt;
 	ftIt = ftMap.begin();
@@ -260,6 +298,8 @@ void	test_map() {
 	mp_cpy.printTree();
 
 	mplst = mp_cpy;
+	printTree();
+	*/
 //	mp_cpy = mp_range;
 	// REPRENDRE ICIIIII
 
@@ -273,7 +313,7 @@ void	test_map() {
 
 //	std::map<int, int>::iterator	stdIt;
 
-//	ftMap.erase(ftMap.end() - 1);
+//	ftMap.erase(ftMap.begin());
 //	ftMap.erase(2);
 //	ftMap.erase(3);
 //	ftMap.erase(4);
@@ -288,8 +328,8 @@ void	test_map() {
 //	ftMap.erase(ftMap.end() - 1);
 //	ftMap.erase(ftMap.end() - 1);
 //	ftMap.printTree();
-/*
-	std::cout << "pair1: " << pair1.first << ", " << pair1.second << '\n';
+
+/*	
 
 	stdIt = stdMap.begin();
 	std::cout << "std-print\n";
@@ -408,6 +448,7 @@ void	test_map() {
 			std::cout << "key_comp: " << res[0] << " | " << "value_comp: " << res[1] << std::endl;
 		}
 	}
+	*/
 	
 //	ft_insert(strMap, ft::map<int, std::string>::value_type(42, "lol"));
 //	ft_insert(strMap, ft::map<int, std::string>::value_type(42, "lol"));
@@ -426,6 +467,7 @@ void	test_map() {
 //	ft_insert(mp2, mp2.end(), T3(1000, "Hello"));
 //	ft_insert(mp2, mp2.end(), T3(1500, "World"));
 
+	/*
 	std::cout << "TESTING RESIZE\n" << std::endl;
 	std::cout << "TESTING ERASE\n" << std::endl;
 	std::cout << "TESTING OPERATOR[]\n" << std::endl;

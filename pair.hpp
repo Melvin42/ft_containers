@@ -11,7 +11,7 @@ namespace ft {
 				second_type		second;
 
 				//default (1)
-				pair() : first(0), second(0) {}
+				pair() : first(T1()), second(T2()) {}
 
 				//copy (2)
 				template <class U, class V>

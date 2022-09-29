@@ -97,9 +97,7 @@ namespace ft {
 //				}
 
 				IteratorMap(const IteratorMap<typename std::remove_const<U>::type> &it)
-					: _pos(it._pos), _p_end(it._p_end), _comp(it._comp) {
-//						*this = it;
-					}
+					: _pos(it._pos), _p_end(it._p_end), _comp(it._comp) {}
 
 			private:
 				explicit IteratorMap(Node *pos, Node *end, key_compare comp)
@@ -240,23 +238,19 @@ namespace ft {
 
 				map	&operator=(const ft::map<Key, T, Compare, Alloc> &map) {
 					if (this != &map) {
+						clear();
 						_alloc = map.get_allocator();
 						_comp = map._comp;
-						clear();
+//						std::cout << "Tout est clear!!!\n";
+//						std::cout << _root->_pair.first << '\n';
 						_size = 0;
-						_p_end = _alloc_node.allocate(1);
+//						_p_end = _alloc_node.allocate(1);
+						_root =	NULL;
 						_p_end->parent = NULL;
 						_p_end->left = NULL;
 						_p_end->right = NULL;
 						_p_end->height = 0;
-//						std::cout << "fucking operator =\n";
-//						std::cout << " first  = " << map.begin()->first << ' '
-//						<< "second = " << map.begin()->second << '\n';
-
-//						std::cout << " first  = " << map.end()->first << ' '
-//						<< "second = " << map.end()->second << '\n';
 						insert(map.begin(), map.end());
-//						printTree();
 					}
 					return *this;
 				}
@@ -296,14 +290,18 @@ namespace ft {
 					_p_end = _alloc_node.allocate(1);
 					_root = NULL;
 					_p_end->parent = _root;
+					_p_end->parent = NULL;
 					_p_end->left = NULL;
 					_p_end->right = NULL;
 					_p_end->height = 0;
 
 					insert(map.begin(), map.end());
+//					linkEnd();
 				}
 
 				~map() {
+					clear();
+					_alloc_node.deallocate(_p_end, 1);
 				}
 
 				allocator_type	get_allocator() const {
@@ -366,13 +364,10 @@ namespace ft {
 				/* ELEMENT ACCES */
 
 				mapped_type	&operator[](const key_type &k) {
-					Node	*tmp = search(k);
-
-					if (!tmp)
-						insert(ft::make_pair(k, mapped_type()));
-					tmp = search(k);
-					return tmp->_pair.second;
-				}
+//					std::cout << mapped_type() << std::endl;
+//					std::cout << ft::make_pair(k, mapped_type()).second <<'\n';
+					return (*((insert(ft::make_pair(k, mapped_type()))).first)).second;
+				};
 
 				/* UTILS */
 
@@ -392,14 +387,19 @@ namespace ft {
 				}
 
 				iterator		find(const key_type &k) {
-//					nlinkEnd();
-					iterator	it(search(k), _p_end, _comp);
-//					linkEnd();
-					return it;
+					Node	*tmp = search(k);
+
+					if (!tmp)
+						return end();
+					return iterator(tmp, _p_end, _comp);
 				}
 
 				const_iterator	find(const key_type &k) const {
-					return const_iterator(search(k), _p_end, _comp);
+					Node	*tmp = search(k);
+
+					if (!tmp)
+						return end();
+					return const_iterator(tmp, _p_end, _comp);
 				}
 
 				iterator		lower_bound(const key_type &k) {
@@ -444,19 +444,26 @@ namespace ft {
 				pair<iterator, bool>	insert(const value_type& val) {
 
 						if (!_root) {
-//							linkEnd();
 							_root = insert(_root, ft::make_pair(val.first, val.second));
+//							linkEnd();
 							return ft::make_pair<iterator, bool>(find(val.first), true);
 						}
 						linkEnd();
 						Node	*tmp;
 
+//						std::cout << "CRASH\n";
+//						std::cout << "VAL = " << val.first << "\n";
+//						std::cout << "VAL = " << val.second << "\n";;
 						tmp = search(val.first);
 
+//						std::cout << "PA CRASH\n";
 						if (tmp)
 							return ft::make_pair<iterator, bool>(find(val.first), false);
 //					}
+//						std::cout << "PA CRASH\n";
 					_root = insert(_root, ft::make_pair(val.first, val.second));
+//						std::cout << "PA CRASH\n";
+//					linkEnd();
 					return ft::make_pair<iterator, bool>(find(val.first), true);
 				}
 
@@ -476,14 +483,13 @@ namespace ft {
 						}
 					}
 
-				void	erase(iterator pos) {
-					deleteNode(pos.base(), *pos);
+				void	erase(iterator position) {
+					erase(position->first);
 				}
 
 				size_type	erase(const key_type &k) {
 					Node	*node = search(k);
 
-//					std::cout << "ERASE " << k << '\n';
 					if (deleteNode(node, node->_pair))
 						return 1;
 					return 0;
@@ -491,7 +497,7 @@ namespace ft {
 
 				void	erase(iterator first, iterator last) {
 					while (first != last) {
-						deleteNode(first, *(first->first));
+						erase(*first->first);
 						++first;
 					}
 				}
@@ -520,7 +526,11 @@ namespace ft {
 
 				void		clear() {
 					if (_size != 0) {
+						unlinkEnd();
 						destroyTree();
+//						std::cout << "Tout est clear!!!\n";
+//						_alloc_node.deallocate(_p_end, 1);
+						//SOCCUPER DE P_END ICI
 						_size = 0;
 					}
 				}
@@ -699,6 +709,10 @@ namespace ft {
 						std::cout << "First: " << root->_pair.first
 							<< " " << root->_pair.second << ", height = " << root->height
 							<< " " << "root addr = " << &root << ", parent addr = " << root->parent << '\n';
+						if (root->left)
+							std::cout << "left " << root->left->_pair.first << '\n';
+						if (root->right && root->right != _p_end)
+							std::cout << "right " << root->right->_pair.first << '\n';
 						preOrder(root->left);
 						preOrder(root->right);
 					}
@@ -758,7 +772,7 @@ namespace ft {
 							tmp = node->left ? node->left : node->right;
 							if (!tmp) {
 								tmp = node;
-								node = NULL;
+//								node = NULLftMap.;
 							} else {
 
 								_alloc_node.destroy(node);
@@ -774,7 +788,7 @@ namespace ft {
 //								free(tmp);
 							}
 						} else {
-							Node	*tmp = min(node->right);
+							Node	*tmp = minValueNode(node->right);
 
 //							_alloc_node.destroy(node);
 //							node->_pair = make_pair(tmp->_pair.first, tmp->_pair.first);
@@ -816,11 +830,11 @@ namespace ft {
 					if (leaf) {
 						if (leaf->left)
 							destroyTree(leaf->left);
-						else if (leaf->right)// && leaf->right != _p_end)
+						if (leaf->right)// && leaf->right != _p_end)
 							destroyTree(leaf->right);
 						_alloc_node.destroy(&leaf->_pair);
-//						_alloc_node.deallocate(leaf, 1);
-						--_size;
+						_alloc_node.deallocate(leaf, 1);
+//						--_size;
 					}
 				}
 
