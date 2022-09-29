@@ -445,7 +445,7 @@ namespace ft {
 
 						if (!_root) {
 							_root = insert(_root, ft::make_pair(val.first, val.second));
-//							linkEnd();
+							linkEnd();
 							return ft::make_pair<iterator, bool>(find(val.first), true);
 						}
 						linkEnd();
@@ -461,9 +461,10 @@ namespace ft {
 							return ft::make_pair<iterator, bool>(find(val.first), false);
 //					}
 //						std::cout << "PA CRASH\n";
+					unlinkEnd();
 					_root = insert(_root, ft::make_pair(val.first, val.second));
 //						std::cout << "PA CRASH\n";
-//					linkEnd();
+					linkEnd();
 					return ft::make_pair<iterator, bool>(find(val.first), true);
 				}
 

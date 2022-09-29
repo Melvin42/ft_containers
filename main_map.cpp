@@ -149,6 +149,38 @@ void	test_map() {
 	ftMap.insert(ft::make_pair(16,31));
 	*/
 
+	/*
+	ftMap.insert(ft::make_pair(1,1));
+	ftMap.insert(ft::make_pair(2,1));
+	ftMap.insert(ft::make_pair(3,1));
+	ftMap.insert(ft::make_pair(4,1));
+	ftMap.insert(ft::make_pair(5,1));
+	ftMap.insert(ft::make_pair(6,1));
+	ftMap.insert(ft::make_pair(7,1));
+	ftMap.insert(ft::make_pair(8,1));
+	*/
+
+//	stdMap.insert(std::make_pair(3,34));
+//	stdMap.insert(pair2);
+//	stdMap.insert(std::make_pair(13,29));
+//	stdMap.insert(std::make_pair(4,23));
+//	stdMap.insert(std::make_pair(12,56));
+//	stdMap.insert(std::make_pair(5,24));
+//	stdMap.insert(std::make_pair(6,25));
+//	stdMap.insert(std::make_pair(7,26));
+//	stdMap.insert(std::make_pair(2,34));
+//	stdMap.insert(std::make_pair(11,28));
+//	stdMap.insert(std::make_pair(14,34));
+//	stdMap.insert(std::make_pair(1,34));
+//	stdMap.insert(std::make_pair(19,30));
+//	stdMap.insert(std::make_pair(20,30));
+//	stdMap.insert(std::make_pair(9,30));
+//	stdMap.insert(std::make_pair(21,30));
+//	stdMap.insert(std::make_pair(22,30));
+//	stdMap.insert(std::make_pair(8,30));
+//	stdMap.insert(std::make_pair(15,30));
+//	stdMap.insert(std::make_pair(16,31));
+
 	ftMap.insert(ft::make_pair(9,1));
 	ftMap.insert(ft::make_pair(8,1));
 	ftMap.insert(ft::make_pair(7,1));
@@ -162,38 +194,6 @@ void	test_map() {
 	ftMap.printTree();
 	printMap(ftMap);
 	std::cout << std::endl;
-
-	/*
-	ftMap.insert(ft::make_pair(1,1));
-	ftMap.insert(ft::make_pair(2,1));
-	ftMap.insert(ft::make_pair(3,1));
-	ftMap.insert(ft::make_pair(4,1));
-	ftMap.insert(ft::make_pair(5,1));
-	ftMap.insert(ft::make_pair(6,1));
-	ftMap.insert(ft::make_pair(7,1));
-	ftMap.insert(ft::make_pair(8,1));
-	*/
-
-	stdMap.insert(std::make_pair(3,34));
-	stdMap.insert(pair2);
-	stdMap.insert(std::make_pair(13,29));
-	stdMap.insert(std::make_pair(4,23));
-	stdMap.insert(std::make_pair(12,56));
-	stdMap.insert(std::make_pair(5,24));
-	stdMap.insert(std::make_pair(6,25));
-	stdMap.insert(std::make_pair(7,26));
-	stdMap.insert(std::make_pair(2,34));
-	stdMap.insert(std::make_pair(11,28));
-	stdMap.insert(std::make_pair(14,34));
-	stdMap.insert(std::make_pair(1,34));
-	stdMap.insert(std::make_pair(19,30));
-	stdMap.insert(std::make_pair(20,30));
-	stdMap.insert(std::make_pair(9,30));
-	stdMap.insert(std::make_pair(21,30));
-	stdMap.insert(std::make_pair(22,30));
-	stdMap.insert(std::make_pair(8,30));
-	stdMap.insert(std::make_pair(15,30));
-	stdMap.insert(std::make_pair(16,31));
 
 	ft::map<int, int>::iterator	it = ftMap.begin();
 	ft::map<int, int>::iterator	ite = --(--ftMap.end());
@@ -223,9 +223,19 @@ void	test_map() {
 	printMap(ftMap);
 	printMap(ftMapCpy);
 
-//	ft::map<int, int>	ftMapOp;
+	ft::map<int, std::string>	ftMapTest;
 
-//	ftMapOp = ftMap;
+	ftMapTest[42] = "coucou";
+	ftMapTest[25] = "bip";
+	ftMapTest[80] = "boop";
+//	ftMapTest[12] = "paf";
+//	ftMapTest[27] = "pouuuf";
+//	ftMapTest[90] = "X";
+
+	ftMapTest.printTree();
+	printMap(ftMapTest);
+
+
 
 
 
