@@ -315,22 +315,22 @@ namespace ft {
 
 				/* ITERATORS */
 				iterator				begin() {
+					if (_size == 0)
+						return end();
 					return iterator(minValueNode(_root), _p_end, _comp);
 				}
 
 				const_iterator			begin() const {
+					if (_size == 0)
+						return end();
 					return const_iterator(minValueNode(_root), _p_end, _comp);
 				}
 
 				iterator				end() {
-					if (_size == 0)
-						return begin();
 					return iterator(_p_end, _p_end, _comp);
 				}
 
 				const_iterator			end() const {
-					if (_size == 0)
-						return begin();
 					return const_iterator(_p_end, _p_end, _comp);
 				}
 
@@ -389,8 +389,9 @@ namespace ft {
 				iterator		find(const key_type &k) {
 					Node	*tmp = search(k);
 
-					if (!tmp)
+					if (!tmp) {
 						return end();
+					}
 					return iterator(tmp, _p_end, _comp);
 				}
 
@@ -451,19 +452,12 @@ namespace ft {
 						linkEnd();
 						Node	*tmp;
 
-//						std::cout << "CRASH\n";
-//						std::cout << "VAL = " << val.first << "\n";
-//						std::cout << "VAL = " << val.second << "\n";;
 						tmp = search(val.first);
 
-//						std::cout << "PA CRASH\n";
 						if (tmp)
 							return ft::make_pair<iterator, bool>(find(val.first), false);
-//					}
-//						std::cout << "PA CRASH\n";
 					unlinkEnd();
 					_root = insert(_root, ft::make_pair(val.first, val.second));
-//						std::cout << "PA CRASH\n";
 					linkEnd();
 					return ft::make_pair<iterator, bool>(find(val.first), true);
 				}
@@ -491,8 +485,8 @@ namespace ft {
 				size_type	erase(const key_type &k) {
 					Node	*node = search(k);
 
-					if (deleteNode(node, node->_pair))
-						return 1;
+//					if (deleteNode(node, node->_pair))
+//						return 1;
 					return 0;
 				}
 
@@ -623,20 +617,16 @@ namespace ft {
 					if (!node || node == _p_end) {
 						return NULL;
 					}
-					if (node->left == NULL && node->right == _p_end && k ==  node->_pair.first)
-						return node;
-					else if (node->left == NULL && node->right == _p_end)
-						return NULL;
-					else if ( node->right == NULL)
-						return NULL;
-
-					if (node != _p_end && k == node->_pair.first)
+					if (_comp(k, node->_pair.first) == false
+						&& _comp(node->_pair.first, k) == false)
 						return node;
 
-					if (node->left && _comp(k, node->_pair.first))
+					if (node->left && _comp(k, node->_pair.first)) {
 						return searchRecurs(node->left, k);
-					else if (node->right && node->right != _p_end)
+					}
+					else if (node->right) {// && node->right != _p_end) {
 						return searchRecurs(node->right, k);
+					}
 					return NULL;
 				}
 

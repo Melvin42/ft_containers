@@ -225,15 +225,28 @@ void	test_map() {
 
 	ft::map<int, std::string>	ftMapTest;
 
+//	ftMapTest.insert(ft::make_pair(42, "coucou"));
+//	ftMapTest.insert(ft::make_pair(80, "boop"));
+//	ftMapTest.insert(ft::make_pair(12, "paf"));
 	ftMapTest[42] = "coucou";
 	ftMapTest[25] = "bip";
 	ftMapTest[80] = "boop";
-//	ftMapTest[12] = "paf";
-//	ftMapTest[27] = "pouuuf";
-//	ftMapTest[90] = "X";
+	ftMapTest[12] = "paf";
+	ftMapTest[27] = "pouuuf";
+	ftMapTest[90] = "X";
 
 	ftMapTest.printTree();
 	printMap(ftMapTest);
+
+	std::cout << "Find " << ftMapTest.find(12)->first << " = " << ftMapTest.find(12)->second << std::endl;
+	ft::map<int, std::string>::iterator	itend = ftMapTest.end();
+	ft::map<int, std::string>::iterator	ret;
+
+	ret = ftMapTest.find(3);
+	if (ret == itend)
+		std::cout << "Find 3 = END() " << std::endl;
+	else
+		std::cout << "Find " << ftMapTest.find(3)->first << " = " << ftMapTest.find(3)->second << std::endl;
 
 
 
