@@ -41,6 +41,11 @@ namespace ft {
 				typedef std::size_t									size_type;
 
 			private:
+
+
+
+
+
 				struct Node {
 					value_type		_pair;
 					Node			*parent;
@@ -48,6 +53,9 @@ namespace ft {
 					Node			*right;
 					int				height;
 				};
+
+
+
 
 				class value_compare
 				{   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
@@ -485,14 +493,18 @@ namespace ft {
 				size_type	erase(const key_type &k) {
 					Node	*node = search(k);
 
-//					if (deleteNode(node, node->_pair))
-//						return 1;
+					if (node) {
+						unlinkEnd();
+						_root = deleteNode(_root, node->_pair);
+						linkEnd();
+						return 1;
+					}
 					return 0;
 				}
 
 				void	erase(iterator first, iterator last) {
 					while (first != last) {
-						erase(*first->first);
+						erase(first->first);
 						++first;
 					}
 				}
@@ -523,9 +535,6 @@ namespace ft {
 					if (_size != 0) {
 						unlinkEnd();
 						destroyTree();
-//						std::cout << "Tout est clear!!!\n";
-//						_alloc_node.deallocate(_p_end, 1);
-						//SOCCUPER DE P_END ICI
 						_size = 0;
 					}
 				}
@@ -631,10 +640,7 @@ namespace ft {
 				}
 
 				Node	*insert(Node *node, value_type pair) {
-//					++_size;
-//					std::cout << "INSERTING KEY : " << pair.first << '\n';
 					if (!node) {
-//						std::cout << std::endl;
 						return (newNode(pair));
 					}
 
@@ -647,16 +653,6 @@ namespace ft {
 						node->right->parent = node;
 					} else {
 						linkEnd();
-						/*
-						if (node->parent)
-							std::cout << "INSERT PARENT : " << node->parent->_pair.first << '\n';
-						if (node->left)
-							std::cout << "INSERT LEFT : " << node->left->_pair.first << '\n';
-						if (node->right)
-							std::cout << "INSERT RIGHT : " << node->right->_pair.first << '\n';
-						std::cout << std::endl;
-						printTree();
-						*/
 						return node;
 					}
 
@@ -681,17 +677,6 @@ namespace ft {
 					}
 
 					linkEnd();
-					/*
-					std::cout << "INSERT AFTER ROTATE: " << node->_pair.first << '\n';
-					if (node->parent)
-						std::cout << "INSERT PARENT : " << node->parent->_pair.first << '\n';
-					if (node->left)
-						std::cout << "INSERT LEFT : " << node->left->_pair.first << '\n';
-					if (node->right)
-						std::cout << "INSERT RIGHT : " << node->right->_pair.first << '\n';
-					std::cout << std::endl;
-					printTree();
-					*/
 					return node;
 				}
 
@@ -710,27 +695,22 @@ namespace ft {
 				}
 
 				void	linkEnd() {
-					Node	*tmp;
+					if (_root && _size > 0) {
+						Node	*tmp;
 
-//					if (_p_end->parent)
-//						unlinkEnd();
-					tmp = maxValueNode(_root, _p_end);
-//					if (_p_end->parent != tmp)
+						tmp = maxValueNode(_root, _p_end);
 						tmp->right = _p_end;
-					_p_end->parent = tmp;
-//					std::cout << "TMP = " << tmp->_pair.first << std::endl;
-//					if (tmp->parent)
-//						std::cout << "TMP_PARENT = " << tmp->parent->_pair.first << std::endl;
-//					if (tmp->right && tmp->right != _p_end)
-//						std::cout << "TMP_right = " << tmp->right->_pair.first << std::endl;
-//					else if (tmp->right && tmp->right == _p_end)
-//						std::cout << "tmp right == p_end impossible\n";
-
+						_p_end->parent = tmp;
+					}
 				}
 
 				void	unlinkEnd() {
-					if (_p_end->parent)
-						_p_end->parent->right = NULL;
+					if (_root) {
+						if (_p_end->parent) {
+//							if (_p_end->parent->right)
+								_p_end->parent->right = NULL;
+						}
+					}
 				}
 
 				static Node	*minValueNode(Node *root) {
@@ -750,45 +730,45 @@ namespace ft {
 				}
 
 				Node	*deleteNode(Node *node, const value_type &val) {
-					if (!node)
+					if (!node || node == _p_end) {
 						return node;
+					}
 					if (val.first < node->_pair.first)
 						node->left = deleteNode(node->left, val);
 					else if (val.first > node->_pair.first)
 						node->right = deleteNode(node->right, val);
 					else {
 						if (!node->left || !node->right) {
-							Node	*tmp;
+							Node	*tmp = node->left ? node->left : node->right;
 
-							tmp = node->left ? node->left : node->right;
 							if (!tmp) {
 								tmp = node;
-//								node = NULLftMap.;
+								node = NULL;
 							} else {
 
-								_alloc_node.destroy(node);
-//								node->_pair = make_pair(tmp->_pair.first, tmp->_pair.first);
-								_alloc.construct(&node->_pair, tmp->_pair);
 								node->parent = tmp->parent;
-								node->left = tmp->left;
 								node->right = tmp->right;
+								node->left = tmp->left;
 								node->height = tmp->height;
 
-								_alloc_node.destroy(tmp);
-//								_alloc.deallocate(&tmp);
-//								free(tmp);
+								_alloc_node.destroy(&node->_pair);
+								_alloc.construct(&node->_pair, tmp->_pair);
 							}
+							_alloc_node.destroy(&tmp->_pair);
+							_alloc_node.deallocate(tmp, 1);
+							--_size;
 						} else {
 							Node	*tmp = minValueNode(node->right);
 
-//							_alloc_node.destroy(node);
-//							node->_pair = make_pair(tmp->_pair.first, tmp->_pair.first);
+							_alloc_node.destroy(&node->_pair);
 							_alloc.construct(&node->_pair, tmp->_pair);
+
 							node->right = deleteNode(node->right, tmp->_pair);
 						}
 					}
-					if (!node)
+					if (!node) {
 						return node;
+					}
 
 					node->height = 1 + max(height(node->left),
 											height(node->right));
@@ -825,7 +805,6 @@ namespace ft {
 							destroyTree(leaf->right);
 						_alloc_node.destroy(&leaf->_pair);
 						_alloc_node.deallocate(leaf, 1);
-//						--_size;
 					}
 				}
 
