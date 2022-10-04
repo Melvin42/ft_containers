@@ -191,7 +191,7 @@ void	test_map() {
 //	ftMap.insert(ft::make_pair(8,1));
 //	ftMap.insert(ft::make_pair(7,1));
 //	ftMap.insert(ft::make_pair(6,6));
-	ftMap.insert(ft::make_pair(5,5));
+//	ftMap.insert(ft::make_pair(5,5));
 	ftMap.insert(ft::make_pair(4,4));
 	ftMap.insert(ft::make_pair(3,3));
 	ftMap.insert(ft::make_pair(2,2));
@@ -214,32 +214,34 @@ void	test_map() {
 //	ftMap.erase(5);
 //	ftMap.erase(1);
 //	++it;
-//	ftMap.printTree();
 
 //	ftMap.erase(++(++(++ftMap.begin())));
 //	ftMap.erase(ftMap.begin(), ftMap.end());
 //	ftMap.erase(ftMap.begin(), ++(ftMap.begin()));
-//	ftMap.erase(ftMap.begin(), ++(++(++ftMap.begin())));
 	ft::map<int, int>::iterator	it = ftMap.begin();
+//	ft::map<int, int>::iterator	it = --ftMap.end();
 //	ft::map<int, int>::iterator	ite = ++(++(++ftMap.begin()));
+//	ft::map<int, int>::iterator	ite = ftMap.begin();
 	ft::map<int, int>::iterator	ite = ftMap.end();
 //	ft::map<int, int>::iterator	it = --(--(--ftMap.end()));
 //	ft::map<int, int>::iterator	ite = --ftMap.end();
 
 //	ftMap.erase(it, ite);
-	ftMap2.insert(it, ite);
-	printMap(ftMap2);
 //	while (it != ite) {
 //		std::cout << "main to delete = " << it->first << std::endl;
+//		std::cout << "main size = " << ftMap.size() << std::endl;
 //		ftMap.erase(it);
 //		++it;
 //	}
+	ftMap.printTree();
 //	ftMap.erase(--(--(--ftMap.end())), --ftMap.end());
 
 //	ftMap[10] = "Hello";
 //	ftMap[11] = "Hi there";
 //	printMap(ftMap);
-//	ftMap.erase(--(--(--ftMap.end())), ftMap.end());
+
+//	ftMap.erase(ftMap.begin(), ++(++(++ftMap.begin())));
+	ftMap.erase(--(--(--ftMap.end())), ftMap.end());
 
 
 

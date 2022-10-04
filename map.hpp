@@ -131,7 +131,6 @@ namespace ft {
 
 					if (_pos->right) {
 						if (!_pos->right->left || _pos->right == _p_end) {
-//							std::cout << "END\n";
 							_pos = _pos->right;
 						}
 						else {
@@ -152,12 +151,11 @@ namespace ft {
 					IteratorMap	tmp(*this);
 
 					if (_pos == _p_end) {
-//						std::cout << "COCOUCCCCCCC\n";
 						_pos = _p_end->parent;
 						return tmp;
-					} else if (_pos == _p_end->right) {
-						_pos = _p_end;
-						return tmp;
+					} else if (_pos->parent->parent == NULL) {
+						_pos = _p_end->parent;
+						return *this;
 					}
 					if (_pos->left) {
 						if (!_pos->left->right)
@@ -165,22 +163,29 @@ namespace ft {
 						else
 							_pos = ft::map<Key, T, Compare, Alloc>::maxValueNode(_pos->left, _p_end);
 					} else if (_pos->parent) {
-						Node *tmpNode = _pos;
+						Node	*tmpNode = _pos;
 
 						_pos = _pos->parent;
-						while (_comp(_pos->_pair.first, tmpNode->_pair.first) == false)
+						while (_pos && _comp(_pos->_pair.first, tmpNode->_pair.first) == false)
 							_pos = _pos->parent;
 					}
 					return tmp;
 				}
 
 				IteratorMap	&operator--() {
-					if (_pos == _p_end) {
-//						std::cout << "COCOUCCCCCCC\n";
+					std::cout << "operator -- \n";
+					if (_pos->parent == NULL) {
+						std::cout << "ROOOT operator -- \n";
+						if (_pos->left)
+							_pos = _pos->left;
+						return *this;
+					} else if (_pos == _p_end) {
+						std::cout << "end-- operator -- \n";
 						_pos = _p_end->parent;
 						return *this;
-					} else if (_pos == _p_end->right) {
-						_pos = _p_end;
+					} else if (_pos->parent && _pos->parent->parent == NULL) {
+						std::cout << "rout right operator -- \n";
+						_pos = _p_end->parent;
 						return *this;
 					}
 					if (_pos->left) {
@@ -188,8 +193,8 @@ namespace ft {
 							_pos = _pos->left;
 						else
 							_pos = ft::map<Key, T, Compare, Alloc>::maxValueNode(_pos->left, _p_end);
-					} else if (_pos->parent != NULL) {
-						Node *tmpNode = _pos;
+					} else if (_pos->parent) {
+						Node	*tmpNode = _pos;
 
 						_pos = _pos->parent;
 						while (_pos && _comp(_pos->_pair.first, tmpNode->_pair.first) == false)
@@ -228,7 +233,7 @@ namespace ft {
 						_alloc = map.get_allocator();
 						_comp = map._comp;
 						_size = 0;
-						_root =	NULL;
+						_root = NULL;
 						_p_end->parent = NULL;
 						_p_end->left = NULL;
 						_p_end->right = NULL;
@@ -385,28 +390,52 @@ namespace ft {
 				}
 
 				iterator		lower_bound(const key_type &k) {
-					return (iterator(find(k), _p_end, _comp));
+					iterator	it = begin();
+
+					while (it != end()) {
+						if (_comp(it->first, k) == false)
+							break ;
+//							return it;
+						++it;
+					}
+					return it;
 				}
 
 				const_iterator	lower_bound(const key_type &k) const {
-					return (const_iterator(find(k), _p_end, _comp));
+					const_iterator	it = begin();
+
+					while (it != end()) {
+						if (_comp(it->first, k) == false)
+							break ;
+//							return it;
+						++it;
+					}
+					return it;
 				}
 
 				iterator		upper_bound(const key_type &k) {
-					iterator	it(find(k), _p_end, _comp);
+//					iterator	it(find(k), _p_end, _comp);
+					iterator	it = begin();
 
-					if (it != end())
+					while (it != end()) {
+						if (_comp(k, it->first))
+							break ;
+//							return it;
 						++it;
+					}
 					return it;
 				}
 
 				const_iterator	upper_bound(const key_type &k) const {
-					const_iterator	it(find(k), _p_end, _comp);
+					const_iterator	it = begin();
 
-					if (it != end())
+					while (it != end()) {
+						if (_comp(k, it->first))
+							break ;
+//							return it;
 						++it;
+					}
 					return it;
-
 				}
 
 				pair<const_iterator, const_iterator>	equal_range(
@@ -472,24 +501,45 @@ namespace ft {
 
 				size_type	erase(const key_type &k) {
 //					unlinkEnd();
-					std::cout << "SIZE = " << _size << std::endl;
-					exit(1);
+//					std::cout << "SIZE = " << _size << std::endl;
 					Node	*node = search(k);
 
+//					exit(1);
 					if (node) {
 						unlinkEnd();
-						_root = deleteNode(_root, node->_pair);
-						--_size;
-						std::cout << "SIZE = " << _size << std::endl;
-						if (_size == 0 && !_root) {
+						if (_size > 1) {
+							_root = deleteNode(_root, node->_pair);
+							--_size;
+						} else if (_size == 1) {
+							linkEnd();
 							std::cout << "ROOOOOOT =" << std::endl;
-						_root = _p_end;
+							std::cout << "first =" << _root->_pair.first << std::endl;
+							if (_root->left)
+								std::cout << "left =" << _root->left->_pair.first << std::endl;
+//							if (_root->right)
+//								std::cout << "right =" << _root->right->_pair.first << std::endl;
+							_alloc_node.destroy(&_root->_pair);
+//							_alloc_node.deallocate(_root, 1);
+							_root = NULL;
+//							_root->right = _p_end;
+							_p_end->parent = _root;
+							_p_end->left = NULL;
+							_p_end->right = NULL;
+							_p_end->height = 0;
+							_root = _p_end;
+							--_size;
+						std::cout << "SIZE = " << _size << std::endl;
+							linkEnd();
+							return 1;
+						} else {
+							std::cout << "MAP VIDE" << std::endl;
+						}
+//						std::cout << "SIZE = " << _size << std::endl;
 //						_p_end->parent = _root;
 //						_p_end->left = NULL;
 //						_p_end->right = NULL;
 //						_p_end->height = 0;
 //							exit(0);
-						}
 						linkEnd();
 						return 1;
 					}
@@ -882,16 +932,17 @@ namespace ft {
 							_p_end->parent = tmp;
 //						}
 					} else {
-						_root = _p_end;
+//						if (!_root)
+//							std::cout << "LINK NO ROOT\n";
+//						_root = _p_end;
 					}
 				}
 
 				void	unlinkEnd() {
 					if (_root) {
-//						if (_p_end->parent) {
-//							if (_p_end->parent->right)
-								_p_end->parent->right = NULL;
-//						}
+						_p_end->parent->right = NULL;
+					} else {
+//						_p_end->parent = NULL;
 					}
 				}
 
@@ -945,7 +996,7 @@ namespace ft {
 	template<class Key, class T, class Compare, class Alloc>
 		bool	operator!=(const map<Key, T, Compare, Alloc> &lhs,
 							const map<Key, T, Compare, Alloc> &rhs) {
-			return (!(lhs == rhs));
+			return !(lhs == rhs);
 		}
 
 	template<class Key, class T, class Compare, class Alloc>
@@ -958,7 +1009,7 @@ namespace ft {
 	template<class Key, class T, class Compare, class Alloc>
 		bool	operator<=(const map<Key, T, Compare, Alloc> &lhs,
 							const map<Key, T, Compare, Alloc> &rhs) {
-			return (!(rhs < lhs));
+			return !(rhs < lhs);
 		}
 
 	template<class Key, class T, class Compare, class Alloc>
@@ -970,7 +1021,7 @@ namespace ft {
 	template<class Key, class T, class Compare, class Alloc>
 		bool	operator>=(const map<Key, T, Compare, Alloc> &lhs,
 							const map<Key, T, Compare, Alloc> &rhs) {
-			return (!(lhs < rhs));
+			return !(lhs < rhs);
 		}
 
 	template<class Key, class T, class Compare, class Alloc>
