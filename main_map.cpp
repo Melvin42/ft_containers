@@ -119,6 +119,7 @@ void	test_map() {
 	ft::pair<int, int>	pair1;
 	std::pair<int, int>	pair2;
 	ft::map<int, int>	ftMap;
+	ft::map<int, int>	ftMap2;
 	std::map<int, int>	stdMap;
 
 //	std::cout << "std Size = " << stdMap.size() << '\n';
@@ -195,21 +196,50 @@ void	test_map() {
 	ftMap.insert(ft::make_pair(3,3));
 	ftMap.insert(ft::make_pair(2,2));
 	ftMap.insert(ft::make_pair(1,1));
-	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
-	ftMap.printTree();
-	printMap(ftMap);
-	std::cout << std::endl;
+//	std::cout << "\nMAAAAAAAAAAAAIIIIINNN\n";
+//	ftMap.printTree();
+//	printMap(ftMap);
+//	std::cout << std::endl;
 
 //	std::cout << "ERAAAAASE" << std::endl;
-	ftMap.erase(1);
-	ftMap.erase(2);
-	ftMap.erase(3);
-	ftMap.erase(4);
-	ftMap.erase(5);
-//	ftMap.erase(2);
-//	ftMap.erase(4);
+
+//	ftMap.erase(++ftMap.begin());
+
+//	ftMap.erase(ftMap.begin());
+//	ftMap.erase(--ftMap.end());
 //	ftMap.printTree();
-	printMap(ftMap);
+//	ftMap.erase(2);
+//	ftMap.erase(3);
+//	ftMap.erase(4);
+//	ftMap.erase(5);
+//	ftMap.erase(1);
+//	++it;
+//	ftMap.printTree();
+
+//	ftMap.erase(++(++(++ftMap.begin())));
+//	ftMap.erase(ftMap.begin(), ftMap.end());
+//	ftMap.erase(ftMap.begin(), ++(ftMap.begin()));
+//	ftMap.erase(ftMap.begin(), ++(++(++ftMap.begin())));
+	ft::map<int, int>::iterator	it = ftMap.begin();
+//	ft::map<int, int>::iterator	ite = ++(++(++ftMap.begin()));
+	ft::map<int, int>::iterator	ite = ftMap.end();
+//	ft::map<int, int>::iterator	it = --(--(--ftMap.end()));
+//	ft::map<int, int>::iterator	ite = --ftMap.end();
+
+//	ftMap.erase(it, ite);
+	ftMap2.insert(it, ite);
+	printMap(ftMap2);
+//	while (it != ite) {
+//		std::cout << "main to delete = " << it->first << std::endl;
+//		ftMap.erase(it);
+//		++it;
+//	}
+//	ftMap.erase(--(--(--ftMap.end())), --ftMap.end());
+
+//	ftMap[10] = "Hello";
+//	ftMap[11] = "Hi there";
+//	printMap(ftMap);
+//	ftMap.erase(--(--(--ftMap.end())), ftMap.end());
 
 
 
@@ -218,8 +248,6 @@ void	test_map() {
 
 
 
-//	ft::map<int, int>::iterator	it = ftMap.begin();
-//	ft::map<int, int>::iterator	ite = --(--ftMap.end());
 
 //	ft::map<int, int>	mp_range(it, --(--ite));
 

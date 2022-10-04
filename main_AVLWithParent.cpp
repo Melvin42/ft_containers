@@ -2,11 +2,12 @@
 using namespace std;
 
 typedef struct AVLwithparent Node;
+
 struct AVLwithparent {
 	Node* left;
 	Node* right;
 	int key;
-	struct AVLwithparent* par;
+	Node* parent;
 	int height;
 };
 
@@ -29,24 +30,24 @@ Node* LLR(Node* root) {
 
 	root->left = tmpnode->right;
 	if (tmpnode->right != NULL)
-		tmpnode->right->par = root;
+		tmpnode->right->parent = root;
 
 	tmpnode->right = root;
-	tmpnode->par = root->par;
-	root->par = tmpnode;
+	tmpnode->parent = root->parent;
+	root->parent = tmpnode;
 
-	if (tmpnode->par != NULL && root->key < tmpnode->par->key) {
-		tmpnode->par->left = tmpnode;
+	if (tmpnode->parent != NULL && root->key < tmpnode->parent->key) {
+		tmpnode->parent->left = tmpnode;
 	} else {
-		if (tmpnode->par != NULL)
-			tmpnode->par->right = tmpnode;
+		if (tmpnode->parent != NULL)
+			tmpnode->parent->right = tmpnode;
 	}
 	root = tmpnode;
 
 	Updateheight(root->left);
 	Updateheight(root->right);
 	Updateheight(root);
-	Updateheight(root->par);
+	Updateheight(root->parent);
 
 	return root;
 }
@@ -56,24 +57,24 @@ Node* RRR(Node* root) {
 
 	root->right = tmpnode->left;
 	if (tmpnode->left != NULL)
-		tmpnode->left->par = root;
+		tmpnode->left->parent = root;
 
 	tmpnode->left = root;
-	tmpnode->par = root->par;
-	root->par = tmpnode;
+	tmpnode->parent = root->parent;
+	root->parent = tmpnode;
 
-	if (tmpnode->par != NULL && root->key < tmpnode->par->key) {
-		tmpnode->par->left = tmpnode;
+	if (tmpnode->parent != NULL && root->key < tmpnode->parent->key) {
+		tmpnode->parent->left = tmpnode;
 	} else {
-		if (tmpnode->par != NULL)
-			tmpnode->par->right = tmpnode;
+		if (tmpnode->parent != NULL)
+			tmpnode->parent->right = tmpnode;
 	}
 	root = tmpnode;
 
 	Updateheight(root->left);
 	Updateheight(root->right);
 	Updateheight(root);
-	Updateheight(root->par);
+	Updateheight(root->parent);
 
 	return root;
 }
@@ -138,13 +139,12 @@ Node* Insert(Node* root, Node* parent, int key) {
 		root = new Node;
 
 		if (root == NULL) {
-			cout << "Error in memory"
-				<< endl;
+			cout << "Error in memory" << endl;
 		} else {
 			root->height = 1;
 			root->left = NULL;
 			root->right = NULL;
-			root->par = parent;
+			root->parent = parentent;
 			root->key = key;
 		}
 	} else if (root->key > key) {
@@ -168,8 +168,7 @@ Node* Insert(Node* root, Node* parent, int key) {
 			}
 		}
 	} else if (root->key < key) {
-		root->right = Insert(root->right,
-				root, key);
+		root->right = Insert(root->right, root, key);
 
 		int firstheight = 0;
 		int secondheight = 0;
@@ -199,45 +198,38 @@ Node* Delete(Node* root, int key) {
 	if (root != NULL) {
 
 		if (root->key == key) {
-			if (root->right == NULL
-					&& root->left != NULL) {
-				if (root->par != NULL) {
-					if (root->par->key
-							< root->key)
-						root->par->right = root->left;
+			if (root->right == NULL && root->left != NULL) {
+				if (root->parent != NULL) {
+					if (root->parent->key < root->key)
+						root->parent->right = root->left;
 					else
-						root->par->left = root->left;
-					Updateheight(root->par);
+						root->parent->left = root->left;
+					Updateheight(root->parent);
 				}
-				root->left->par = root->par;
+				root->left->parent = root->parent;
 				root->left = Balance(root->left);
 
 				return root->left;
-			}
-
-			else if (root->left == NULL
-					&& root->right != NULL) {
-				if (root->par != NULL) {
-					if (root->par->key
-							< root->key)
-						root->par->right = root->right;
+			} else if (root->left == NULL && root->right != NULL) {
+				if (root->parent != NULL) {
+					if (root->parent->key < root->key)
+						root->parent->right = root->right;
 					else
-						root->par->left = root->right;
-					Updateheight(root->par);
+						root->parent->left = root->right;
+					Updateheight(root->parent);
 				}
-				root->right->par = root->par;
+				root->right->parent = root->parent;
 				root->right = Balance(root->right);
 
 				return root->right;
-			} else if (root->left == NULL
-					&& root->right == NULL) {
-				if (root->par->key < root->key) {
-					root->par->right = NULL;
+			} else if (root->left == NULL && root->right == NULL) {
+				if (root->parent->key < root->key) {
+					root->parent->right = NULL;
 				} else {
-					root->par->left = NULL;
+					root->parent->left = NULL;
 				}
-				if (root->par != NULL)
-					Updateheight(root->par);
+				if (root->parent != NULL)
+					Updateheight(root->parent);
 				root = NULL;
 
 				return NULL;
@@ -263,24 +255,21 @@ Node* Delete(Node* root, int key) {
 
 			root = Balance(root);
 		}
-
 		if (root != NULL) {
 			Updateheight(root);
 		}
 	} else {
-		cout << "Key to be deleted "
-			<< "could not be found\n";
+		cout << "Key to be deleted " << "could not be found\n";
 	}
 
 	return root;
 }
 
 void printpreorder(Node* root) {
-	cout << "Node: " << root->key
-		<< ", Parent Node: ";
+	cout << "Node: " << root->key << ", parentent Node: ";
 
-	if (root->par != NULL)
-		cout << root->par->key << endl;
+	if (root->parent != NULL)
+		cout << root->parent->key << endl;
 	else
 		cout << "NULL" << endl;
 
@@ -308,4 +297,5 @@ int main() {
 
 	cout << "After deletion:\n";
 	printpreorder(root);
+
 }

@@ -41,6 +41,11 @@ namespace ft {
 				typedef std::size_t									size_type;
 
 			private:
+
+
+
+
+
 				struct Node {
 					value_type		_pair;
 					Node			*parent;
@@ -48,6 +53,9 @@ namespace ft {
 					Node			*right;
 					int				height;
 				};
+
+
+
 
 				class value_compare
 				{   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
@@ -90,7 +98,7 @@ namespace ft {
 				key_compare	_comp;
 
 			public:
-				IteratorMap() : _pos(), _p_end(), _comp() {}
+				IteratorMap() : _pos(NULL) {}
 
 //				operator IteratorMap<const U>() const {
 //					return IteratorMap<const U>(_pos);
@@ -103,7 +111,24 @@ namespace ft {
 				explicit IteratorMap(Node *pos, Node *end, key_compare comp)
 					: _pos(pos), _p_end(end), _comp(comp) {}
 
+
 			public:
+//					IteratorMap(const IteratorMap<U> &it) {
+//						*this = it;
+//					}
+
+//					IteratorMap	&operator=(const IteratorMap<U> &it) {
+//						std::cout << "operator = iterator\n";
+//						_pos = it._pos;
+//						_pos->parent = it._pos->parent;
+//						_pos->left = it._pos->left;
+//						_pos->right = it._pos->right;
+//
+//						_p_end = it._p_end;
+//						_comp = it._comp;
+//						return *this;
+//					}
+
 				~IteratorMap() {}
 
 				reference	operator*() const { return _pos->_pair; }
@@ -131,7 +156,6 @@ namespace ft {
 
 					if (_pos->right) {
 						if (!_pos->right->left || _pos->right == _p_end) {
-//							std::cout << "END\n";
 							_pos = _pos->right;
 						}
 						else {
@@ -152,7 +176,6 @@ namespace ft {
 					IteratorMap	tmp(*this);
 
 					if (_pos == _p_end) {
-//						std::cout << "COCOUCCCCCCC\n";
 						_pos = _p_end->parent;
 						return tmp;
 					} else if (_pos == _p_end->right) {
@@ -176,7 +199,6 @@ namespace ft {
 
 				IteratorMap	&operator--() {
 					if (_pos == _p_end) {
-//						std::cout << "COCOUCCCCCCC\n";
 						_pos = _p_end->parent;
 						return *this;
 					} else if (_pos == _p_end->right) {
@@ -227,7 +249,10 @@ namespace ft {
 						clear();
 						_alloc = map.get_allocator();
 						_comp = map._comp;
+//						std::cout << "Tout est clear!!!\n";
+//						std::cout << _root->_pair.first << '\n';
 						_size = 0;
+//						_p_end = _alloc_node.allocate(1);
 						_root =	NULL;
 						_p_end->parent = NULL;
 						_p_end->left = NULL;
@@ -347,6 +372,8 @@ namespace ft {
 				/* ELEMENT ACCES */
 
 				mapped_type	&operator[](const key_type &k) {
+//					std::cout << mapped_type() << std::endl;
+//					std::cout << ft::make_pair(k, mapped_type()).second <<'\n';
 					return (*((insert(ft::make_pair(k, mapped_type()))).first)).second;
 				};
 
@@ -426,8 +453,7 @@ namespace ft {
 				pair<iterator, bool>	insert(const value_type& val) {
 
 						if (!_root) {
-//							unlinkEnd();
-							_root = insert(_root, NULL, ft::make_pair(val.first, val.second));
+							_root = insert(_root, ft::make_pair(val.first, val.second));
 							linkEnd();
 							return ft::make_pair<iterator, bool>(find(val.first), true);
 						}
@@ -439,21 +465,15 @@ namespace ft {
 						if (tmp)
 							return ft::make_pair<iterator, bool>(find(val.first), false);
 					unlinkEnd();
-					_root = insert(_root, NULL, ft::make_pair(val.first, val.second));
+					_root = insert(_root, ft::make_pair(val.first, val.second));
 					linkEnd();
 					return ft::make_pair<iterator, bool>(find(val.first), true);
 				}
 
 				//with hint (2)
 				iterator	insert(iterator pos, const value_type& val) {
-					(void)pos;
 					insert(val);
-
-					Node	*tmp;
-
-					tmp = search(val.first);
-
-					return iterator(tmp, _p_end, _comp);
+					return pos;
 				}
 
 				//range (3)
@@ -471,25 +491,12 @@ namespace ft {
 				}
 
 				size_type	erase(const key_type &k) {
-//					unlinkEnd();
-					std::cout << "SIZE = " << _size << std::endl;
-					exit(1);
 					Node	*node = search(k);
 
 					if (node) {
 						unlinkEnd();
 						_root = deleteNode(_root, node->_pair);
-						--_size;
-						std::cout << "SIZE = " << _size << std::endl;
-						if (_size == 0 && !_root) {
-							std::cout << "ROOOOOOT =" << std::endl;
-						_root = _p_end;
-//						_p_end->parent = _root;
-//						_p_end->left = NULL;
-//						_p_end->right = NULL;
-//						_p_end->height = 0;
-//							exit(0);
-						}
+						std::cout << "ROOOOOOT =" << _root->_pair.first <<std::endl;
 						linkEnd();
 						return 1;
 					}
@@ -500,7 +507,7 @@ namespace ft {
 				void	erase(iterator first, iterator last) {
 					while (first != last) {
 						erase(first->first);
-//						linkEnd();
+//						this->printTree();
 						++first;
 					}
 				}
@@ -540,14 +547,20 @@ namespace ft {
 //****************************************************************************//
 
 			private:
+				int	height(Node *node) {
+					if (!node)
+						return 0;
+					return node->height;
+				}
+
 				int	max(int a, int b) {
 					return (a > b) ? a : b;
 				}
 
-				Node	*newNode(const value_type &val) {
+				Node	*newNode(value_type pair) {
 					Node	*node = _alloc_node.allocate(1);
 
-					_alloc.construct(&node->_pair, val);
+					_alloc.construct(&node->_pair, pair);
 					node->parent = NULL;
 					node->left = NULL;
 					node->right = NULL;
@@ -557,283 +570,55 @@ namespace ft {
 					return (node);
 				}
 
-				void Updateheight(Node* node) {
-					if (node != NULL) {
-						int val = 1;
+/*
+** T1, T2 and T3 are subtrees of the tree,
+** rooted with y (on the left side) or x (on the right side)
+**
+**     y                               x
+**    / \     Right Rotation          /  \
+**   x   T3   - - - - - - - >        T1   y
+**  / \       < - - - - - - -            / \
+** T1  T2     Left Rotation            T2  T3
+**
+*/
 
-						if (node->left != NULL)
-							val = node->left->height + 1;
+				Node	*rightRotate(Node *y) {
+					Node	*x = y->left;
+					Node	*T2 = x->right;
 
-						if (node->right != NULL)
-							val = max(val, node->right->height + 1);
+					x->right = y;
+					x->parent = y->parent;
+					y->parent = x;
+					y->left = T2;
+					if (y->left)
+						y->left->parent = y;
 
-						node->height = val;
-	}
+					y->height = max(height(y->left), height(y->right)) + 1;
+					x->height = max(height(x->left), height(x->right)) + 1;
+					return x;
 				}
 
-				Node* LLR(Node* node) {
-					Node* tmpnode = node->left;
+				Node	*leftRotate(Node *x) {
+					Node	*y = x->right;
+					Node	*T2 = y->left;
 
-					node->left = tmpnode->right;
-					if (tmpnode->right != NULL)
-						tmpnode->right->parent = node;
+					y->left = x;
+					y->parent = x->parent;
+					x->parent = y;
+					x->right = T2;
 
-					tmpnode->right = node;
-					tmpnode->parent = node->parent;
-					node->parent = tmpnode;
+					if (x->right)
+						x->right->parent = x;
 
-					if (tmpnode->parent != NULL && node->_pair.first < tmpnode->parent->_pair.first) {
-						tmpnode->parent->left = tmpnode;
-					} else {
-						if (tmpnode->parent != NULL)
-							tmpnode->parent->right = tmpnode;
-					}
-					node = tmpnode;
-
-					Updateheight(node->left);
-					Updateheight(node->right);
-					Updateheight(node);
-					Updateheight(node->parent);
-
-					return node;
+					x->height = max(height(x->left), height(x->right)) + 1;
+					y->height = max(height(y->left), height(y->right)) + 1;
+					return y;
 				}
 
-				Node* RRR(Node* node) {
-					Node* tmpnode = node->right;
-
-					node->right = tmpnode->left;
-					if (tmpnode->left != NULL)
-						tmpnode->left->parent = node;
-
-					tmpnode->left = node;
-					tmpnode->parent = node->parent;
-					node->parent = tmpnode;
-
-					if (tmpnode->parent != NULL && node->_pair.first < tmpnode->parent->_pair.first) {
-						tmpnode->parent->left = tmpnode;
-					} else {
-						if (tmpnode->parent != NULL)
-							tmpnode->parent->right = tmpnode;
-					}
-					node = tmpnode;
-
-					Updateheight(node->left);
-					Updateheight(node->right);
-					Updateheight(node);
-					Updateheight(node->parent);
-
-					return node;
-				}
-
-				Node* LRR(Node* node) {
-					node->left = RRR(node->left);
-					return LLR(node);
-				}
-
-				Node* RLR(Node* node) {
-					node->right = LLR(node->right);
-					return RRR(node);
-				}
-
-				Node* Balance(Node* node) {
-					int firstheight = 0;
-					int secondheight = 0;
-
-					if (node->left != NULL)
-						firstheight = node->left->height;
-
-					if (node->right != NULL)
-						secondheight = node->right->height;
-
-					if (abs(firstheight - secondheight) == 2) {
-						if (firstheight < secondheight) {
-
-							int rightheight1 = 0;
-							int rightheight2 = 0;
-							if (node->right->right != NULL)
-								rightheight2 = node->right->right->height;
-
-							if (node->right->left != NULL)
-								rightheight1 = node->right->left->height;
-
-							if (rightheight1 > rightheight2) {
-								node = RLR(node);
-							} else {
-								node = RRR(node);
-							}
-						} else {
-							int leftheight1 = 0;
-							int leftheight2 = 0;
-							if (node->left->right != NULL)
-								leftheight2 = node->left->right->height;
-
-							if (node->left->left != NULL)
-								leftheight1 = node->left->left->height;
-
-							if (leftheight1 > leftheight2) {
-								node = LLR(node);
-							} else {
-								node = LRR(node);
-							}
-						}
-					}
-					return node;
-				}
-
-				Node* insert(Node* node, Node* parent, const value_type &val) {
-//					unlinkEnd();
-					if (node == NULL) {
-						node = newNode(val);
-
-						if (node == NULL) {
-							std::cout << "Error in memory" << std::endl;
-						} else {
-							node->height = 1;
-							node->left = NULL;
-							node->right = NULL;
-							node->parent = parent;
-							_alloc.construct(&node->_pair, val);
-						}
-					} else if (node->_pair.first > val.first) {
-						node->left = insert(node->left, node, val);
-
-						int firstheight = 0;
-						int secondheight = 0;
-
-						if (node->left != NULL)
-							firstheight = node->left->height;
-
-						if (node->right != NULL)
-							secondheight = node->right->height;
-
-						if (abs(firstheight - secondheight) == 2) {
-							if (node->left != NULL && val.first < node->left->_pair.first) {
-								node = LLR(node);
-							} else {
-								node = LRR(node);
-							}
-						}
-					} else if (node->_pair.first < val.first) {
-						node->right = insert(node->right, node, val);
-
-						int firstheight = 0;
-						int secondheight = 0;
-
-						if (node->left != NULL)
-							firstheight = node->left->height;
-
-						if (node->right != NULL)
-							secondheight = node->right->height;
-
-						if (abs(firstheight - secondheight) == 2) {
-							if (node->right != NULL && val.first < node->right->_pair.first) {
-								node = RLR(node);
-							} else {
-								node = RRR(node);
-							}
-						}
-					} else {
-					}
-					Updateheight(node);
-
-					return node;
-				}
-
-				Node* deleteNode(Node* node, const value_type &val) {
-					if (node == _root && _size == 1) {
-//						std::cout << "LAST\n";
-						_alloc_node.destroy(&node->_pair);
-						_alloc_node.deallocate(node, 1);
-
-						node = NULL;
-						return NULL;
-					}
-					if (node != NULL) {
-						if (node->_pair.first == val.first) {
-							if (node->right == NULL && node->left != NULL) {
-								if (node->parent != NULL) {
-									if (node->parent->_pair.first < node->_pair.first)
-										node->parent->right = node->left;
-									else
-										node->parent->left = node->left;
-									Updateheight(node->parent);
-								}
-								node->left->parent = node->parent;
-								node->left = Balance(node->left);
-
-								return node->left;
-							} else if (node->left == NULL && node->right != NULL) {
-								if (node->parent != NULL) {
-									if (node->parent->_pair.first < node->_pair.first)
-										node->parent->right = node->right;
-									else
-										node->parent->left = node->right;
-									Updateheight(node->parent);
-								}
-								node->right->parent = node->parent;
-								node->right = Balance(node->right);
-
-								return node->right;
-							} else if (node->left == NULL && node->right == NULL) {
-								if (node->parent->_pair.first < node->_pair.first) {
-									node->parent->right = NULL;
-								} else {
-									node->parent->left = NULL;
-								}
-								if (node->parent != NULL)
-									Updateheight(node->parent);
-								node = NULL;
-
-								return NULL;
-							} else {
-								Node* tmpnode = node;
-
-								tmpnode = tmpnode->right;
-								while (tmpnode->left != NULL) {
-									tmpnode = tmpnode->left;
-								}
-								ft::pair<key_type, mapped_type>tmpval
-									= ft::make_pair(tmpnode->_pair.first, tmpnode->_pair.second);
-
-								node->right = deleteNode(node->right, tmpnode->_pair);
-								_alloc_node.destroy(&node->_pair);
-								_alloc.construct(&node->_pair, tmpval);
-								node = Balance(node);
-							}
-						} else if (node->_pair.first < val.first) {
-							node->right = deleteNode(node->right, val);
-
-							node = Balance(node);
-						} else if (node->_pair.first > val.first) {
-							node->left = deleteNode(node->left, val);
-
-							node = Balance(node);
-						}
-						if (node != NULL) {
-							Updateheight(node);
-						}
-					} else {
-						std::cout << "Key to be deleted " << "could not be found\n";
-					}
-				
-					return node;
-				}
-
-				void printpreorder(Node* node) {
-					std::cout << "Node: " << node->_pair.first << ", parent Node: ";
-
-					if (node->parent != NULL)
-						std::cout << node->parent->_pair.first << std::endl;
-					else
-						std::cout << "NULL" << std::endl;
-
-					if (node->left != NULL) {
-						printpreorder(node->left);
-					}
-
-					if (node->right != NULL) {
-						printpreorder(node->right);
-					}
+				int	getBalance(Node *node) {
+					if (!node)
+						return 0;
+					return height(node->left) - height(node->right);
 				}
 
 				Node	*search(const key_type &k) const {
@@ -857,6 +642,47 @@ namespace ft {
 					return NULL;
 				}
 
+				Node	*insert(Node *node, value_type pair) {
+					if (!node) {
+						return (newNode(pair));
+					}
+
+					unlinkEnd();
+					if (pair.first < node->_pair.first) {
+						node->left = insert(node->left, pair);
+						node->left->parent = node;
+					} else if (pair.first > node->_pair.first) {
+						node->right = insert(node->right, pair);
+						node->right->parent = node;
+					} else {
+						linkEnd();
+						return node;
+					}
+
+					node->height = 1 + max(height(node->left), height(node->right));
+
+					int balance = getBalance(node);
+
+					if (balance > 1 && pair.first < node->left->_pair.first)
+						return rightRotate(node);
+
+					if (balance < -1 && pair.first > node->right->_pair.first)
+						return leftRotate(node);
+
+					if (balance > 1 && pair.first > node->left->_pair.first) {
+						node->left = leftRotate(node->left);
+						return rightRotate(node);
+					}
+
+					if (balance < -1 && pair.first < node->right->_pair.first) {
+						node->right = rightRotate(node->right);
+						return leftRotate(node);
+					}
+
+					linkEnd();
+					return node;
+				}
+
 				void	preOrder(Node *root) {
 					if (root && root != _p_end) {
 						std::cout << "First: " << root->_pair.first
@@ -877,21 +703,17 @@ namespace ft {
 
 						tmp = maxValueNode(_root, _p_end);
 //						std::cout << "LINK MAX = " << tmp->_pair.first << std::endl;
-//						if (tmp) {
-							tmp->right = _p_end;
-							_p_end->parent = tmp;
-//						}
-					} else {
-						_root = _p_end;
+						tmp->right = _p_end;
+						_p_end->parent = tmp;
 					}
 				}
 
 				void	unlinkEnd() {
 					if (_root) {
-//						if (_p_end->parent) {
+						if (_p_end->parent) {
 //							if (_p_end->parent->right)
 								_p_end->parent->right = NULL;
-//						}
+						}
 					}
 				}
 
@@ -909,6 +731,81 @@ namespace ft {
 					if (root->right->_pair.first > root->_pair.first)
 						return maxValueNode(root->right, end);
 					return root;
+				}
+
+				Node	*deleteNode(Node *node, const value_type &val) {
+					if (!node) {
+						return node;
+					}
+					if (val.first < node->_pair.first)
+						node->left = deleteNode(node->left, val);
+					else if (val.first > node->_pair.first)
+						node->right = deleteNode(node->right, val);
+					else {
+						if (!node->left || !node->right) {
+							Node	*tmp = node->left ? node->left : node->right;
+
+							if (!tmp) {
+								tmp = node;
+//								if (node->parent)
+//									tmp->parent->left = NULL;
+//									tmp->parent->right = NULL;
+//								node->parent->right = NULL;
+								std::cout << "NULLLL\n";
+								node = NULL;
+							} else {
+
+								node->parent = tmp->parent;
+//								if (node->parent)
+//									std::cout << "PARENT = " << node->parent->_pair.first << std::endl;
+								node->left = tmp->left;
+//								if (node->left)
+//									std::cout << "left = " << node->left->_pair.first << std::endl;
+								node->right = tmp->right;
+//								if (node->right)
+//									std::cout << "right = " << node->right->_pair.first << std::endl;
+								node->height = tmp->height;
+
+								_alloc_node.destroy(&node->_pair);
+								_alloc.construct(&node->_pair, tmp->_pair);
+							}
+							_alloc_node.destroy(&tmp->_pair);
+							_alloc_node.deallocate(tmp, 1);
+							--_size;
+						} else {
+							Node	*tmp = minValueNode(node->right);
+
+							_alloc_node.destroy(&node->_pair);
+							_alloc.construct(&node->_pair, tmp->_pair);
+
+							node->right = deleteNode(node->right, tmp->_pair);
+						}
+					}
+					if (!node) {
+						return node;
+					}
+
+					node->height = 1 + max(height(node->left),
+											height(node->right));
+
+					int	balance = getBalance(node);
+
+					if (balance > 1 && getBalance(node->left) >= 0)
+						return rightRotate(node);
+
+					if (balance > 1 && getBalance(node->left) < 0) {
+						node->left = leftRotate(node->left);
+						return rightRotate(node);
+					}
+
+					if (balance < -1 && getBalance(node->right) <= 0)
+						return leftRotate(node);
+
+					if (balance < -1 && getBalance(node->right) > 0) {
+						node->right = rightRotate(node->right);
+						return leftRotate(node);
+					}
+					return node;
 				}
 
 				void	destroyTree() {
