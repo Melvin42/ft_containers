@@ -222,7 +222,9 @@ void	test_map() {
 //	ft::map<int, int>::iterator	it = --ftMap.end();
 //	ft::map<int, int>::iterator	ite = ++(++(++ftMap.begin()));
 //	ft::map<int, int>::iterator	ite = ftMap.begin();
-	ft::map<int, int>::iterator	ite = ftMap.end();
+//	ft::map<int, int>::iterator	ite = --ftMap.end();
+
+//	std::cout << "--end first = " << ite->first << std::endl;
 //	ft::map<int, int>::iterator	it = --(--(--ftMap.end()));
 //	ft::map<int, int>::iterator	ite = --ftMap.end();
 
@@ -240,14 +242,16 @@ void	test_map() {
 //	ftMap[11] = "Hi there";
 //	printMap(ftMap);
 
+//	std::cout << "To erase start = " << (++(++(++ftMap.begin())))->first << std::endl;
 //	ftMap.erase(ftMap.begin(), ++(++(++ftMap.begin())));
-	ftMap.erase(--(--(--ftMap.end())), ftMap.end());
-
-
-
-
-
-
+//	std::cout << "To erase start = " << (--(--(--ftMap.end())))->first << std::endl;
+//	std::cout << "To erase start = " << (--(--(--ftMap.end())))->first << std::endl;
+//	std::cout << "To erase start = " << (--(--(--(--ftMap.end()))))->first << std::endl;
+	ftMap.erase(ftMap.begin(), ftMap.end());
+//	ftMap.erase(--(--(--ftMap.end())), ftMap.end());
+//	ftMap.erase(--(--(--ftMap.end())), --ftMap.end());
+//	ftMap.erase(--(--(--ftMap.end())), ite);
+	ftMap.printTree();
 
 
 
