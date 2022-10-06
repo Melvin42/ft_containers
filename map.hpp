@@ -162,7 +162,6 @@ namespace ft {
 						_pos = _pos->parent;
 						return tmp;
 					}
-
 					if (_pos->left) {
 						if (!_pos->left->right)
 							_pos = _pos->left;
@@ -193,7 +192,6 @@ namespace ft {
 						_pos = _pos->parent;
 						return *this;
 					}
-
 					if (_pos->left) {
 						if (!_pos->left->right)
 							_pos = _pos->left;
@@ -507,29 +505,38 @@ namespace ft {
 					Node	*tmp = position._pos->parent;
 
 					if (!position._pos->left && !position._pos->right) {
+						std::cout << "last Node = root\n";
 						if (tmp != NULL) {
 							if (tmp->left == position._pos)
 								tmp->left = NULL;
 							else
 								tmp->right = NULL;
 						} else {
+						std::cout << "last Node = root\n";
 							_root = NULL; // delete le root
+//							_root->left = NULL; // delete le root
+//							_root->parent = NULL; // delete le root
 						}
+						if (_root->right == position._pos)
+							_root->right = tmp;
 						_alloc_node.destroy(&position._pos->_pair);
 						_alloc_node.deallocate(position._pos, 1);
 						--_size;
 						if (tmp != NULL)
 							tmp = Balance(tmp);
 						linkEnd();
+						printTree();
 						return ;
 
 					} else if (!position._pos->left && position._pos->right) {
+						std::cout << "RIGHT\n";
 						if (!tmp) {
 							_root = position._pos->right;
 							_root->parent = NULL;
 							_alloc_node.destroy(&position._pos->_pair);
 							_alloc_node.deallocate(position._pos, 1);
 							--_size;
+						linkEnd();
 							return ;
 						}
 						if (tmp->left == position._pos)
@@ -549,11 +556,14 @@ namespace ft {
 						linkEnd();
 						return ;
 
-					} else if (position._pos->left && !position._pos->right) {
-						if (tmp->left == position._pos)
-							tmp->left = position._pos->left;
-						else
-							tmp->right = position._pos->left;
+					} else if (tmp && position._pos->left && !position._pos->right) {
+						std::cout << "LEFT\n";
+//						if (tmp) {
+							if (tmp->left == position._pos)
+								tmp->left = position._pos->left;
+							else
+								tmp->right = position._pos->left;
+//						}
 						position._pos->left->parent = tmp;
 						if (_root->right == position._pos)
 							_root->right = minValueNode(tmp);
@@ -563,20 +573,21 @@ namespace ft {
 						if (tmp != NULL)
 							tmp = Balance(tmp);
 						linkEnd();
+						printTree();
 						return ;
 					} else {
 
+						std::cout << "ELSE\n";
 //						linkEnd();
 //						std::cout << "COUCOUCCCCCCCCCCCCCCCCCCCCCCCCC\n";
 
-						if (position._pos->right == _p_end) {
-							unlinkEnd();
-							Node *current = position._pos->left;
+						if (position._pos->left && !position._pos->right && !position._pos->parent) {
 
+							Node	*current = position._pos->left;
 							while (current->right)
 								current = current->right;
 							current->right = _root;
-							_root->left = _root;
+							_root->left = current;
 							if (tmp) {
 								if (tmp->left == position._pos)
 									tmp->left = position._pos->left;
@@ -597,6 +608,7 @@ namespace ft {
 							Node	*current = minValueNode(position._pos->right);
 
 //						std::cout << "COUCOUCCCCCCCCCCCCCCCCCCCCCCCCC\n";
+							_alloc_node.destroy(&position._pos->_pair);
 							if (current != position._pos->right) {
 								current->parent->left = current->right;
 								if (current->right)
@@ -616,7 +628,6 @@ namespace ft {
 							current->left = position._pos->left;
 							if (current->left)
 								current->left->parent = current;
-							_alloc_node.destroy(&position._pos->_pair);
 							_alloc_node.deallocate(position._pos, 1);
 							--_size;
 							if (tmp != NULL)

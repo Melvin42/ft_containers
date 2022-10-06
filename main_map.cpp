@@ -208,12 +208,12 @@ void	test_map() {
 //	ftMap.erase(--ftMap.end());
 //	ftMap.printTree();
 //	printMap(ftMap);
-//	ftMap.erase(2);
-//	ftMap.erase(3);
+	ftMap.erase(3);
 //	ftMap.erase(4);
 //	ftMap.erase(5);
-//	ftMap.erase(1);
-//	printMap(ftMap);
+	ftMap.erase(1);
+	ftMap.erase(2);
+	printMap(ftMap);
 //	++it;
 
 //	ftMap.erase(++(++(++ftMap.begin())));
@@ -230,7 +230,7 @@ void	test_map() {
 //	ft::map<int, int>::iterator	it = --(--(--ftMap.end()));
 //	ft::map<int, int>::iterator	ite = --ftMap.end();
 
-	ftMap.erase(it, ite);
+//	ftMap.erase(it, ite);
 //	while (it != ite) {
 //		std::cout << "main to delete = " << it->first << std::endl;
 //		std::cout << "main size = " << ftMap.size() << std::endl;
