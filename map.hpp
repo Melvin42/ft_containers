@@ -111,18 +111,7 @@ namespace ft {
 				IteratorMap	operator++(int) {
 					IteratorMap	tmp(*this);
 
-					if (_pos->right) {
-						if (!_pos->right->left || _pos->right == _p_end)
-							_pos = _pos->right;
-						else
-							_pos = ft::map<Key, T, Compare, Alloc>::minValueNode(_pos->right);
-					} else if (_pos->parent) {
-						Node	*tmpNode = _pos;
-
-						_pos = _pos->parent;
-						while (_pos && _comp(tmpNode->_pair.first, _pos->_pair.first) == false)
-							_pos = _pos->parent;
-					}
+					operator++();
 					return tmp;
 				}
 
@@ -149,47 +138,15 @@ namespace ft {
 				IteratorMap	operator--(int) {
 					IteratorMap	tmp(*this);
 
-					if (_pos == _p_end) {
-						_pos = _p_end->parent;
-						return tmp;
-					}
-					if (!_pos->parent) {
-						if (_pos->left)
-							_pos = _pos->left;
-						return tmp;
-					} else if (_pos->parent && _pos->parent->parent == NULL
-							&& _comp(_pos->_pair.first, _pos->parent->_pair.first)) {
-						_pos = _pos->parent;
-						return tmp;
-					}
-					if (_pos->left) {
-						if (!_pos->left->right)
-							_pos = _pos->left;
-						else
-							_pos = ft::map<Key, T, Compare, Alloc>::maxValueNode(_pos->left, _p_end);
-					} else if (_pos->parent) {
-						Node	*tmpNode = _pos;
-
-						_pos = _pos->parent;
-						while (_pos && _comp(_pos->_pair.first, tmpNode->_pair.first) == false)
-							_pos = _pos->parent;
-					}
+					operator--();
 					return tmp;
 				}
 
 				IteratorMap	&operator--() {
 
+
 					if (_pos == _p_end) {
 						_pos = _p_end->parent;
-						return *this;
-					}
-					if (!_pos->parent) {
-						if (_pos->left)
-							_pos = _pos->left;
-						return *this;
-					} else if (_pos->parent && _pos->parent->parent == NULL
-							&& _comp(_pos->_pair.first, _pos->parent->_pair.first)) {
-						_pos = _pos->parent;
 						return *this;
 					}
 					if (_pos->left) {
@@ -288,7 +245,6 @@ namespace ft {
 					_p_end->height = 0;
 
 					insert(map.begin(), map.end());
-//					linkEnd();
 				}
 
 				~map() {
@@ -501,6 +457,26 @@ namespace ft {
 
 				void	erase(iterator position) {
 					unlinkEnd();
+					if (_size > 1) {
+						_root = deleteNode(_root, position._pos->_pair);
+
+					} else if (_size == 1) {
+						if (_root && _root->_pair.first == position->first) {
+	//						Node	*tmp = position._pos->parent;
+
+//					std::cout << "VAL = " << position->first << std::endl;
+							_root = NULL;
+//							_alloc_node.destroy(&position._pos->_pair);
+//							_alloc_node.deallocate(position._pos, 1);
+						}
+					}
+					--_size;
+					linkEnd();
+				}
+
+				/*
+				void	erase(iterator position) {
+					unlinkEnd();
 
 					Node	*tmp = position._pos->parent;
 
@@ -527,7 +503,9 @@ namespace ft {
 						linkEnd();
 						printTree();
 						return ;
+						*/
 
+/*
 					} else if (!position._pos->left && position._pos->right) {
 						std::cout << "RIGHT\n";
 						if (!tmp) {
@@ -637,6 +615,7 @@ namespace ft {
 						}
 					}
 				}
+*/
 
 				size_type	erase(const key_type &k) {
 					Node	*node = search(k);
@@ -648,9 +627,12 @@ namespace ft {
 				}
 
 				void	erase(iterator first, iterator last) {
+//					iterator	tmp;
+
 					while (first != last) {
-						erase(first);
-						++first;
+//						tmp = first++;
+//						erase(tmp);
+						erase(first++);
 					}
 				}
 
@@ -902,6 +884,7 @@ namespace ft {
 								node->left->parent = node->parent;
 								node->left = Balance(node->left);
 
+//								--_size;
 								return node->left;
 							} else if (node->left == NULL && node->right != NULL) {
 								if (node->parent != NULL) {
@@ -914,6 +897,7 @@ namespace ft {
 								node->right->parent = node->parent;
 								node->right = Balance(node->right);
 
+//								--_size;
 								return node->right;
 							} else if (node->left == NULL && node->right == NULL) {
 								if (node->parent->_pair.first < node->_pair.first) {
@@ -923,8 +907,7 @@ namespace ft {
 								}
 								if (node->parent != NULL)
 									Updateheight(node->parent);
-//								_alloc_node.destroy(&node->_pair);
-//								_alloc_node.deallocate(node, 1);
+//								--_size;
 								node = NULL;
 								return NULL;
 							} else {
@@ -957,7 +940,7 @@ namespace ft {
 					} else {
 						std::cout << "Key to be deleted " << "could not be found\n";
 					}
-				
+
 					return node;
 				}
 
@@ -1022,19 +1005,20 @@ namespace ft {
 //						if (tmp) {
 							tmp->right = _p_end;
 							_p_end->parent = tmp;
-//						}
-					} else {
+						}
+//					} else {
 //						if (!_root)
 //							std::cout << "LINK NO ROOT\n";
 //						_root = _p_end;
-					}
+//					}
 				}
 
 				void	unlinkEnd() {
 					if (_root) {
-						_p_end->parent->right = NULL;
+						if (_p_end->parent)
+							_p_end->parent->right = NULL;
 					} else {
-//						_p_end->parent = NULL;
+						_p_end->parent = NULL;
 					}
 				}
 
