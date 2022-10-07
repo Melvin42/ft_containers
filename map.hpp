@@ -312,8 +312,27 @@ namespace ft {
 				/* ELEMENT ACCES */
 
 				mapped_type	&operator[](const key_type &k) {
+					/*
+					if (!_root) {
+//						unlinkEnd();
+						_root = insert(_root, NULL, ft::make_pair(val.first, val.second));
+						linkEnd();
+						return ft::make_pair<iterator, bool>(find(val.first), true);
+					}
+					linkEnd();
+					Node	*tmp;
+
+					tmp = search(val.first);
+
+					if (tmp)
+						return ft::make_pair<iterator, bool>(find(val.first), false);
+					unlinkEnd();
+					_root = insert(_root, NULL, ft::make_pair(val.first, val.second));
+					linkEnd();
+					return ft::make_pair<iterator, bool>(find(val.first), true);
+					*/
 					return (*((insert(ft::make_pair(k, mapped_type()))).first)).second;
-				};
+				}
 
 				/* UTILS */
 
@@ -414,19 +433,19 @@ namespace ft {
 				//single element (1)
 				pair<iterator, bool>	insert(const value_type& val) {
 
-						if (!_root) {
-//							unlinkEnd();
-							_root = insert(_root, NULL, ft::make_pair(val.first, val.second));
-							linkEnd();
-							return ft::make_pair<iterator, bool>(find(val.first), true);
-						}
+					if (!_root) {
+//						unlinkEnd();
+						_root = insert(_root, NULL, ft::make_pair(val.first, val.second));
 						linkEnd();
-						Node	*tmp;
+						return ft::make_pair<iterator, bool>(find(val.first), true);
+					}
+					linkEnd();
+					Node	*tmp;
 
-						tmp = search(val.first);
+					tmp = search(val.first);
 
-						if (tmp)
-							return ft::make_pair<iterator, bool>(find(val.first), false);
+					if (tmp)
+						return ft::make_pair<iterator, bool>(find(val.first), false);
 					unlinkEnd();
 					_root = insert(_root, NULL, ft::make_pair(val.first, val.second));
 					linkEnd();
@@ -451,26 +470,39 @@ namespace ft {
 //					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0) {
 						while (first != last) {
 							this->insert(*first);
+//							this->insert(first, *first);
 							++first;
 						}
 					}
 
 				void	erase(iterator position) {
-					unlinkEnd();
+						unlinkEnd();
+//					if (position._pos == _p_end)
+//						return ;
 					if (_size > 1) {
 						_root = deleteNode(_root, position._pos->_pair);
 
 					} else if (_size == 1) {
-						if (_root && _root->_pair.first == position->first) {
+//						std::cout << "SEGGGGGGGGGGGGGGGG\n";
+//						if (_root && _root->_pair.first == position->first) {
 	//						Node	*tmp = position._pos->parent;
 
 //					std::cout << "VAL = " << position->first << std::endl;
 							_root = NULL;
+//						unlinkEnd();
 //							_alloc_node.destroy(&position._pos->_pair);
 //							_alloc_node.deallocate(position._pos, 1);
-						}
+//						}
 					}
 					--_size;
+//					if (_size == 1) {
+//						_root->parent = NULL;
+//						_root->left = NULL;
+//						_root->height = 1;
+//						_root->right = _p_end;
+//						_p_end->parent = _root;
+//						return ;
+//					}
 					linkEnd();
 				}
 
@@ -1005,12 +1037,12 @@ namespace ft {
 //						if (tmp) {
 							tmp->right = _p_end;
 							_p_end->parent = tmp;
-						}
-//					} else {
+//						}
+					} else {
 //						if (!_root)
 //							std::cout << "LINK NO ROOT\n";
-//						_root = _p_end;
-//					}
+						_p_end->parent = _root;
+					}
 				}
 
 				void	unlinkEnd() {
