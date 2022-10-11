@@ -132,6 +132,7 @@ namespace ft {
 								_pos = _pos->parent;
 						}
 					}
+//					std::cout << "OPE ++ = " << _pos->_pair.first << std::endl;
 					return *this;
 				}
 
@@ -161,6 +162,7 @@ namespace ft {
 						while (_pos && _comp(_pos->_pair.first, tmpNode->_pair.first) == false)
 							_pos = _pos->parent;
 					}
+//					std::cout << "OPE -- = " << _pos->_pair.first << std::endl;
 					return *this;
 				}
 
@@ -248,7 +250,8 @@ namespace ft {
 				}
 
 				~map() {
-					clear();
+					if (_root)
+						clear();
 					_alloc_node.deallocate(_p_end, 1);
 				}
 
@@ -275,6 +278,7 @@ namespace ft {
 				}
 
 				iterator				end() {
+//					linkEnd();
 					return iterator(_p_end, _p_end, _comp);
 				}
 
@@ -434,6 +438,7 @@ namespace ft {
 				pair<iterator, bool>	insert(const value_type& val) {
 
 					if (!_root) {
+//						std::cout << "INSERT ROOT\n";
 //						unlinkEnd();
 						_root = insert(_root, NULL, ft::make_pair(val.first, val.second));
 						linkEnd();
@@ -476,34 +481,23 @@ namespace ft {
 					}
 
 				void	erase(iterator position) {
-						unlinkEnd();
-//					if (position._pos == _p_end)
-//						return ;
+//					std::cout << "Erase\n" << std::endl;
 					if (_size > 1) {
+						unlinkEnd();
+//						std::cout << "Node = " << position._pos->_pair.first << std::endl;
 						_root = deleteNode(_root, position._pos->_pair);
-
+						--_size;
+						linkEnd();
 					} else if (_size == 1) {
-//						std::cout << "SEGGGGGGGGGGGGGGGG\n";
-//						if (_root && _root->_pair.first == position->first) {
-	//						Node	*tmp = position._pos->parent;
-
-//					std::cout << "VAL = " << position->first << std::endl;
-							_root = NULL;
-//						unlinkEnd();
-//							_alloc_node.destroy(&position._pos->_pair);
-//							_alloc_node.deallocate(position._pos, 1);
-//						}
+						_alloc_node.destroy(&_root->_pair);
+						_alloc_node.deallocate(_root, 1);
+						_root = NULL;
+						--_size;
+						linkEnd();
 					}
-					--_size;
-//					if (_size == 1) {
-//						_root->parent = NULL;
-//						_root->left = NULL;
-//						_root->height = 1;
-//						_root->right = _p_end;
-//						_p_end->parent = _root;
-//						return ;
-//					}
-					linkEnd();
+//					if (_size > 0)
+//						--_size;
+//					std::cout << "Size = " << _size << std::endl;
 				}
 
 				/*
@@ -541,7 +535,7 @@ namespace ft {
 					} else if (!position._pos->left && position._pos->right) {
 						std::cout << "RIGHT\n";
 						if (!tmp) {
-							_root = position._pos->right;
+							_root = position._p/os->right;
 							_root->parent = NULL;
 							_alloc_node.destroy(&position._pos->_pair);
 							_alloc_node.deallocate(position._pos, 1);
@@ -851,11 +845,11 @@ namespace ft {
 						if (node == NULL) {
 							std::cout << "Error in memory" << std::endl;
 						} else {
-							node->height = 1;
-							node->left = NULL;
-							node->right = NULL;
+//							node->height = 1;
+//							node->left = NULL;
+//							node->right = NULL;
 							node->parent = parent;
-							_alloc.construct(&node->_pair, val);
+//							_alloc.construct(&node->_pair, val);
 						}
 					} else if (node->_pair.first > val.first) {
 						node->left = insert(node->left, node, val);
@@ -903,9 +897,11 @@ namespace ft {
 				}
 
 				Node* deleteNode(Node* node, const value_type &val) {
+//								std::cout << "ERASE = " << node->_pair.first << std::endl;
 					if (node != NULL) {
 						if (node->_pair.first == val.first) {
 							if (node->right == NULL && node->left != NULL) {
+//								std::cout << "One Left\n";
 								if (node->parent != NULL) {
 									if (node->parent->_pair.first < node->_pair.first)
 										node->parent->right = node->left;
@@ -916,21 +912,35 @@ namespace ft {
 								node->left->parent = node->parent;
 								node->left = Balance(node->left);
 
-//								--_size;
-								return node->left;
+								Node	*tmp = node->left;
+
+								_alloc_node.destroy(&node->_pair);
+								_alloc_node.deallocate(node, 1);
+								node = NULL;
+								return tmp;
 							} else if (node->left == NULL && node->right != NULL) {
+//								std::cout << "One right\n";
 								if (node->parent != NULL) {
+//									std::cout << "PARENT = " << node->parent->_pair.first << "\n";
+//									std::cout << "this = " << node->_pair.first << "\n";
 									if (node->parent->_pair.first < node->_pair.first)
 										node->parent->right = node->right;
 									else
 										node->parent->left = node->right;
 									Updateheight(node->parent);
 								}
-								node->right->parent = node->parent;
-								node->right = Balance(node->right);
 
-//								--_size;
-								return node->right;
+								node->right->parent = node->parent;
+
+
+								node->right = Balance(node->right);
+								Node	*tmp = node->right;
+
+//								std::cout << "ERASE = " << node->_pair.first << std::endl;
+								_alloc_node.destroy(&node->_pair);
+								_alloc_node.deallocate(node, 1);
+								node = NULL;
+								return tmp;
 							} else if (node->left == NULL && node->right == NULL) {
 								if (node->parent->_pair.first < node->_pair.first) {
 									node->parent->right = NULL;
@@ -939,23 +949,43 @@ namespace ft {
 								}
 								if (node->parent != NULL)
 									Updateheight(node->parent);
-//								--_size;
+
+//								std::cout << "BIIPPP\n";
+
+								_alloc_node.destroy(&node->_pair);
+								_alloc_node.deallocate(node, 1);
 								node = NULL;
 								return NULL;
 							} else {
-								Node* tmpnode = node;
+//								Node* tmpnode = node;
+								Node* tmpnode = minValueNode(node->right);
+								if (tmpnode != node->right) {
+//										value_type tmpval
+//											= ft::make_pair(tmpnode->_pair.first, tmpnode->_pair.second);
+									_alloc_node.destroy(&node->_pair);
+									_alloc.construct(&node->_pair, tmpnode->_pair);
+									node->right = deleteNode(node->right, tmpnode->_pair);
+//									std::cout << "VAL = " << node->_pair.first << std::endl;
+									node = Balance(node);
+								} else {
+//								std::cout << "ERASE = " << node->_pair.first << std::endl;
+//								std::cout << "ERASE = " << node->right->_pair.first << std::endl;
+//									_alloc_node.deallocate(node->right, 1);
+//									node->right = NULL;
+//									node->right = deleteNode(node->right, tmpnode->_pair);
+//									_alloc_node.destroy(&node->_pair);
 
-								tmpnode = tmpnode->right;
-								while (tmpnode->left != NULL) {
-									tmpnode = tmpnode->left;
+//									_alloc.construct(&node->_pair, tmpnode->_pair);
+									
+									
+
+									node = Balance(node);
+//									std::cout << "node = " << node->_pair.first << std::endl;
+
+//									node->parent->right = NULL;
+//									node = NULL;
+//									return node;
 								}
-								ft::pair<key_type, mapped_type>tmpval
-									= ft::make_pair(tmpnode->_pair.first, tmpnode->_pair.second);
-
-								node->right = deleteNode(node->right, tmpnode->_pair);
-								_alloc_node.destroy(&node->_pair);
-								_alloc.construct(&node->_pair, tmpval);
-								node = Balance(node);
 							}
 						} else if (node->_pair.first < val.first) {
 							node->right = deleteNode(node->right, val);
@@ -970,7 +1000,7 @@ namespace ft {
 							Updateheight(node);
 						}
 					} else {
-						std::cout << "Key to be deleted " << "could not be found\n";
+//						std::cout << "Key to be deleted " << "could not be found\n";
 					}
 
 					return node;
@@ -1029,29 +1059,29 @@ namespace ft {
 				}
 
 				void	linkEnd() {
-					if (_root && _size > 0) {
+					if (_root && _size > 1) {
 						Node	*tmp;
 
 						tmp = maxValueNode(_root, _p_end);
-//						std::cout << "LINK MAX = " << tmp->_pair.first << std::endl;
-//						if (tmp) {
+						if (tmp) {
+//							std::cout << "LINK MAX = " << tmp->_pair.first << std::endl;
 							tmp->right = _p_end;
 							_p_end->parent = tmp;
-//						}
-					} else {
-//						if (!_root)
-//							std::cout << "LINK NO ROOT\n";
+						}
+					} else if (_size == 1) {
+//						std::cout << "LINK ROOT = " << _root->_pair.first << std::endl;
+						_root->right = _p_end;
 						_p_end->parent = _root;
+					} else {
+//						std::cout << "LINK EMPTY" << std::endl;
+						_p_end->parent = NULL;
 					}
 				}
 
 				void	unlinkEnd() {
-					if (_root) {
+					if (_p_end)
 						if (_p_end->parent)
 							_p_end->parent->right = NULL;
-					} else {
-						_p_end->parent = NULL;
-					}
 				}
 
 				static Node	*minValueNode(Node *root) {
