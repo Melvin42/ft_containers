@@ -73,13 +73,13 @@ template<class T1, class T2>
 template<typename MAP, typename U>
 void	ft_erase(MAP &mp, U param) {
 	mp.erase(param);
-//	printMap(mp);
+	printMap(mp);
 }
 
 template<typename MAP, typename U, typename V>
 void	ft_erase(MAP &mp, U param, V param2) {
 	mp.erase(param, param2);
-//	printMap(mp);
+	printMap(mp);
 }
 
 void	test_pair() {
@@ -228,27 +228,37 @@ void	test_map() {
 //	stdMap.insert(std::make_pair(13, "wouh"));
 
 	ftMap2.printTree();
-	std::cout << "LAST ERASE\n";
-	ft::map<int, std::string>::iterator	it = --(--(--ftMap2.end()));
-	std::cout << "val = " << it->first << std::endl;
-	std::map<int, std::string>::iterator	stdit = --(--(--stdMap.end()));;
-	std::cout << "val = " << stdit->first << std::endl;
+//	std::cout << "LAST ERASE\n";
+//	ft::map<int, std::string>::iterator	it = --(--(--ftMap2.end()));
+//	ft::map<int, std::string>::iterator	it = ++(ftMap2.begin());
+//	std::cout << "val = " << it->first << std::endl;
+//	std::map<int, std::string>::iterator	stdit = --(--(--stdMap.end()));;
+//	std::cout << "val = " << stdit->first << std::endl;
 //	ft_erase(ftMap2, --(--ftMap2.end()), ftMap2.end());
-	ft_erase(ftMap2, --(--(--ftMap2.end())), ftMap2.end());
+//	ft_erase(ftMap2, --(--(--ftMap2.end())), ftMap2.end());
 	std::cout << ftMap2.size() << std::endl;
 //	ft_erase(ftMap2, --(--(--ftMap2.end())));
+//	ft_erase(ftMap2, it);
 //	ftMap2.printTree();
 //	ft_erase(ftMap2, (--(--ftMap2.end()))->first);
 //	ft_erase(ftMap2, 10);
 //	ft_erase(ftMap2, 5);
 //	ft_erase(ftMap2, 11);
-//	ft_erase(ftMap2, --(--ftMap2.end()));
-//	ft_erase(ftMap2, 8);
+	ft_erase(ftMap2, ftMap2.begin(), ftMap2.end());
+//	ft_erase(ftMap2, ftMap2.begin());
+//	ft_erase(ftMap2, ftMap2.begin());
+	ftMap2.printTree();
+//	ft_erase(ftMap2, ftMap2.begin());
+//	ft_erase(ftMap2, ftMap2.begin());
+
+//	ft_erase(ftMap2, --(ftMap2.end()));
+//	ft_erase(ftMap2, --(ftMap2.end()));
+//	ft_erase(ftMap2, --(ftMap2.end()));
 //	ft_erase(ftMap2, 10);
 //	ft_erase(ftMap2, 11);
 //	ft_erase(ftMap2, ftMap2.begin()->first);
 //	ft_erase(ftMap2, (--ftMap2.end())->first);
-///	ft_erase(ftMap2, --(--ftMap2.end()), ftMap2.end());
+//	ft_erase(ftMap2, ftMap2.begin(), ftMap2.end());
 //	ft_erase(ftMap2, ftMap2.begin(), ftMap2.end());
 //	ftMap.insert(ft::make_pair(10, "hey"));
 //	ftMap.insert(ft::make_pair(11, "wouh"));

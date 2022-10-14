@@ -251,7 +251,8 @@ namespace ft {
 				~map() {
 					if (_root)
 						clear();
-					_alloc_node.deallocate(_p_end, 1);
+					if (_p_end)
+						_alloc_node.deallocate(_p_end, 1);
 				}
 
 				allocator_type	get_allocator() const {
@@ -481,6 +482,87 @@ namespace ft {
 
 				void	erase(iterator position) {
 					unlinkEnd();
+
+					Node	*tmp = position._pos->parent;
+
+					if (position._pos->left == NULL && position._pos->right == NULL) {
+						if (tmp != NULL) {
+							if (tmp->left == position._pos) {
+								std::cout << "DELETE left\n";
+								tmp->left = NULL;
+						}
+							else
+								tmp->right = NULL;
+						} else {
+							_root = NULL;
+							std::cout << "DELETE ROOT\n";
+						}
+						_alloc_node.destroy(&(position._pos->_pair));
+						_alloc_node.deallocate(position._pos, 1);
+						--_size;
+						if (tmp != NULL) {
+							_root = Balance(_root);
+						}
+						linkEnd();
+						return ;
+					} else if (position._pos->left == NULL && position._pos->right != NULL) {
+						if (tmp == NULL) {
+							std::cout << "DELETE ROOT\n";
+							position._pos->right->parent = NULL;
+							Node	*tmpNode = position._pos->right;
+
+							_alloc_node.destroy(&(position._pos->_pair));
+							_alloc_node.deallocate(position._pos, 1);
+							--_size;
+							_root = tmpNode;
+							linkEnd();
+							return ;
+						}
+						
+						if (tmp->left == position._pos)
+							tmp->left = position._pos->right;
+						else
+							tmp->right = position._pos->right;
+						position._pos->right->parent = tmp;
+
+						_alloc_node.destroy(&(position._pos->_pair));
+						_alloc_node.deallocate(position._pos, 1);
+						if (tmp != NULL) {
+							_root = Balance(_root);
+						}
+					} else if (position._pos->left != NULL && position._pos->right == NULL) {
+						std::cout << "lefft\n";
+						/*
+						if (tmp == NULL) {
+							position._pos->left->parent = NULL;
+							Node	*tmpNode = position._pos->left;
+
+							_alloc_node.destroy(&(position._pos->_pair));
+							_alloc_node.deallocate(position._pos, 1);
+							--_size;
+							_root = tmpNode;
+							return ;
+						}
+						*/
+						if (tmp->left == position._pos)
+							tmp->left = position._pos->left;
+						else
+							tmp->right = position._pos->left;
+						position._pos->left->parent = tmp;
+
+						_alloc_node.destroy(&(position._pos->_pair));
+						_alloc_node.deallocate(position._pos, 1);
+						if (tmp != NULL) {
+							_root = Balance(_root);
+						}
+					} else {
+					}
+
+					linkEnd();
+				}
+				/*
+				void	erase(iterator position) {
+					unlinkEnd();
 					if (_size == 3) {
 						if (position->first == _root->_pair.first) {
 //							std::cout << "Erase rrooooooot\n" << std::endl;
@@ -544,6 +626,7 @@ namespace ft {
 					linkEnd();
 //					std::cout << "Size = " << _size << std::endl;
 				}
+				*/
 
 				size_type	erase(const key_type &k) {
 					Node	*node = search(k);
@@ -559,8 +642,8 @@ namespace ft {
 					while (first != last) {
 //						iterator	tmp(first, _p_end, _comp);
 
-//						erase(iterator(search((first++)->first), _p_end, _comp));
-						erase(first++);
+						erase(iterator(search((first++)->first), _p_end, _comp));
+//						erase(first++);
 //						erase(tmp);
 //						++first;
 					}
@@ -947,6 +1030,7 @@ namespace ft {
 
 				void	linkEnd() {
 //					std::cout << "LINK size " << _size << std::endl;
+					/*
 					if (_root && _size == 3) {
 						if (_root->right) {
 							_root->right->right = _p_end;
@@ -967,12 +1051,13 @@ namespace ft {
 //						std::cout << "LINK 2= " << std::endl;
 					}
 
+					*/
 					if (_root && _size > 1) {
 						Node	*tmp;
 
 						tmp = maxValueNode(_root, _p_end);
 						if (tmp) {
-//						std::cout << "LINK = " << tmp->_pair.first << std::endl;
+						std::cout << "LINK = " << tmp->_pair.first << std::endl;
 							tmp->right = _p_end;
 							_p_end->parent = tmp;
 						}
