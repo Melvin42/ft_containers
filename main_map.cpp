@@ -143,14 +143,14 @@ void	test_map() {
 	std::cout << "/******** TESTING MAP ********/\n" << std::endl;
 
 //	ft::map<int, int>	ftMap;
-//	std::list<ft::pair<int, std::string>>	lst;
+	std::list<ft::pair<int, std::string>>	lst;
 //	std::list<std::pair<int, std::string>>	stdlst;
 
-//	unsigned int lst_size = 10;
-//	for (unsigned int i = 0; i < lst_size; ++i) {
-//		lst.push_back(ft::make_pair(i, std::string((lst_size - i), i + 65)));
+	unsigned int lst_size = 6;
+	for (unsigned int i = 0; i < lst_size; ++i) {
+		lst.push_back(ft::make_pair(i, std::string((lst_size - i), i + 65)));
 //		stdlst.push_back(std::make_pair(i, std::string((lst_size - i), i + 65)));
-//	}
+	}
 
 	/*
 	lst.push_back(ft::make_pair(1, "coucou"));
@@ -165,10 +165,20 @@ void	test_map() {
 	lst.push_back(ft::make_pair(10,"pim"));
 	*/
 
-//	ft::map<int, std::string>	ftMap(lst.begin(), lst.end());
-	ft::map<int, std::string>	ftMap2;
-	std::map<int, std::string>	stdMap;
+	ft::map<int, std::string>	ftMap(lst.begin(), lst.end());
+//	ft::map<int, std::string>	ftMap2;
+//	std::map<int, std::string>	stdMap;
 //	std::map<int, std::string>	stdMap(stdlst.begin(), stdlst.end());
+
+//	ftMap.printTree();
+	for (int i = 2; i < 4; ++i) {
+		std::cout << "i = " << i << std::endl;
+		ft_erase(ftMap, i);
+	}
+	std::cout << "After While \n";
+	ft_erase(ftMap, ftMap.begin()->first);
+	ftMap.printTree();
+	ft_erase(ftMap, (--ftMap.end())->first);
 
 	//	ftMap.insert(ft::make_pair(10,1));
 	//	ftMap.insert(ft::make_pair(9,1));
@@ -213,21 +223,21 @@ void	test_map() {
 //	std::cout << "FT:\n" << std::endl;
 //	printMap(ftMap);
 //	printMap(stdMap);
-	ftMap2.insert(ft::make_pair(5, "hey"));
-	ftMap2.insert(ft::make_pair(8, "hey"));
-	ftMap2.insert(ft::make_pair(10, "hey"));
-	ftMap2.insert(ft::make_pair(11, "wouh"));
+//	ftMap2.insert(ft::make_pair(0, "hey"));
+//	ftMap2.insert(ft::make_pair(1, "hey"));
+//	ftMap2.insert(ft::make_pair(4, "hey"));
+//	ftMap2.insert(ft::make_pair(5, "wouh"));
 //	ftMap2.insert(ft::make_pair(12, "wouh"));
 //	ftMap2.insert(ft::make_pair(13, "wouh"));
 
-	stdMap.insert(std::make_pair(5, "hey"));
-	stdMap.insert(std::make_pair(8, "hey"));
-	stdMap.insert(std::make_pair(10, "hey"));
-	stdMap.insert(std::make_pair(11, "wouh"));
+//	stdMap.insert(std::make_pair(5, "hey"));
+//	stdMap.insert(std::make_pair(8, "hey"));
+//	stdMap.insert(std::make_pair(10, "hey"));
+//	stdMap.insert(std::make_pair(11, "wouh"));
 //	stdMap.insert(std::make_pair(12, "wouh"));
 //	stdMap.insert(std::make_pair(13, "wouh"));
 
-	ftMap2.printTree();
+//	ftMap2.printTree();
 //	std::cout << "LAST ERASE\n";
 //	ft::map<int, std::string>::iterator	it = --(--(--ftMap2.end()));
 //	ft::map<int, std::string>::iterator	it = ++(ftMap2.begin());
@@ -236,7 +246,7 @@ void	test_map() {
 //	std::cout << "val = " << stdit->first << std::endl;
 //	ft_erase(ftMap2, --(--ftMap2.end()), ftMap2.end());
 //	ft_erase(ftMap2, --(--(--ftMap2.end())), ftMap2.end());
-	std::cout << ftMap2.size() << std::endl;
+//	std::cout << ftMap2.size() << std::endl;
 //	ft_erase(ftMap2, --(--(--ftMap2.end())));
 //	ft_erase(ftMap2, it);
 //	ftMap2.printTree();
@@ -244,10 +254,11 @@ void	test_map() {
 //	ft_erase(ftMap2, 10);
 //	ft_erase(ftMap2, 5);
 //	ft_erase(ftMap2, 11);
-	ft_erase(ftMap2, ftMap2.begin(), ftMap2.end());
+//	ft_erase(ftMap2, ftMap2.begin()->first);
+//	ft_erase(ftMap2, (--ftMap2.end())->first);
 //	ft_erase(ftMap2, ftMap2.begin());
 //	ft_erase(ftMap2, ftMap2.begin());
-	ftMap2.printTree();
+//	ftMap2.printTree();
 //	ft_erase(ftMap2, ftMap2.begin());
 //	ft_erase(ftMap2, ftMap2.begin());
 

@@ -485,35 +485,33 @@ namespace ft {
 
 					Node	*tmp = position._pos->parent;
 
+					--_size;
 					if (position._pos->left == NULL && position._pos->right == NULL) {
 						if (tmp != NULL) {
 							if (tmp->left == position._pos) {
-								std::cout << "DELETE left\n";
 								tmp->left = NULL;
 						}
 							else
 								tmp->right = NULL;
 						} else {
 							_root = NULL;
-							std::cout << "DELETE ROOT\n";
 						}
 						_alloc_node.destroy(&(position._pos->_pair));
 						_alloc_node.deallocate(position._pos, 1);
-						--_size;
-						if (tmp != NULL) {
+//						--_size;
+						if (_root && tmp != NULL && _size > 2) {
 							_root = Balance(_root);
 						}
 						linkEnd();
 						return ;
 					} else if (position._pos->left == NULL && position._pos->right != NULL) {
 						if (tmp == NULL) {
-							std::cout << "DELETE ROOT\n";
 							position._pos->right->parent = NULL;
 							Node	*tmpNode = position._pos->right;
 
 							_alloc_node.destroy(&(position._pos->_pair));
 							_alloc_node.deallocate(position._pos, 1);
-							--_size;
+//							--_size;
 							_root = tmpNode;
 							linkEnd();
 							return ;
@@ -527,23 +525,21 @@ namespace ft {
 
 						_alloc_node.destroy(&(position._pos->_pair));
 						_alloc_node.deallocate(position._pos, 1);
-						if (tmp != NULL) {
+						if (_root && tmp != NULL && _size > 2) {
 							_root = Balance(_root);
 						}
 					} else if (position._pos->left != NULL && position._pos->right == NULL) {
-						std::cout << "lefft\n";
-						/*
 						if (tmp == NULL) {
 							position._pos->left->parent = NULL;
 							Node	*tmpNode = position._pos->left;
 
 							_alloc_node.destroy(&(position._pos->_pair));
 							_alloc_node.deallocate(position._pos, 1);
-							--_size;
+//							--_size;
 							_root = tmpNode;
+							linkEnd();
 							return ;
 						}
-						*/
 						if (tmp->left == position._pos)
 							tmp->left = position._pos->left;
 						else
@@ -552,10 +548,40 @@ namespace ft {
 
 						_alloc_node.destroy(&(position._pos->_pair));
 						_alloc_node.deallocate(position._pos, 1);
-						if (tmp != NULL) {
+						if (_root && tmp != NULL && _size > 2) {
 							_root = Balance(_root);
 						}
 					} else {
+						Node	*tmpNode = minValueNode(position._pos->right);
+						_alloc_node.destroy(&(position._pos->_pair));
+
+						if (tmpNode != position._pos->right) {
+							tmpNode->parent->left = tmpNode->right;
+							if (tmpNode->right != NULL)
+								tmpNode->right->parent = tmpNode->parent;
+							tmpNode->right = position._pos->right;
+							tmpNode->right->parent = tmpNode;
+						}
+						tmpNode->parent = position._pos->parent;
+						if (tmpNode->parent != NULL) {
+							if (tmpNode->parent->left == position._pos)
+								tmpNode->parent->left = tmpNode;
+							else
+								tmpNode->parent->right = tmpNode;
+						}
+						else
+							_root = tmpNode;
+						tmpNode->left = position._pos->left;
+						if (tmpNode->left != NULL) {
+							tmpNode->left->parent = tmpNode;
+						}
+						_alloc_node.deallocate(position._pos, 1);
+						
+//						--_size;
+						if (_root && tmp != NULL && _size > 2)
+							_root = Balance(_root);
+						linkEnd();
+						return ;
 					}
 
 					linkEnd();
@@ -642,8 +668,8 @@ namespace ft {
 					while (first != last) {
 //						iterator	tmp(first, _p_end, _comp);
 
-						erase(iterator(search((first++)->first), _p_end, _comp));
-//						erase(first++);
+//						erase(iterator(search((first++)->first), _p_end, _comp));
+						erase(first++);
 //						erase(tmp);
 //						++first;
 					}
@@ -743,6 +769,8 @@ namespace ft {
 				}
 
 				Node* RRR(Node* node) {
+					if (!node->right)
+						std::cout << "NOOOOOOO\n";
 					Node* tmpnode = node->right;
 
 					node->right = tmpnode->left;
@@ -1030,7 +1058,7 @@ namespace ft {
 
 				void	linkEnd() {
 //					std::cout << "LINK size " << _size << std::endl;
-					/*
+					
 					if (_root && _size == 3) {
 						if (_root->right) {
 							_root->right->right = _p_end;
@@ -1051,13 +1079,11 @@ namespace ft {
 //						std::cout << "LINK 2= " << std::endl;
 					}
 
-					*/
 					if (_root && _size > 1) {
 						Node	*tmp;
 
 						tmp = maxValueNode(_root, _p_end);
 						if (tmp) {
-						std::cout << "LINK = " << tmp->_pair.first << std::endl;
 							tmp->right = _p_end;
 							_p_end->parent = tmp;
 						}
