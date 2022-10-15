@@ -9,6 +9,7 @@
 #include "pair.hpp"
 #include <map>
 #include "iterator_traits.hpp"
+#include "reverse_iterator.hpp"
 #include <type_traits>
 
 namespace ft {
@@ -82,6 +83,7 @@ namespace ft {
 				typedef Reference					reference;
 				typedef Distance					difference_type;
 				typedef typename map::key_compare	key_compare;
+
 
 			protected:
 				Node		*_pos;
@@ -177,8 +179,8 @@ namespace ft {
 			public:
 				typedef IteratorMap<value_type>								iterator;
 				typedef IteratorMap<const value_type>						const_iterator;
-				typedef std::reverse_iterator<iterator>						reverse_iterator;
-				typedef std::reverse_iterator<const_iterator>				const_reverse_iterator;
+				typedef ft::reverse_iterator<iterator>						reverse_iterator;
+				typedef ft::reverse_iterator<const_iterator>				const_reverse_iterator;
 				typedef typename iterator_traits<iterator>::difference_type	difference_type;
 
 
@@ -289,21 +291,21 @@ namespace ft {
 				reverse_iterator		rbegin() {
 					if (_size == 0)
 						return begin();
-					return reverse_iterator(_p_end, _p_end, _comp);
+					return reverse_iterator(end());
 				}
 
 				const_reverse_iterator	rbegin() const {
 					if (_size == 0)
 						return begin();
-					return const_reverse_iterator(_p_end, _p_end, _comp);
+					return const_reverse_iterator(end());
 				}
 
 				reverse_iterator		rend() {
-					return reverse_iterator(minValueNode(_root, _p_end, _comp));
+					return reverse_iterator(begin());
 				}
 
 				const_reverse_iterator	rend() const {
-					return const_reverse_iterator(minValueNode(_root, _p_end, _comp));
+					return const_reverse_iterator(begin());
 				}
 
 				/* CAPACITY */
@@ -666,12 +668,7 @@ namespace ft {
 				void	erase(iterator first, iterator last) {
 
 					while (first != last) {
-//						iterator	tmp(first, _p_end, _comp);
-
-//						erase(iterator(search((first++)->first), _p_end, _comp));
 						erase(first++);
-//						erase(tmp);
-//						++first;
 					}
 				}
 
