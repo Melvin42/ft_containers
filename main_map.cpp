@@ -42,6 +42,20 @@ template <typename MAP, typename U, typename V>
 		mp.printTree();
 	}
 	*/
+template<class T1, class T2, class T3>
+	void printMap(const ft::map<T1, T2, T3> &mp) {
+		typename ft::map<T1, T2, T3>::const_iterator it = mp.begin();
+		typename ft::map<T1, T2, T3>::const_iterator ite = mp.end();
+
+		std::cout << "\n************PRINT MAP************\n";
+
+		std::cout << "Size = " << mp.size() << '\n';
+		while (it != ite) {
+			std::cout << "First = " << it->first << " | Second = " << it->second << std::endl;
+			++it;
+		}
+	}
+
 template<class T1, class T2>
 	void printMap(const std::map<T1, T2> &mp) {
 		typename std::map<T1, T2>::const_iterator it = mp.begin();
@@ -81,6 +95,12 @@ void	ft_erase(MAP &mp, U param, V param2) {
 	mp.erase(param, param2);
 	printMap(mp);
 }
+
+struct ft_more {
+	bool	operator()(const int &first, const int &second) const {
+		return (first > second);
+	}
+};
 
 void	test_pair() {
 	std::cout << "/******** TESTING PAIR ********/\n" << std::endl;
@@ -142,7 +162,7 @@ void	test_iterator() {
 void	test_map() {
 	std::cout << "/******** TESTING MAP ********/\n" << std::endl;
 
-	ft::map<int, int>	ftMap;
+//	ft::map<int, int>	ftMap;
 ///	std::list<ft::pair<int, std::string>>	lst;
 //	std::list<std::pair<int, std::string>>	stdlst;
 
@@ -166,7 +186,15 @@ void	test_map() {
 	*/
 
 //	ft::map<int, std::string>	ftMap(lst.begin(), lst.end());
-	ft::map<int, std::string>	ftMap2;
+	ft::map<int, std::string, ft_more>	ftMap2;
+
+	ftMap2[42] = "fxsdxgsfg";
+	ftMap2[25] = "funny";
+	ftMap2[80] = "hey";
+	ftMap2[12] = "no";
+	ftMap2[27] = "bee";
+	ftMap2[90] = "8";
+	printMap(ftMap2);
 //	std::map<int, std::string>	stdMap;
 //	std::map<int, std::string>	stdMap(stdlst.begin(), stdlst.end());
 
@@ -223,7 +251,7 @@ void	test_map() {
 //	std::cout << "FT:\n" << std::endl;
 //	printMap(ftMap);
 //	printMap(stdMap);
-	ftMap2.insert(ft::make_pair(0, "hey"));
+//	ftMap2.insert(ft::make_pair(0, "hey"));
 //	ftMap2.insert(ft::make_pair(1, "hey"));
 //	ftMap2.insert(ft::make_pair(4, "hey"));
 //	ftMap2.insert(ft::make_pair(5, "wouh"));
@@ -237,8 +265,8 @@ void	test_map() {
 //	stdMap.insert(std::make_pair(12, "wouh"));
 //	stdMap.insert(std::make_pair(13, "wouh"));
 
-	ftMap2.printTree();
-	std::cout << "LAST ERASE\n";
+//	ftMap2.printTree();
+//	std::cout << "LAST ERASE\n";
 //	ft::map<int, std::string>::iterator	it = --(--(--ftMap2.end()));
 //	ft::map<int, std::string>::iterator	it = ++(ftMap2.begin());
 //	std::cout << "val = " << it->first << std::endl;
@@ -248,8 +276,8 @@ void	test_map() {
 //	ft_erase(ftMap2, --(--(--ftMap2.end())), ftMap2.end());
 //	std::cout << ftMap2.size() << std::endl;
 //	ft_erase(ftMap2, --(--(--ftMap2.end())));
-	ft_erase(ftMap2, ftMap2.begin());
-	ftMap2.printTree();
+//	ft_erase(ftMap2, ftMap2.begin());
+//	ftMap2.printTree();
 //	ftMap2.printTree();
 //	ft_erase(ftMap2, (--(--ftMap2.end()))->first);
 //	ft_erase(ftMap2, 10);
@@ -710,7 +738,7 @@ void	test_relational_operator() {
 	ft::map<int, int> mp1;
 	ft::map<int, int> mp2;
 
-//	mp1['a'] = 2; mp1['b'] = 3; mp1['c'] = 4; mp1['d'] = 5;
+	mp1['a'] = 2; mp1['b'] = 3; mp1['c'] = 4; mp1['d'] = 5;
 	mp2['a'] = 2; mp2['b'] = 3; mp2['c'] = 4; mp2['d'] = 5;
 
 	std::cout << "==: " << (mp1 == mp2) << std::endl;
@@ -719,6 +747,16 @@ void	test_relational_operator() {
 	std::cout << "<=: " << (mp1 <= mp2) << std::endl;
 	std::cout << "> : " << (mp1 >  mp2) << std::endl;
 	std::cout << ">=: " << (mp1 >= mp2) << std::endl;
+
+	mp2['a'] = 3;
+
+	std::cout << "==: " << (mp1 == mp2) << std::endl;
+	std::cout << "!=: " << (mp1 != mp2) << std::endl;
+	std::cout << "< : " << (mp1 <  mp2) << std::endl;
+	std::cout << "<=: " << (mp1 <= mp2) << std::endl;
+	std::cout << "> : " << (mp1 >  mp2) << std::endl;
+	std::cout << ">=: " << (mp1 >= mp2) << std::endl;
+
 //	std::cout << "== " << (vect1 == vect2) << '\n';
 //	std::cout << "!= " << (vect1 != vect2) << '\n';
 //	std::cout << "< " << (vect1 < vect2) << '\n';
@@ -749,10 +787,10 @@ void	test_lexicographical_compare() {
 int	main() {
 //	test_pair();
 //	test_iterator();
-	test_map();
+//	test_map();
 //	test_is_integral();
 //	test_equal();
-//	test_relational_operator();
+	test_relational_operator();
 //	test_lexicographical_compare();
 //	test_enable_if();
 	return 0;

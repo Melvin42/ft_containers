@@ -21,7 +21,7 @@ namespace ft {
 
 	template <	class Key,
 				class T,
-				class Compare = ft::less<Key>,
+				class Compare = std::less<Key>,
 				class Alloc = std::allocator<ft::pair<const Key, T> > >
 		class map {
 
@@ -108,7 +108,8 @@ namespace ft {
 				~IteratorMap() {}
 
 				reference	operator*() const { return _pos->_pair; }
-				pointer		operator->() const { return &(_pos->_pair); }
+				pointer		operator->() { return &(_pos->_pair); }
+				const pointer		operator->() const { return &(_pos->_pair); }
 
 				IteratorMap	operator++(int) {
 					IteratorMap	tmp(*this);
@@ -118,7 +119,6 @@ namespace ft {
 				}
 
 				IteratorMap	&operator++() {
-
 					if (_pos->right) {
 						if (!_pos->right->left || _pos->right == _p_end) {
 							_pos = _pos->right;
@@ -145,8 +145,6 @@ namespace ft {
 				}
 
 				IteratorMap	&operator--() {
-
-
 					if (_pos == _p_end) {
 						_pos = _p_end->parent;
 						return *this;
@@ -163,7 +161,6 @@ namespace ft {
 						while (_pos && _comp(_pos->_pair.first, tmpNode->_pair.first) == false)
 							_pos = _pos->parent;
 					}
-//					std::cout << "OPE -- = " << _pos->_pair.first << std::endl;
 					return *this;
 				}
 
@@ -280,7 +277,6 @@ namespace ft {
 				}
 
 				iterator				end() {
-					linkEnd();
 					return iterator(_p_end, _p_end, _comp);
 				}
 
@@ -289,14 +285,10 @@ namespace ft {
 				}
 
 				reverse_iterator		rbegin() {
-					if (_size == 0)
-						return begin();
 					return reverse_iterator(end());
 				}
 
 				const_reverse_iterator	rbegin() const {
-					if (_size == 0)
-						return begin();
 					return const_reverse_iterator(end());
 				}
 
@@ -318,25 +310,6 @@ namespace ft {
 				/* ELEMENT ACCES */
 
 				mapped_type	&operator[](const key_type &k) {
-					/*
-					if (!_root) {
-//						unlinkEnd();
-						_root = insert(_root, NULL, ft::make_pair(val.first, val.second));
-						linkEnd();
-						return ft::make_pair<iterator, bool>(find(val.first), true);
-					}
-					linkEnd();
-					Node	*tmp;
-
-					tmp = search(val.first);
-
-					if (tmp)
-						return ft::make_pair<iterator, bool>(find(val.first), false);
-					unlinkEnd();
-					_root = insert(_root, NULL, ft::make_pair(val.first, val.second));
-					linkEnd();
-					return ft::make_pair<iterator, bool>(find(val.first), true);
-					*/
 					return (*((insert(ft::make_pair(k, mapped_type()))).first)).second;
 				}
 
@@ -379,8 +352,7 @@ namespace ft {
 
 					while (it != end()) {
 						if (_comp(it->first, k) == false)
-							break ;
-//							return it;
+							return it;
 						++it;
 					}
 					return it;
@@ -391,8 +363,7 @@ namespace ft {
 
 					while (it != end()) {
 						if (_comp(it->first, k) == false)
-							break ;
-//							return it;
+							return it;
 						++it;
 					}
 					return it;
@@ -404,8 +375,7 @@ namespace ft {
 
 					while (it != end()) {
 						if (_comp(k, it->first))
-							break ;
-//							return it;
+							return it;
 						++it;
 					}
 					return it;
@@ -416,8 +386,7 @@ namespace ft {
 
 					while (it != end()) {
 						if (_comp(k, it->first))
-							break ;
-//							return it;
+							return it;
 						++it;
 					}
 					return it;
@@ -488,8 +457,8 @@ namespace ft {
 					Node	*tmp = position._pos->parent;
 
 					--_size;
-					if (position._pos->left == NULL && position._pos->right == NULL) {
-						if (tmp != NULL) {
+					if (!position._pos->left && !position._pos->right) {
+						if (tmp) {
 							if (tmp->left == position._pos) {
 								tmp->left = NULL;
 						}
@@ -500,25 +469,22 @@ namespace ft {
 						}
 						_alloc_node.destroy(&(position._pos->_pair));
 						_alloc_node.deallocate(position._pos, 1);
-//						--_size;
-						if (_root && tmp != NULL && _size > 2) {
+						if (_root && tmp && _size > 2) {
 							_root = Balance(_root);
 						}
 						linkEnd();
 						return ;
-					} else if (position._pos->left == NULL && position._pos->right != NULL) {
-						if (tmp == NULL) {
+					} else if (!position._pos->left && position._pos->right) {
+						if (!tmp) {
 							position._pos->right->parent = NULL;
 							Node	*tmpNode = position._pos->right;
 
 							_alloc_node.destroy(&(position._pos->_pair));
 							_alloc_node.deallocate(position._pos, 1);
-//							--_size;
 							_root = tmpNode;
 							linkEnd();
 							return ;
 						}
-						
 						if (tmp->left == position._pos)
 							tmp->left = position._pos->right;
 						else
@@ -527,17 +493,16 @@ namespace ft {
 
 						_alloc_node.destroy(&(position._pos->_pair));
 						_alloc_node.deallocate(position._pos, 1);
-						if (_root && tmp != NULL && _size > 2) {
+						if (_root && tmp && _size > 2) {
 							_root = Balance(_root);
 						}
-					} else if (position._pos->left != NULL && position._pos->right == NULL) {
-						if (tmp == NULL) {
+					} else if (position._pos->left && !position._pos->right) {
+						if (!tmp) {
 							position._pos->left->parent = NULL;
 							Node	*tmpNode = position._pos->left;
 
 							_alloc_node.destroy(&(position._pos->_pair));
 							_alloc_node.deallocate(position._pos, 1);
-//							--_size;
 							_root = tmpNode;
 							linkEnd();
 							return ;
@@ -550,7 +515,7 @@ namespace ft {
 
 						_alloc_node.destroy(&(position._pos->_pair));
 						_alloc_node.deallocate(position._pos, 1);
-						if (_root && tmp != NULL && _size > 2) {
+						if (_root && tmp && _size > 2) {
 							_root = Balance(_root);
 						}
 					} else {
@@ -559,13 +524,13 @@ namespace ft {
 
 						if (tmpNode != position._pos->right) {
 							tmpNode->parent->left = tmpNode->right;
-							if (tmpNode->right != NULL)
+							if (tmpNode->right)
 								tmpNode->right->parent = tmpNode->parent;
 							tmpNode->right = position._pos->right;
 							tmpNode->right->parent = tmpNode;
 						}
 						tmpNode->parent = position._pos->parent;
-						if (tmpNode->parent != NULL) {
+						if (tmpNode->parent) {
 							if (tmpNode->parent->left == position._pos)
 								tmpNode->parent->left = tmpNode;
 							else
@@ -574,87 +539,18 @@ namespace ft {
 						else
 							_root = tmpNode;
 						tmpNode->left = position._pos->left;
-						if (tmpNode->left != NULL) {
+						if (tmpNode->left) {
 							tmpNode->left->parent = tmpNode;
 						}
 						_alloc_node.deallocate(position._pos, 1);
 						
-//						--_size;
-						if (_root && tmp != NULL && _size > 2)
+						if (_root && tmp && _size > 2)
 							_root = Balance(_root);
 						linkEnd();
 						return ;
 					}
-
 					linkEnd();
 				}
-				/*
-				void	erase(iterator position) {
-					unlinkEnd();
-					if (_size == 3) {
-						if (position->first == _root->_pair.first) {
-//							std::cout << "Erase rrooooooot\n" << std::endl;
-							Node	*tmp = _root;
-
-							_root->right->left = _root->left;
-							_root->right->parent = NULL;
-							_root->left->parent = _root->right;
-
-							_root = _root->right;
-							_alloc_node.destroy(&tmp->_pair);
-							_alloc_node.deallocate(tmp, 1);
-							tmp = NULL;
-						} else
-							_root = deleteNode(_root, position._pos->_pair);
-					} else if (_size == 2) {
-						if (_root->_pair.first == position->first) {
-							Node	*tmp = _root;
-
-							if (_root->right) {
-								_root = _root->right;
-								_root->right = NULL;
-								_root->parent = NULL;
-								_alloc_node.destroy(&tmp->_pair);
-								_alloc_node.deallocate(tmp, 1);
-								tmp = NULL;
-							} else {
-								_root = _root->left;
-								_root->left = NULL;
-								_root->parent = NULL;
-								_alloc_node.destroy(&tmp->_pair);
-								_alloc_node.deallocate(tmp, 1);
-								tmp = NULL;
-							}
-//							std::cout << "same\n";
-						} else if (_root->right && _root->right->_pair.first == position->first) {
-							Node	*tmp = _root->right;
-
-							_root->right = NULL;
-							_alloc_node.destroy(&tmp->_pair);
-							_alloc_node.deallocate(tmp, 1);
-							tmp = NULL;
-//							std::cout << "Erase right\n" << std::endl;
-						} else if (_root->left && _root->left->_pair.first == position->first) {
-							Node	*tmp = _root->left;
-
-							_root->left = NULL;
-							_alloc_node.destroy(&tmp->_pair);
-							_alloc_node.deallocate(tmp, 1);
-							tmp = NULL;
-//							std::cout << "Erase left\n" << std::endl;
-						}
-					} else if (_size == 1) {
-						_alloc_node.destroy(&_root->_pair);
-						_alloc_node.deallocate(_root, 1);
-						_root = NULL;
-					} else
-						_root = deleteNode(_root, position._pos->_pair);
-					if (_size > 0)
-						--_size;
-					linkEnd();
-//					std::cout << "Size = " << _size << std::endl;
-				}
-				*/
 
 				size_type	erase(const key_type &k) {
 					Node	*node = search(k);
@@ -666,7 +562,6 @@ namespace ft {
 				}
 
 				void	erase(iterator first, iterator last) {
-
 					while (first != last) {
 						erase(first++);
 					}
@@ -725,34 +620,34 @@ namespace ft {
 				}
 
 				void Updateheight(Node* node) {
-					if (node != NULL) {
+					if (node) {
 						int val = 1;
 
-						if (node->left != NULL)
+						if (node->left)
 							val = node->left->height + 1;
 
-						if (node->right != NULL)
+						if (node->right)
 							val = max(val, node->right->height + 1);
 
 						node->height = val;
-	}
+					}
 				}
 
 				Node* LLR(Node* node) {
 					Node* tmpnode = node->left;
 
 					node->left = tmpnode->right;
-					if (tmpnode->right != NULL)
+					if (tmpnode->right)
 						tmpnode->right->parent = node;
 
 					tmpnode->right = node;
 					tmpnode->parent = node->parent;
 					node->parent = tmpnode;
 
-					if (tmpnode->parent != NULL && node->_pair.first < tmpnode->parent->_pair.first) {
+					if (tmpnode->parent && _comp(node->_pair.first, tmpnode->parent->_pair.first) == true) {
 						tmpnode->parent->left = tmpnode;
 					} else {
-						if (tmpnode->parent != NULL)
+						if (tmpnode->parent)
 							tmpnode->parent->right = tmpnode;
 					}
 					node = tmpnode;
@@ -766,22 +661,20 @@ namespace ft {
 				}
 
 				Node* RRR(Node* node) {
-					if (!node->right)
-						std::cout << "NOOOOOOO\n";
 					Node* tmpnode = node->right;
 
 					node->right = tmpnode->left;
-					if (tmpnode->left != NULL)
+					if (tmpnode->left)
 						tmpnode->left->parent = node;
 
 					tmpnode->left = node;
 					tmpnode->parent = node->parent;
 					node->parent = tmpnode;
 
-					if (tmpnode->parent != NULL && node->_pair.first < tmpnode->parent->_pair.first) {
+					if (tmpnode->parent && _comp(node->_pair.first, tmpnode->parent->_pair.first) == true) {
 						tmpnode->parent->left = tmpnode;
 					} else {
-						if (tmpnode->parent != NULL)
+						if (tmpnode->parent)
 							tmpnode->parent->right = tmpnode;
 					}
 					node = tmpnode;
@@ -808,10 +701,10 @@ namespace ft {
 					int firstheight = 0;
 					int secondheight = 0;
 
-					if (node->left != NULL)
+					if (node->left)
 						firstheight = node->left->height;
 
-					if (node->right != NULL)
+					if (node->right)
 						secondheight = node->right->height;
 
 					if (abs(firstheight - secondheight) == 2) {
@@ -819,10 +712,10 @@ namespace ft {
 
 							int rightheight1 = 0;
 							int rightheight2 = 0;
-							if (node->right->right != NULL)
+							if (node->right->right)
 								rightheight2 = node->right->right->height;
 
-							if (node->right->left != NULL)
+							if (node->right->left)
 								rightheight1 = node->right->left->height;
 
 							if (rightheight1 > rightheight2) {
@@ -833,10 +726,10 @@ namespace ft {
 						} else {
 							int leftheight1 = 0;
 							int leftheight2 = 0;
-							if (node->left->right != NULL)
+							if (node->left->right)
 								leftheight2 = node->left->right->height;
 
-							if (node->left->left != NULL)
+							if (node->left->left)
 								leftheight1 = node->left->left->height;
 
 							if (leftheight1 > leftheight2) {
@@ -851,152 +744,50 @@ namespace ft {
 
 				Node* insert(Node* node, Node* parent, const value_type &val) {
 //					unlinkEnd();
-					if (node == NULL) {
+					if (!node) {
 						node = newNode(val);
 
-						if (node == NULL) {
-							std::cout << "Error in memory" << std::endl;
-						} else {
-//							node->height = 1;
-//							node->left = NULL;
-//							node->right = NULL;
-							node->parent = parent;
-//							_alloc.construct(&node->_pair, val);
-						}
-					} else if (node->_pair.first > val.first) {
+//						else
+						node->parent = parent;
+					} else if (_comp(val.first, node->_pair.first) == true) {
 						node->left = insert(node->left, node, val);
 
 						int firstheight = 0;
 						int secondheight = 0;
 
-						if (node->left != NULL)
+						if (node->left)
 							firstheight = node->left->height;
 
-						if (node->right != NULL)
+						if (node->right)
 							secondheight = node->right->height;
 
 						if (abs(firstheight - secondheight) == 2) {
-							if (node->left != NULL && val.first < node->left->_pair.first) {
+							if (node->left && _comp(val.first, node->left->_pair.first) == true) {
 								node = LLR(node);
 							} else {
 								node = LRR(node);
 							}
 						}
-					} else if (node->_pair.first < val.first) {
+					} else if (_comp(node->_pair.first, val.first) == true) {
 						node->right = insert(node->right, node, val);
 
 						int firstheight = 0;
 						int secondheight = 0;
 
-						if (node->left != NULL)
+						if (node->left)
 							firstheight = node->left->height;
 
-						if (node->right != NULL)
+						if (node->right)
 							secondheight = node->right->height;
 
 						if (abs(firstheight - secondheight) == 2) {
-							if (node->right != NULL && val.first < node->right->_pair.first) {
+							if (node->right && _comp(val.first, node->right->_pair.first) == true)
 								node = RLR(node);
-							} else {
+							else
 								node = RRR(node);
-							}
 						}
-					} else {
 					}
 					Updateheight(node);
-
-					return node;
-				}
-
-				Node* deleteNode(Node* node, const value_type &val) {
-//					std::cout << "ERASE = " << node->_pair.first << std::endl;
-//					std::cout << "ERASE = " << val.first << std::endl;
-					if (node != NULL) {
-						if (node->_pair.first == val.first) {
-							if (node->right == NULL && node->left != NULL) {
-								if (node->parent != NULL) {
-									if (node->parent->_pair.first < node->_pair.first)
-										node->parent->right = node->left;
-									else
-										node->parent->left = node->left;
-									Updateheight(node->parent);
-								}
-								node->left->parent = node->parent;
-								node->left = Balance(node->left);
-
-								Node	*tmp = node->left;
-
-//								if (node != _root) {
-//									_alloc_node.destroy(&node->_pair);
-//									_alloc_node.deallocate(node, 1);
-//									node = NULL;
-//								}
-								return tmp;
-							} else if (node->left == NULL && node->right != NULL) {
-								if (node->parent != NULL) {
-									if (node->parent->_pair.first < node->_pair.first)
-										node->parent->right = node->right;
-									else
-										node->parent->left = node->right;
-									Updateheight(node->parent);
-								}
-								node->right->parent = node->parent;
-								node->right = Balance(node->right);
-
-								Node	*tmp = node->right;
-
-//								if (node != _root) {
-//									_alloc_node.destroy(&node->_pair);
-//									_alloc_node.deallocate(node, 1);
-//									node = NULL;
-//								}
-								return tmp;
-							} else if (node->left == NULL && node->right == NULL) {
-								if (node->parent->_pair.first < node->_pair.first) {
-									node->parent->right = NULL;
-								} else {
-									node->parent->left = NULL;
-								}
-								if (node->parent != NULL)
-									Updateheight(node->parent);
-
-								_alloc_node.destroy(&node->_pair);
-								_alloc_node.deallocate(node, 1);
-								node = NULL;
-								return NULL;
-							} else {
-//								Node* tmpnode = minValueNode(node->right);
-								Node* tmpnode = node;
-
-								tmpnode = tmpnode->right;
-								while (tmpnode->left)
-									tmpnode = tmpnode->left;
-
-								value_type tmpval
-									= ft::make_pair(tmpnode->_pair.first, tmpnode->_pair.second);
-
-									node->right = deleteNode(node->right, tmpnode->_pair);
-
-									_alloc_node.destroy(&node->_pair);
-									_alloc.construct(&node->_pair, tmpval);
-
-									node = Balance(node);
-							}
-						} else if (node->_pair.first < val.first) {
-							node->right = deleteNode(node->right, val);
-
-							node = Balance(node);
-						} else if (node->_pair.first > val.first) {
-							node->left = deleteNode(node->left, val);
-
-							node = Balance(node);
-						}
-						if (node != NULL) {
-							Updateheight(node);
-						}
-					} else {
-//						std::cout << "Key to be deleted " << "could not be found\n";
-					}
 
 					return node;
 				}
@@ -1023,19 +814,15 @@ namespace ft {
 				}
 
 				Node	*searchRecurs(Node *node, const key_type &k) const {
-					if (!node || node == _p_end) {
+					if (!node || node == _p_end)
 						return NULL;
-					}
 					if (_comp(k, node->_pair.first) == false
 						&& _comp(node->_pair.first, k) == false)
 						return node;
-
-					if (node->left && _comp(k, node->_pair.first)) {
+					if (node->left && _comp(k, node->_pair.first))
 						return searchRecurs(node->left, k);
-					}
-					else if (node->right) {// && node->right != _p_end) {
+					else if (node->right)
 						return searchRecurs(node->right, k);
-					}
 					return NULL;
 				}
 
@@ -1054,18 +841,14 @@ namespace ft {
 				}
 
 				void	linkEnd() {
-//					std::cout << "LINK size " << _size << std::endl;
-					
 					if (_root && _size == 3) {
 						if (_root->right) {
 							_root->right->right = _p_end;
 							_p_end->parent = _root->right;
 						}
-//						std::cout << "LINK MAX = " << std::endl;
 						return ;
 					}
 					if (_root && _size == 2) {
-//						printTree();
 						if (_root->left) {
 							_root->right = _p_end;
 							_p_end->parent = _root;
@@ -1073,9 +856,7 @@ namespace ft {
 							_root->right->right = _p_end;
 							_p_end->parent = _root->right;
 						}
-//						std::cout << "LINK 2= " << std::endl;
 					}
-
 					if (_root && _size > 1) {
 						Node	*tmp;
 
@@ -1085,14 +866,11 @@ namespace ft {
 							_p_end->parent = tmp;
 						}
 					} else if (_size == 1) {
-//						std::cout << "LINK ROOT = " << _root->_pair.first << std::endl;
 						_root->right = _p_end;
 						_root->left = NULL;
 						_p_end->parent = _root;
-					} else {
-//						std::cout << "LINK EMPTY" << std::endl;
+					} else
 						_p_end->parent = NULL;
-					}
 				}
 
 				void	unlinkEnd() {
@@ -1102,19 +880,19 @@ namespace ft {
 				}
 
 				static Node	*minValueNode(Node *root) {
-					if (!root || !root->left)
-						return root;
-					if (root->left->_pair.first < root->_pair.first)
-						return minValueNode(root->left);
-					return root;
+					Node	*tmp = root;
+
+					while (tmp && tmp->left)
+						tmp = tmp->left;
+					return tmp;
 				}
 
 				static Node	*maxValueNode(Node *root, Node *end) {
-					if (!root || !root->right || root->right == end)
-						return root;
-					if (root->right->_pair.first > root->_pair.first)
-						return maxValueNode(root->right, end);
-					return root;
+					Node	*tmp = root;
+
+					while (tmp && tmp->right && tmp->right != end)
+						tmp = tmp->right;
+					return tmp;
 				}
 
 				void	destroyTree() {
@@ -1125,7 +903,7 @@ namespace ft {
 					if (leaf) {
 						if (leaf->left)
 							destroyTree(leaf->left);
-						if (leaf->right)// && leaf->right != _p_end)
+						if (leaf->right)
 							destroyTree(leaf->right);
 						_alloc_node.destroy(&leaf->_pair);
 						_alloc_node.deallocate(leaf, 1);
@@ -1148,6 +926,21 @@ namespace ft {
 			return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 		}
 
+
+	template<class Key, class T, class Compare, class Alloc>
+		bool	operator<(const map<Key, T, Compare, Alloc> &lhs,
+							const map<Key, T, Compare, Alloc> &rhs) {
+			return (ft::lexicographical_compare(lhs.begin(), lhs.end(),
+											rhs.begin(), rhs.end()));
+		}
+
+
+	template<class Key, class T, class Compare, class Alloc>
+		bool	operator>(const map<Key, T, Compare, Alloc> &lhs,
+							const map<Key, T, Compare, Alloc> &rhs) {
+			return (!(lhs < rhs) && !(lhs == rhs));
+		}
+
 	template<class Key, class T, class Compare, class Alloc>
 		bool	operator!=(const map<Key, T, Compare, Alloc> &lhs,
 							const map<Key, T, Compare, Alloc> &rhs) {
@@ -1155,22 +948,9 @@ namespace ft {
 		}
 
 	template<class Key, class T, class Compare, class Alloc>
-		bool	operator<(const map<Key, T, Compare, Alloc> &lhs,
-							const map<Key, T, Compare, Alloc> &rhs) {
-			return (ft::lexicographical_compare(lhs.begin(), lhs.end(),
-											rhs.begin(), rhs.begin()));
-		}
-
-	template<class Key, class T, class Compare, class Alloc>
 		bool	operator<=(const map<Key, T, Compare, Alloc> &lhs,
 							const map<Key, T, Compare, Alloc> &rhs) {
-			return !(rhs < lhs);
-		}
-
-	template<class Key, class T, class Compare, class Alloc>
-		bool	operator>(const map<Key, T, Compare, Alloc> &lhs,
-							const map<Key, T, Compare, Alloc> &rhs) {
-			return (rhs < lhs);
+			return !(lhs > rhs);
 		}
 
 	template<class Key, class T, class Compare, class Alloc>
