@@ -39,20 +39,8 @@ namespace ft {
 				/* CONSTRUCT/COPY/DESTROY */
 
 				vector	&operator=(const vector<T, Alloc> &vector) {
-					if (this != &vector) {
-						if (_p)
-							_alloc.deallocate(_p, _p_end - _p);
-						_alloc = vector.get_allocator();//_alloc;
-						_capacity = vector._capacity;
-						_p = _alloc.allocate(_capacity);
-						size_t	i = 0;
-
-						_p_end = _p;
-						for (const_iterator it = vector.begin(); it != vector.end(); it++, i++) {
-							_alloc.construct(_p + i, *it);
-							++_p_end;
-						}
-					}
+					_alloc = vector.get_allocator();//_alloc;
+					assign(vector.begin(), vector.end());
 					return *this;
 				}
 
