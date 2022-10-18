@@ -6,7 +6,7 @@
 #include <cstddef>
 #include <iostream>
 #include "iterator.hpp"
-#include "iterator.hpp"
+#include "reverse_iterator.hpp"
 #include "utils.hpp"
 #include "iterator_traits.hpp"
 
@@ -16,18 +16,18 @@ namespace ft {
 			public:
 				/* TYPES */
 
-				typedef T																value_type;
-				typedef Alloc															allocator_type;
-				typedef typename allocator_type::reference								reference;
-				typedef typename allocator_type::const_reference						const_reference;
-				typedef typename allocator_type::pointer								pointer;
-				typedef typename allocator_type::const_pointer							const_pointer;
-				typedef iterator<std::random_access_iterator_tag, value_type>			iterator;
-				typedef ft::iterator<std::random_access_iterator_tag, const value_type>	const_iterator;
-				typedef std::reverse_iterator<T*>										reverse_iterator;
-				typedef std::reverse_iterator<const T*>									const_reverse_iterator;
-				typedef typename iterator_traits<iterator>::difference_type				difference_type;
-				typedef std::size_t														size_type;
+				typedef T													value_type;
+				typedef Alloc												allocator_type;
+				typedef typename allocator_type::reference					reference;
+				typedef typename allocator_type::const_reference			const_reference;
+				typedef typename allocator_type::pointer					pointer;
+				typedef typename allocator_type::const_pointer				const_pointer;
+				typedef ft::iterator<value_type>								iterator;
+				typedef ft::iterator<const value_type>						const_iterator;
+				typedef typename ft::reverse_iterator<iterator>				reverse_iterator;
+				typedef typename ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+				typedef typename iterator_traits<iterator>::difference_type	difference_type;
+				typedef std::size_t											size_type;
 
 			private:
 				Alloc		_alloc;
@@ -78,8 +78,12 @@ namespace ft {
 							const allocator_type &alloc = allocator_type(),
 							typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
 							: _alloc(alloc), _p(NULL), _p_end(NULL), _capacity(0) {
-						if (last - first > 0) {
-							_capacity = last - first;
+						int	n = 0;
+
+						for (InputIterator it = first; it != last; ++it, ++n);
+
+						if (n > 0) {
+							_capacity = n;
 							_p = _alloc.allocate(_capacity);
 							_p_end = _p;
 							for (size_t i = 0; first != last; i++) {
@@ -88,11 +92,13 @@ namespace ft {
 								++_p_end;
 							}
 						}
-						else
-							throw std::length_error("cannot create std::vector larger than max_size()");
+//						else
+//							throw std::length_error("cannot create std::vector larger than max_size()");
 					}
 
 				//copy (4)
+//				IteratorMap(const IteratorMap<typename std::remove_const<U>::type> &it)
+//				vector(const vector<typename std::remove_const<T>::type, Alloc> &vector) {
 				vector(const vector<T, Alloc> &vector) {
 					*this = vector;
 				}
@@ -105,9 +111,11 @@ namespace ft {
 				template <class InputIterator>
 					void	assign(InputIterator first, InputIterator last,
 							typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0) {
+						int	n = 0;
 
-						if (last - first > 0) {
-							_capacity = last - first;
+						for (InputIterator it = first; it != last; ++it, ++n);
+						if (n > 0) {
+							_capacity = n;
 							_p = _alloc.allocate(_capacity);
 							_p_end = _p;
 							for (size_t i = 0; first != last; i++) {
@@ -140,7 +148,7 @@ namespace ft {
 				}
 
 				const_iterator			begin() const {
-					return const_iterator(_p_end);
+					return const_iterator(_p);
 				}
 
 				iterator				end() {
@@ -152,19 +160,19 @@ namespace ft {
 				}
 
 				reverse_iterator		rbegin() {
-					return reverse_iterator(_p_end);
+					return reverse_iterator(end());
 				}
 
 				const_reverse_iterator	rbegin() const {
-					return const_reverse_iterator(_p_end);
+					return const_reverse_iterator(end());
 				}
 
 				reverse_iterator		rend() {
-					return reverse_iterator(_p);
+					return reverse_iterator(begin());
 				}
 
 				const_reverse_iterator	rend() const {
-					return const_reverse_iterator(_p);
+					return const_reverse_iterator(begin());
 				}
 
 				/* CAPACITY */
@@ -218,25 +226,25 @@ namespace ft {
 				/* ELEMENT ACCES */
 
 				reference		operator[](size_type n) {
-					if (n >= size())
-						throw std::out_of_range("");
+//					if (n >= size())
+//						throw std::out_of_range("");
 					return *(_p + n);
 				}
 
 				const_reference	operator[](size_type n) const {
-					if (n >= size())
-						throw std::out_of_range("");
+//					if (n >= size())
+//						throw std::out_of_range("");
 					return *(_p + n);
 				}
 
 				reference		at(size_type n) {
-					if (n >= size())
+					if (n >= size() || size() == 0)
 						throw std::out_of_range("");
 					return *(_p + n);
 				}
 
 				const_reference	at(size_type n) const {
-					if (n >= size())
+					if (n >= size() || size() == 0)
 						throw std::out_of_range("");
 					return *(_p + n);
 				}
@@ -244,11 +252,11 @@ namespace ft {
 				reference		front() { return *_p; }
 				const_reference	front() const { return *_p; }
 				reference		back() {
-					std::cout << *(_p_end - 1) << '\n';
+//					std::cout << *(_p_end - 1) << '\n';
 					return *(_p_end - 1);
 				}
 				const_reference	back() const {
-					std::cout << *(_p_end - 1) << '\n';
+//					std::cout << *(_p_end - 1) << '\n';
 					return *(_p_end - 1);
 				}
 
@@ -347,8 +355,10 @@ namespace ft {
 						for (iterator it = begin(); it != pos; it++, count++) ;
 
 						i = 0;
-						if (last - first > 0)
-							n = last - first;
+						for (InputIterator it = first; it != last; ++it, ++n);
+
+//						if (last - first > 0)
+//							n = last - first;
 						if (n + size() > _capacity)
 							reserve(n + size());
 
@@ -402,8 +412,8 @@ namespace ft {
 						_alloc.construct(_p + i, tmp[i]);
 						++_p_end;
 					}
-//					return iterator(_p + ret); return iterator????
-					return _p + ret;
+					return iterator(_p + ret);
+//					return _p + ret;
 				}
 
 				iterator	erase(iterator first, iterator last) {
@@ -412,8 +422,9 @@ namespace ft {
 					size_t	len = size();
 					size_t	ret = 0;
 
-					if (last - first > 0)
-						n = last - first;
+//					if (last - first > 0)
+//						n = last - first;
+					for (iterator it = first; it != last; ++it, ++n);
 					if (n > len)
 						n = len;
 					if (len - n <= 0)
@@ -449,7 +460,7 @@ namespace ft {
 						_alloc.construct(_p + i, tmp[i]);
 						++_p_end;
 					}
-					return _p + ret;
+					return iterator(_p + ret);
 				}
 
 				void	swap(vector<T, Alloc> &x) {
@@ -543,6 +554,6 @@ namespace ft {
 			x.swap(y);
 		}
 
-}
+};
 
 #endif

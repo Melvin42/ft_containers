@@ -5,7 +5,8 @@ all: main_vector.cpp main_map.cpp
 
 vector: main_vector.cpp
 	rm -f ft_exec_vector
-	clang++ -Wall -Wextra -Werror -std=c++98 main_vector.cpp -o ft_exec_vector
+	clang++ -Wall -Wextra -Werror main_vector.cpp -o ft_exec_vector
+	#clang++ -Wall -Wextra -Werror -std=c++98 main_vector.cpp -o ft_exec_vector
 
 map: main_map.cpp
 	rm -f ft_exec_map
