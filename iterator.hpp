@@ -54,7 +54,7 @@ namespace ft {
 					return _pos;
 				}
 
-				const pointer	base() const {
+				pointer	base() const {
 					return _pos;
 				}
 
@@ -139,6 +139,10 @@ namespace ft {
 //					return tmp;
 //				}
 
+				reference	operator[](difference_type v) {
+					return *(_pos + v);
+				}
+
 				reference	operator[](difference_type v) const {
 					return *(_pos + v);
 				}
@@ -207,10 +211,10 @@ namespace ft {
 //			return lhs.base() + rhs.base();
 //		}
 
-	template <class T, class U>
-		typename iterator<T>::difference_type operator-(const iterator<T> &lhs, const iterator<U> &rhs) {
-			return lhs.base() - rhs.base();
-		}
+//	template <class T, class U>
+//		typename iterator<T>::difference_type operator-(const iterator<T> &lhs, const iterator<U> &rhs) {
+//			return lhs.base() - rhs.base();
+//		}
 };
 
 #endif

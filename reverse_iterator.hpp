@@ -25,11 +25,7 @@ namespace ft {
 					template <class U>
 						reverse_iterator(const reverse_iterator<U> &it) : _pos(it.base()) {}
 
-//					virtual ~reverse_iterator() {}
-
-//					iterator_type	base() {
-//						return _pos;
-//					}
+					~reverse_iterator() {}
 
 					iterator_type	base() const {
 						return _pos;
@@ -78,17 +74,11 @@ namespace ft {
 					}
 
 					reverse_iterator	operator+(difference_type v) const {
-						reverse_iterator	tmp(*this);
-
-						tmp -= v;
-						return tmp;
+						return reverse_iterator(_pos - v);
 					}
 
 					reverse_iterator	operator-(difference_type v) const {
-						reverse_iterator	tmp(*this);
-
-						tmp += v;
-						return tmp;
+						return reverse_iterator(_pos + v);
 					}
 
 					difference_type	operator-(const reverse_iterator<Iterator> &it) {
@@ -98,7 +88,6 @@ namespace ft {
 
 					reference	operator[](difference_type v) const {
 						return _pos[-v - 1];
-//						return *(_pos + v);
 					}
 
 					template <class T>
@@ -113,31 +102,30 @@ namespace ft {
 
 					template <class T>
 						bool	operator<=(const reverse_iterator<T> &it) const {
-							return base() <= it.base();
-						}
-
-					template <class T>
-						bool	operator>=(const reverse_iterator<T> &it) const {
 							return base() >= it.base();
 						}
 
 					template <class T>
+						bool	operator>=(const reverse_iterator<T> &it) const {
+							return base() <= it.base();
+						}
+
+					template <class T>
 						bool	operator<(const reverse_iterator<T> &it) const {
-							return base() < it.base();
+							return base() > it.base();
 						}
 
 					template <class T>
 						bool	operator>(const reverse_iterator<T> &it) const {
-							return base() > it.base();
+							return base() < it.base();
 						}
-
 			};
 
 	template <class Iterator>
 		reverse_iterator<Iterator> operator+(
 				typename reverse_iterator<Iterator>::difference_type v,
 				reverse_iterator<Iterator> &it) {
-			return reverse_iterator<Iterator>(it.base() + v);
+			return reverse_iterator<Iterator>(it.base() - v);
 		}
 
 	template <class Iterator>
