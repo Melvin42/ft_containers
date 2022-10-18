@@ -78,11 +78,21 @@ namespace ft {
 					}
 
 					reverse_iterator	operator+(difference_type v) const {
-						return reverse_iterator(_pos.base() - v);
+						reverse_iterator	tmp(*this);
+
+						tmp -= v;
+						return tmp;
 					}
 
 					reverse_iterator	operator-(difference_type v) const {
-						return reverse_iterator(_pos.base() + v);
+						reverse_iterator	tmp(*this);
+
+						tmp += v;
+						return tmp;
+					}
+
+					difference_type	operator-(const reverse_iterator<Iterator> &it) {
+						return it.base() - base();
 					}
 
 
@@ -127,15 +137,8 @@ namespace ft {
 		reverse_iterator<Iterator> operator+(
 				typename reverse_iterator<Iterator>::difference_type v,
 				reverse_iterator<Iterator> &it) {
-			return reverse_iterator<Iterator>(it.base() - v);
+			return reverse_iterator<Iterator>(it.base() + v);
 		}
-
-//	template <class Iterator>
-//		reverse_iterator<Iterator> operator-(
-//				typename reverse_iterator<Iterator>::difference_type v,
-//				reverse_iterator<Iterator> &it) {
-//			return reverse_iterator<Iterator>(it.base() + v);
-//		}
 
 	template <class Iterator>
 		typename reverse_iterator<Iterator>::difference_type	operator-(
