@@ -56,20 +56,20 @@ template<class T1, class T2, class T3>
 		}
 	}
 
-template<class T1, class T2>
-	void printMap(const std::map<T1, T2> &mp) {
-		typename std::map<T1, T2>::const_iterator it = mp.begin();
-		typename std::map<T1, T2>::const_iterator ite = mp.end();
-
-		std::cout << "\n************PRINT MAP************\n";
-
-		std::cout << "Size = " << mp.size() << '\n';
-		while (it != ite) {
-			std::cout << "First = " << it->first << " | Second = " << it->second << std::endl;
-			++it;
-		}
-	}
-
+//template<class T1, class T2>
+//	void printMap(const std::map<T1, T2> &mp) {
+//		typename std::map<T1, T2>::const_iterator it = mp.begin();
+//		typename std::map<T1, T2>::const_iterator ite = mp.end();
+//
+//		std::cout << "\n************PRINT MAP************\n";
+//
+//		std::cout << "Size = " << mp.size() << '\n';
+//		while (it != ite) {
+//			std::cout << "First = " << it->first << " | Second = " << it->second << std::endl;
+//			++it;
+//		}
+////	}
+//
 template<class T1, class T2>
 	void printMap(const ft::map<T1, T2> &mp) {
 		typename ft::map<T1, T2>::const_iterator it = mp.begin();
@@ -162,15 +162,16 @@ void	test_iterator() {
 void	test_map() {
 	std::cout << "/******** TESTING MAP ********/\n" << std::endl;
 
-//	ft::map<int, int>	ftMap;
+	ft::map<int, int>	ftMap;
 ///	std::list<ft::pair<int, std::string>>	lst;
 //	std::list<std::pair<int, std::string>>	stdlst;
 
-//	unsigned int lst_size = 6;
-//	for (unsigned int i = 0; i < lst_size; ++i) {
+	unsigned int lst_size = 100000000;
+	for (unsigned int i = 0; i < lst_size; ++i) {
+		ftMap.insert(ft::make_pair(i, 1));
 //		lst.push_back(ft::make_pair(i, std::string((lst_size - i), i + 65)));
 //		stdlst.push_back(std::make_pair(i, std::string((lst_size - i), i + 65)));
-//	}
+	}
 
 	/*
 	lst.push_back(ft::make_pair(1, "coucou"));
@@ -186,15 +187,15 @@ void	test_map() {
 	*/
 
 //	ft::map<int, std::string>	ftMap(lst.begin(), lst.end());
-	ft::map<int, std::string, ft_more>	ftMap2;
+//	ft::map<int, std::string, ft_more>	ftMap2;
 
-	ftMap2[42] = "fxsdxgsfg";
-	ftMap2[25] = "funny";
-	ftMap2[80] = "hey";
-	ftMap2[12] = "no";
-	ftMap2[27] = "bee";
-	ftMap2[90] = "8";
-	printMap(ftMap2);
+//	ftMap2[42] = "fxsdxgsfg";
+//	ftMap2[25] = "funny";
+//	ftMap2[80] = "hey";
+//	ftMap2[12] = "no";
+//	ftMap2[27] = "bee";
+//	ftMap2[90] = "8";
+//	printMap(ftMap);
 //	std::map<int, std::string>	stdMap;
 //	std::map<int, std::string>	stdMap(stdlst.begin(), stdlst.end());
 
@@ -375,7 +376,7 @@ void	test_map() {
 
 //	printMap(ftMap);
 //	printMap(mp_range);
-//	printMap(ftMapCpy);
+////	printMap(ftMapCpy);
 
 //	ftMap.printTree();
 //	ftMap = ftMapCpy;
@@ -787,10 +788,10 @@ void	test_lexicographical_compare() {
 int	main() {
 //	test_pair();
 //	test_iterator();
-//	test_map();
+	test_map();
 //	test_is_integral();
 //	test_equal();
-	test_relational_operator();
+//	test_relational_operator();
 //	test_lexicographical_compare();
 //	test_enable_if();
 	return 0;

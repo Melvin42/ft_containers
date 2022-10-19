@@ -42,7 +42,7 @@ void	test_iterator() {
 
 	vect_str.push_back("coucou\n");
 	it = vect.begin();
-	ite = vect.end();
+//	ite = vect.end();
 	for (size_t i = 0; it != ite; it++, i++) {
 //		std::cout << "at[" << i << "] = " << vect.at(i) << '\n';
 		std::cout << "vect[" << i << "] = " << vect[i] << std::endl;
@@ -53,13 +53,15 @@ void	test_iterator() {
 	for (;it != ite; it++) {
 		std::cout << *it << '\n';
 	}
-//	it = vect.begin();
+	it = vect.begin();
+	ite = vect.end();
 	try {
+//		it = vect.begin();
 		ft::vector<int>	vect_range(it, --(--ite));
 //		ft::vector<int>	vect_range(it, ite);
 
-//		it = vect_range.begin();
-//		ite = vect_range.end();
+		it = vect_range.begin();
+		ite = vect_range.end();
 
 		std::cout << vect.max_size();
 		for (size_t i = 0; it != ite; it++, i++) {
@@ -80,10 +82,15 @@ void	test_iterator() {
 	ft::vector<int>				vectZero(vect);
 
 	int	i = 0;
-	for (it = vectZero.begin(); it != vectZero.end(); it++) {
-		std::cout << "vect[" << i << "] = " << vectZero[i] << std::endl;
-		i++;
-	}
+//	for (it = vect.begin(); it != vect.end(); it++) {
+//		std::cout << "vect[" << i << "] = " << vect[i] << std::endl;
+//		i++;
+//	}
+//	i = -1;
+//	for (it = vectZero.begin(); it != vectZero.end(); it++) {
+//		std::cout << "vect[" << i << "] = " << vectZero[i] << std::endl;
+//		i++;
+//	}
 
 	i = 0;
 
@@ -185,7 +192,6 @@ void	test_iterator() {
 	std::cout << "(const_rite - rit): " << (rite - rit) << std::endl;
 	std::cout << "(rite + 3 == rit): " << (rite + 3 == rit) << std::endl;
 
-	/*
 	std::cout << "TESTING BIDIR_ITERATOR\n" << std::endl;
 	std::list<int> lst2;
 	std::list<int>::iterator lst_it;
@@ -199,7 +205,6 @@ void	test_iterator() {
 		*lst_it++ = i * 5;
 	vct.assign(lst2.begin(), lst2.end());
 
-	*/
 //	vct2.insert(vct2.end(), lst2.rbegin(), lst2.rend());
 
 //	ft::vector<int>				rvect(lst.begin(), lst.end());
@@ -217,7 +222,6 @@ void	test_vector() {
 	ft::vector<int>				vect2(n);
 	ft::vector<int>::iterator	it = vect.begin();
 
-	/*
 	std::cout << "TESTING RESIZE\n" << std::endl;
 
 	std::cout << "Size = " << vect.size() << '\n';
@@ -433,7 +437,6 @@ void	test_vector() {
 	}
 	std::cout << '\n';
 
-	*/
 	std::cout << "TESTING ASSIGN\n";
 	ft::vector<int>	first;
 	ft::vector<int>	second;
@@ -596,13 +599,13 @@ void	test_lexicographical_compare() {
 //}
 
 int	main() {
-//	test_iterator();
+	test_iterator();
 	test_vector();
-//	test_is_integral();
-//	test_equal();
-//	test_relational_operator();
-//	test_lexicographical_compare();
-//	test_enable_if();
+	test_is_integral();
+	test_equal();
+	test_relational_operator();
+	test_lexicographical_compare();
+	test_enable_if();
 //	test_map();
 //
 	return 0;
