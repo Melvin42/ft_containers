@@ -195,7 +195,9 @@ namespace ft {
 						_comp = map._comp;
 						_size = 0;
 						_root = NULL;
-						_p_end->parent = NULL;
+						if (!_p_end)
+							_p_end = _alloc_node.allocate(1);
+						_p_end->parent = _root;
 						_p_end->left = NULL;
 						_p_end->right = NULL;
 						_p_end->height = 0;
@@ -324,7 +326,6 @@ namespace ft {
 				}
 
 				size_type		count(const key_type &k) const {
-//					return (search(k) != NULL);
 					if (search(k))
 						return 1;
 					return 0;
@@ -370,7 +371,6 @@ namespace ft {
 				}
 
 				iterator		upper_bound(const key_type &k) {
-//					iterator	it(find(k), _p_end, _comp);
 					iterator	it = begin();
 
 					while (it != end()) {
@@ -467,7 +467,7 @@ namespace ft {
 						} else {
 							_root = NULL;
 						}
-						_alloc_node.destroy(&(position._pos->_pair));
+						_alloc.destroy(&(position._pos->_pair));
 						_alloc_node.deallocate(position._pos, 1);
 						if (_root && tmp && _size > 2) {
 							_root = Balance(_root);
@@ -479,7 +479,7 @@ namespace ft {
 							position._pos->right->parent = NULL;
 							Node	*tmpNode = position._pos->right;
 
-							_alloc_node.destroy(&(position._pos->_pair));
+							_alloc.destroy(&(position._pos->_pair));
 							_alloc_node.deallocate(position._pos, 1);
 							_root = tmpNode;
 							linkEnd();
@@ -491,7 +491,7 @@ namespace ft {
 							tmp->right = position._pos->right;
 						position._pos->right->parent = tmp;
 
-						_alloc_node.destroy(&(position._pos->_pair));
+						_alloc.destroy(&(position._pos->_pair));
 						_alloc_node.deallocate(position._pos, 1);
 						if (_root && tmp && _size > 2) {
 							_root = Balance(_root);
@@ -501,7 +501,7 @@ namespace ft {
 							position._pos->left->parent = NULL;
 							Node	*tmpNode = position._pos->left;
 
-							_alloc_node.destroy(&(position._pos->_pair));
+							_alloc.destroy(&(position._pos->_pair));
 							_alloc_node.deallocate(position._pos, 1);
 							_root = tmpNode;
 							linkEnd();
@@ -513,7 +513,7 @@ namespace ft {
 							tmp->right = position._pos->left;
 						position._pos->left->parent = tmp;
 
-						_alloc_node.destroy(&(position._pos->_pair));
+						_alloc.destroy(&(position._pos->_pair));
 						_alloc_node.deallocate(position._pos, 1);
 						if (_root && tmp && _size > 2) {
 							_root = Balance(_root);
@@ -593,6 +593,7 @@ namespace ft {
 					if (_size != 0) {
 						unlinkEnd();
 						destroyTree();
+						_root = NULL;
 						_size = 0;
 					}
 				}
@@ -743,11 +744,9 @@ namespace ft {
 				}
 
 				Node* insert(Node* node, Node* parent, const value_type &val) {
-//					unlinkEnd();
 					if (!node) {
 						node = newNode(val);
 
-//						else
 						node->parent = parent;
 					} else if (_comp(val.first, node->_pair.first) == true) {
 						node->left = insert(node->left, node, val);
@@ -905,7 +904,7 @@ namespace ft {
 							destroyTree(leaf->left);
 						if (leaf->right)
 							destroyTree(leaf->right);
-						_alloc_node.destroy(&leaf->_pair);
+						_alloc.destroy(&leaf->_pair);
 						_alloc_node.deallocate(leaf, 1);
 					}
 				}
