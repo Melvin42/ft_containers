@@ -80,6 +80,7 @@ namespace ft {
 					clear();
 					if (_capacity > 0)
 						_alloc.deallocate(_p, _capacity);
+//					_alloc.deallocate(_p, _capacity);
 				}
 
 				template <class InputIterator>
@@ -89,21 +90,17 @@ namespace ft {
 						int	n = 0;
 
 						for (InputIterator it = first; it != last; ++it, ++n);
-						if (n > 0) {
-							_capacity = n;
-							_p = _alloc.allocate(_capacity);
-							_p_end = _p;
-							for (size_t i = 0; first != last; i++) {
-								_alloc.construct(_p + i, *first);
-								++first;
-								++_p_end;
-							}
+						reserve(n);
+						for (size_t i = 0; first != last; i++) {
+							_alloc.construct(_p + i, *first);
+							++first;
+							++_p_end;
 						}
 					}
 
 				void			assign(size_type n, const T& u) {
-					reserve(n);
 					clear();
+					reserve(n);
 					for (size_t i = 0; i < n; i++) {
 						_alloc.construct(_p + i, u);
 						if (size() <= i)
@@ -357,6 +354,15 @@ namespace ft {
 					}
 
 				iterator	erase(iterator pos) {
+					for (iterator it = pos; it != end(); ++it) {
+						_alloc.destroy(it);
+						if (it + 1 != end())
+							alloc.construct(it, *(it + 1));
+					}
+					--_p_end;
+					return pos;
+				}
+					/*
 					value_type	tmp[size() - 1];
 					iterator	it = begin();
 					size_t		i = 0;
@@ -383,8 +389,8 @@ namespace ft {
 						++_p_end;
 					}
 					return iterator(_p + ret);
-//					return _p + ret;
-				}
+					*/
+//				}
 
 				iterator	erase(iterator first, iterator last) {
 					size_t	i = 0;

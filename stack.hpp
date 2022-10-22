@@ -14,7 +14,7 @@ namespace ft {
 				Container	c;
 
 			public:
-				explicit	stack(const Container &ctnr = Container()) : c(ctnr) {}
+				explicit	stack(const Container &ctnr = Container_type()) : c(ctnr) {}
 
 				bool				empty() const { return c.empty(); }
 				size_type			size() const { return c.size(); }
