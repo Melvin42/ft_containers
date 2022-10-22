@@ -39,9 +39,11 @@ namespace ft {
 				/* CONSTRUCT/COPY/DESTROY */
 
 				vector	&operator=(const vector<T, Alloc> &vector) {
-					clear();
-					_alloc = vector.get_allocator();//_alloc;
-					assign(vector.begin(), vector.end());
+//					clear();
+					if (&vector != this) {
+						_alloc = vector.get_allocator();//_alloc;
+						assign(vector.begin(), vector.end());
+					}
 					return *this;
 				}
 
@@ -53,12 +55,7 @@ namespace ft {
 				explicit vector(size_type n, const value_type &val = value_type(),
 						const allocator_type &alloc = allocator_type())
 					: _alloc(alloc), _p(NULL), _p_end(NULL), _capacity(n) {
-						_p = _alloc.allocate(_capacity);
-						_p_end = _p;
-						for (size_t i = 0; i < n; i++) {
-							_alloc.construct(_p + i, val);
-							++_p_end;
-						}
+					assign(n, val);
 				}
 
 				//range (3)
@@ -67,20 +64,7 @@ namespace ft {
 							const allocator_type &alloc = allocator_type(),
 							typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
 							: _alloc(alloc), _p(NULL), _p_end(NULL), _capacity(0) {
-						int	n = 0;
-
-						for (InputIterator it = first; it != last; ++it, ++n);
-
-						if (n > 0) {
-							_capacity = n;
-							_p = _alloc.allocate(_capacity);
-							_p_end = _p;
-							for (size_t i = 0; first != last; i++) {
-								_alloc.construct(_p + i, *first);
-								++first;
-								++_p_end;
-							}
-						}
+						assign(first, last);
 //						else
 //							throw std::length_error("cannot create std::vector larger than max_size()");
 					}
@@ -89,10 +73,11 @@ namespace ft {
 //				IteratorMap(const IteratorMap<typename std::remove_const<U>::type> &it)
 //				vector(const vector<typename std::remove_const<T>::type, Alloc> &vector) {
 				vector(const vector<T, Alloc> &vector) {
-					*this = vector;
+					assign(vector.begin(), vector.end());
 				}
 
 				~vector() {
+					clear();
 					if (_capacity > 0)
 						_alloc.deallocate(_p, _capacity);
 				}
@@ -100,6 +85,7 @@ namespace ft {
 				template <class InputIterator>
 					void	assign(InputIterator first, InputIterator last,
 							typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0) {
+						clear();
 						int	n = 0;
 
 						for (InputIterator it = first; it != last; ++it, ++n);
@@ -117,6 +103,7 @@ namespace ft {
 
 				void			assign(size_type n, const T& u) {
 					reserve(n);
+					clear();
 					for (size_t i = 0; i < n; i++) {
 						_alloc.construct(_p + i, u);
 						if (size() <= i)
@@ -170,7 +157,6 @@ namespace ft {
 				size_type	capacity() const { return _capacity; }
 
 				size_type	max_size() const {
-//					return std::numeric_limits<size_type>::max() / sizeof(difference_type); }
 					return _alloc.max_size(); }
 
 				bool		empty() const { return (size() == 0); }
@@ -192,6 +178,8 @@ namespace ft {
 				}
 
 				void		reserve(size_type n) {
+					if (n > max_size())
+						throw std::length_error("vector::reserve");
 					size_t		size_tmp = size();
 					value_type	tmp[size_tmp];
 
@@ -215,14 +203,10 @@ namespace ft {
 				/* ELEMENT ACCES */
 
 				reference		operator[](size_type n) {
-//					if (n >= size())
-//						throw std::out_of_range("");
 					return *(_p + n);
 				}
 
 				const_reference	operator[](size_type n) const {
-//					if (n >= size())
-//						throw std::out_of_range("");
 					return *(_p + n);
 				}
 
@@ -240,14 +224,11 @@ namespace ft {
 
 				reference		front() { return *_p; }
 				const_reference	front() const { return *_p; }
-				reference		back() {
-//					std::cout << *(_p_end - 1) << '\n';
-					return *(_p_end - 1);
-				}
+
+				reference		back() { return *(_p_end - 1); }
+
 				const_reference	back() const {
-//					std::cout << *(_p_end - 1) << '\n';
-					return *(_p_end - 1);
-				}
+					return *(_p_end - 1); }
 
 				/* MODIFIERS */
 
@@ -453,8 +434,13 @@ namespace ft {
 				}
 
 				void	swap(vector<T, Alloc> &x) {
+//					Alloc		alloc_tmp;
 					pointer		p_tmp;
-					value_type	cap_tmp;
+					size_type	cap_tmp;
+
+//					alloc_tmp = _alloc;
+//					_alloc = x._alloc;
+//					x._alloc = alloc_tmp;
 
 					p_tmp = _p;
 					_p = x._p;
@@ -470,12 +456,13 @@ namespace ft {
 				}
 
 				void	clear() {
-					size_t	len = size();
+					erase(begin(), end());
+//					size_t	len = size();
 
-					for (size_t i = 0; i < len; i++) {
-						_alloc.destroy(_p + i);
-					}
-					_p_end = _p;
+//					for (size_t i = 0; i <= len; i++) {
+//						_alloc.destroy(_p + i);
+//					}
+//					_p_end = _p;
 				}
 
 //				friend typename iterator::difference_type operator-(const_iterator &lhs, const_iterator &rhs) {;;;
