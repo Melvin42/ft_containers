@@ -1,0 +1,492 @@
+
+
+= test_begin ================================================================
+$> clang++ -Wall -Wextra -Werror test_begin.cpp -o test_begin.ft
+$> clang++ -Wall -Wextra -Werror test_begin.cpp -o test_begin.std
+= Test ===================================================
+$> ./test_begin.ft
+$> ./test_begin.std
+diff -U 3 test_begin.output.ft test_begin.output.std
+
+Diff OK :D
+
+= test_clear ================================================================
+$> clang++ -Wall -Wextra -Werror test_clear.cpp -o test_clear.ft
+$> clang++ -Wall -Wextra -Werror test_clear.cpp -o test_clear.std
+= Test ===================================================
+$> ./test_clear.ft
+$> ./test_clear.std
+diff -U 3 test_clear.output.ft test_clear.output.std
+--- ../../../logs/map/test_clear.output.std 2022-10-22 03:24:02.088720177 +0200 +++ ../../../logs/map/test_clear.output.ft 2022-10-22 03:24:02.297721469 +0200 @@ -3,5 +3,4 @@ y => 200$ z => 300$ mymap contains:$ -a => 1101$ b => 2202$
+
+Diff KO :(
+
+= test_count ================================================================
+$> clang++ -Wall -Wextra -Werror test_count.cpp -o test_count.ft
+$> clang++ -Wall -Wextra -Werror test_count.cpp -o test_count.std
+= Test ===================================================
+$> ./test_count.ft
+$> ./test_count.std
+diff -U 3 test_count.output.ft test_count.output.std
+
+Diff OK :D
+
+= test_empty ================================================================
+$> clang++ -Wall -Wextra -Werror test_empty.cpp -o test_empty.ft
+$> clang++ -Wall -Wextra -Werror test_empty.cpp -o test_empty.std
+= Test ===================================================
+$> ./test_empty.ft
+$> ./test_empty.std
+diff -U 3 test_empty.output.ft test_empty.output.std
+
+Diff OK :D
+
+= test_end ================================================================
+$> clang++ -Wall -Wextra -Werror test_end.cpp -o test_end.ft
+$> clang++ -Wall -Wextra -Werror test_end.cpp -o test_end.std
+= Test ===================================================
+$> ./test_end.ft
+$> ./test_end.std
+diff -U 3 test_end.output.ft test_end.output.std
+
+Diff OK :D
+
+= test_equal_range ================================================================
+$> clang++ -Wall -Wextra -Werror test_equal_range.cpp -o test_equal_range.ft
+$> clang++ -Wall -Wextra -Werror test_equal_range.cpp -o test_equal_range.std
+= Test ===================================================
+$> ./test_equal_range.ft
+$> ./test_equal_range.std
+diff -U 3 test_equal_range.output.ft test_equal_range.output.std
+
+Diff OK :D
+
+= test_erase ================================================================
+$> clang++ -Wall -Wextra -Werror test_erase.cpp -o test_erase.ft
+$> clang++ -Wall -Wextra -Werror test_erase.cpp -o test_erase.std
+= Test ===================================================
+$> ./test_erase.ft
+$> ./test_erase.std
+diff -U 3 test_erase.output.ft test_erase.output.std
+
+Diff OK :D
+
+= test_find ================================================================
+$> clang++ -Wall -Wextra -Werror test_find.cpp -o test_find.ft
+$> clang++ -Wall -Wextra -Werror test_find.cpp -o test_find.std
+= Test ===================================================
+$> ./test_find.ft
+$> ./test_find.std
+diff -U 3 test_find.output.ft test_find.output.std
+
+Diff OK :D
+
+= test_insert ================================================================
+$> clang++ -Wall -Wextra -Werror test_insert.cpp -o test_insert.ft
+$> clang++ -Wall -Wextra -Werror test_insert.cpp -o test_insert.std
+= Test ===================================================
+$> ./test_insert.ft
+$> ./test_insert.std
+diff -U 3 test_insert.output.ft test_insert.output.std
+
+Diff OK :D
+
+= test_key_comp ================================================================
+$> clang++ -Wall -Wextra -Werror test_key_comp.cpp -o test_key_comp.ft
+$> clang++ -Wall -Wextra -Werror test_key_comp.cpp -o test_key_comp.std
+= Test ===================================================
+$> ./test_key_comp.ft
+$> ./test_key_comp.std
+diff -U 3 test_key_comp.output.ft test_key_comp.output.std
+
+Diff OK :D
+
+= test_lower_bound ================================================================
+$> clang++ -Wall -Wextra -Werror test_lower_bound.cpp -o test_lower_bound.ft
+$> clang++ -Wall -Wextra -Werror test_lower_bound.cpp -o test_lower_bound.std
+= Test ===================================================
+$> ./test_lower_bound.ft
+$> ./test_lower_bound.std
+diff -U 3 test_lower_bound.output.ft test_lower_bound.output.std
+
+Diff OK :D
+
+= test_max_size ================================================================
+$> clang++ -Wall -Wextra -Werror test_max_size.cpp -o test_max_size.ft
+$> clang++ -Wall -Wextra -Werror test_max_size.cpp -o test_max_size.std
+= Test ===================================================
+$> ./test_max_size.ft
+$> ./test_max_size.std
+diff -U 3 test_max_size.output.ft test_max_size.output.std
+
+Diff OK :D
+
+= test_operator_equal ================================================================
+$> clang++ -Wall -Wextra -Werror test_operator_equal.cpp -o test_operator_equal.ft
+$> clang++ -Wall -Wextra -Werror test_operator_equal.cpp -o test_operator_equal.std
+= Test ===================================================
+$> ./test_operator_equal.ft
+$> ./test_operator_equal.std
+diff -U 3 test_operator_equal.output.ft test_operator_equal.output.std
+
+Diff OK :D
+
+= test_operator_hook ================================================================
+$> clang++ -Wall -Wextra -Werror test_operator_hook.cpp -o test_operator_hook.ft
+$> clang++ -Wall -Wextra -Werror test_operator_hook.cpp -o test_operator_hook.std
+= Test ===================================================
+$> ./test_operator_hook.ft
+$> ./test_operator_hook.std
+diff -U 3 test_operator_hook.output.ft test_operator_hook.output.std
+
+Diff OK :D
+
+= test_rbegin ================================================================
+$> clang++ -Wall -Wextra -Werror test_rbegin.cpp -o test_rbegin.ft
+$> clang++ -Wall -Wextra -Werror test_rbegin.cpp -o test_rbegin.std
+= Test ===================================================
+$> ./test_rbegin.ft
+$> ./test_rbegin.std
+diff -U 3 test_rbegin.output.ft test_rbegin.output.std
+
+Diff OK :D
+
+= test_relational_operators ================================================================
+$> clang++ -Wall -Wextra -Werror test_relational_operators.cpp -o test_relational_operators.ft
+$> clang++ -Wall -Wextra -Werror test_relational_operators.cpp -o test_relational_operators.std
+= Test ===================================================
+$> ./test_relational_operators.ft
+$> ./test_relational_operators.std
+diff -U 3 test_relational_operators.output.ft test_relational_operators.output.std
+
+Diff OK :D
+
+= test_rend ================================================================
+$> clang++ -Wall -Wextra -Werror test_rend.cpp -o test_rend.ft
+$> clang++ -Wall -Wextra -Werror test_rend.cpp -o test_rend.std
+= Test ===================================================
+$> ./test_rend.ft
+$> ./test_rend.std
+diff -U 3 test_rend.output.ft test_rend.output.std
+
+Diff OK :D
+
+= test_size ================================================================
+$> clang++ -Wall -Wextra -Werror test_size.cpp -o test_size.ft
+$> clang++ -Wall -Wextra -Werror test_size.cpp -o test_size.std
+= Test ===================================================
+$> ./test_size.ft
+$> ./test_size.std
+diff -U 3 test_size.output.ft test_size.output.std
+
+Diff OK :D
+
+= test_swap ================================================================
+$> clang++ -Wall -Wextra -Werror test_swap.cpp -o test_swap.ft
+$> clang++ -Wall -Wextra -Werror test_swap.cpp -o test_swap.std
+= Test ===================================================
+$> ./test_swap.ft
+$> ./test_swap.std
+diff -U 3 test_swap.output.ft test_swap.output.std
+
+Diff OK :D
+
+= test_swap_map ================================================================
+$> clang++ -Wall -Wextra -Werror test_swap_map.cpp -o test_swap_map.ft
+$> clang++ -Wall -Wextra -Werror test_swap_map.cpp -o test_swap_map.std
+= Test ===================================================
+$> ./test_swap_map.ft
+$> ./test_swap_map.std
+diff -U 3 test_swap_map.output.ft test_swap_map.output.std
+
+Diff OK :D
+
+= test_upper_bound ================================================================
+$> clang++ -Wall -Wextra -Werror test_upper_bound.cpp -o test_upper_bound.ft
+$> clang++ -Wall -Wextra -Werror test_upper_bound.cpp -o test_upper_bound.std
+= Test ===================================================
+$> ./test_upper_bound.ft
+$> ./test_upper_bound.std
+diff -U 3 test_upper_bound.output.ft test_upper_bound.output.std
+
+Diff OK :D
+
+= test_value_comp ================================================================
+$> clang++ -Wall -Wextra -Werror test_value_comp.cpp -o test_value_comp.ft
+$> clang++ -Wall -Wextra -Werror test_value_comp.cpp -o test_value_comp.std
+= Test ===================================================
+$> ./test_value_comp.ft
+$> ./test_value_comp.std
+diff -U 3 test_value_comp.output.ft test_value_comp.output.std
+
+Diff OK :D
+
+= test_empty ================================================================
+$> clang++ -Wall -Wextra -Werror test_empty.cpp -o test_empty.ft
+$> clang++ -Wall -Wextra -Werror test_empty.cpp -o test_empty.std
+= Test ===================================================
+$> ./test_empty.ft
+$> ./test_empty.std
+diff -U 3 test_empty.output.ft test_empty.output.std
+
+Diff OK :D
+
+= test_pop ================================================================
+$> clang++ -Wall -Wextra -Werror test_pop.cpp -o test_pop.ft
+$> clang++ -Wall -Wextra -Werror test_pop.cpp -o test_pop.std
+= Test ===================================================
+$> ./test_pop.ft
+$> ./test_pop.std
+diff -U 3 test_pop.output.ft test_pop.output.std
+
+Diff OK :D
+
+= test_push ================================================================
+$> clang++ -Wall -Wextra -Werror test_push.cpp -o test_push.ft
+$> clang++ -Wall -Wextra -Werror test_push.cpp -o test_push.std
+= Test ===================================================
+$> ./test_push.ft
+$> ./test_push.std
+diff -U 3 test_push.output.ft test_push.output.std
+
+Diff OK :D
+
+= test_size ================================================================
+$> clang++ -Wall -Wextra -Werror test_size.cpp -o test_size.ft
+$> clang++ -Wall -Wextra -Werror test_size.cpp -o test_size.std
+= Test ===================================================
+$> ./test_size.ft
+$> ./test_size.std
+diff -U 3 test_size.output.ft test_size.output.std
+
+Diff OK :D
+
+= test_top ================================================================
+$> clang++ -Wall -Wextra -Werror test_top.cpp -o test_top.ft
+$> clang++ -Wall -Wextra -Werror test_top.cpp -o test_top.std
+= Test ===================================================
+$> ./test_top.ft
+$> ./test_top.std
+diff -U 3 test_top.output.ft test_top.output.std
+
+Diff OK :D
+
+= test_assign ================================================================
+$> clang++ -Wall -Wextra -Werror test_assign.cpp -o test_assign.ft
+$> clang++ -Wall -Wextra -Werror test_assign.cpp -o test_assign.std
+= Test ===================================================
+$> ./test_assign.ft
+$> ./test_assign.std
+diff -U 3 test_assign.output.ft test_assign.output.std
+
+Diff OK :D
+
+= test_at ================================================================
+$> clang++ -Wall -Wextra -Werror test_at.cpp -o test_at.ft
+$> clang++ -Wall -Wextra -Werror test_at.cpp -o test_at.std
+= Test ===================================================
+$> ./test_at.ft
+$> ./test_at.std
+diff -U 3 test_at.output.ft test_at.output.std
+
+Diff OK :D
+
+= test_back ================================================================
+$> clang++ -Wall -Wextra -Werror test_back.cpp -o test_back.ft
+$> clang++ -Wall -Wextra -Werror test_back.cpp -o test_back.std
+= Test ===================================================
+$> ./test_back.ft
+$> ./test_back.std
+diff -U 3 test_back.output.ft test_back.output.std
+
+Diff OK :D
+
+= test_begin ================================================================
+$> clang++ -Wall -Wextra -Werror test_begin.cpp -o test_begin.ft
+$> clang++ -Wall -Wextra -Werror test_begin.cpp -o test_begin.std
+= Test ===================================================
+$> ./test_begin.ft
+$> ./test_begin.std
+diff -U 3 test_begin.output.ft test_begin.output.std
+
+Diff OK :D
+
+= test_capacity ================================================================
+$> clang++ -Wall -Wextra -Werror test_capacity.cpp -o test_capacity.ft
+$> clang++ -Wall -Wextra -Werror test_capacity.cpp -o test_capacity.std
+= Test ===================================================
+$> ./test_capacity.ft
+$> ./test_capacity.std
+diff -U 3 test_capacity.output.ft test_capacity.output.std
+
+Diff OK :D
+
+= test_clear ================================================================
+$> clang++ -Wall -Wextra -Werror test_clear.cpp -o test_clear.ft
+$> clang++ -Wall -Wextra -Werror test_clear.cpp -o test_clear.std
+= Test ===================================================
+$> ./test_clear.ft
+$> ./test_clear.std
+diff -U 3 test_clear.output.ft test_clear.output.std
+
+Diff OK :D
+
+= test_empty ================================================================
+$> clang++ -Wall -Wextra -Werror test_empty.cpp -o test_empty.ft
+$> clang++ -Wall -Wextra -Werror test_empty.cpp -o test_empty.std
+= Test ===================================================
+$> ./test_empty.ft
+$> ./test_empty.std
+diff -U 3 test_empty.output.ft test_empty.output.std
+
+Diff OK :D
+
+= test_end ================================================================
+$> clang++ -Wall -Wextra -Werror test_end.cpp -o test_end.ft
+$> clang++ -Wall -Wextra -Werror test_end.cpp -o test_end.std
+= Test ===================================================
+$> ./test_end.ft
+$> ./test_end.std
+diff -U 3 test_end.output.ft test_end.output.std
+
+Diff OK :D
+
+= test_erase ================================================================
+$> clang++ -Wall -Wextra -Werror test_erase.cpp -o test_erase.ft
+$> clang++ -Wall -Wextra -Werror test_erase.cpp -o test_erase.std
+= Test ===================================================
+$> ./test_erase.ft
+$> ./test_erase.std
+diff -U 3 test_erase.output.ft test_erase.output.std
+
+Diff OK :D
+
+= test_front ================================================================
+$> clang++ -Wall -Wextra -Werror test_front.cpp -o test_front.ft
+$> clang++ -Wall -Wextra -Werror test_front.cpp -o test_front.std
+= Test ===================================================
+$> ./test_front.ft
+$> ./test_front.std
+diff -U 3 test_front.output.ft test_front.output.std
+
+Diff OK :D
+
+= test_insert ================================================================
+$> clang++ -Wall -Wextra -Werror test_insert.cpp -o test_insert.ft
+$> clang++ -Wall -Wextra -Werror test_insert.cpp -o test_insert.std
+= Test ===================================================
+$> ./test_insert.ft
+$> ./test_insert.std
+diff -U 3 test_insert.output.ft test_insert.output.std
+
+Diff OK :D
+
+= test_max_size ================================================================
+$> clang++ -Wall -Wextra -Werror test_max_size.cpp -o test_max_size.ft
+$> clang++ -Wall -Wextra -Werror test_max_size.cpp -o test_max_size.std
+= Test ===================================================
+$> ./test_max_size.ft
+$> ./test_max_size.std
+diff -U 3 test_max_size.output.ft test_max_size.output.std
+
+Diff OK :D
+
+= test_operator_equal ================================================================
+$> clang++ -Wall -Wextra -Werror test_operator_equal.cpp -o test_operator_equal.ft
+$> clang++ -Wall -Wextra -Werror test_operator_equal.cpp -o test_operator_equal.std
+= Test ===================================================
+$> ./test_operator_equal.ft
+$> ./test_operator_equal.std
+diff -U 3 test_operator_equal.output.ft test_operator_equal.output.std
+
+Diff OK :D
+
+= test_operator_hook ================================================================
+$> clang++ -Wall -Wextra -Werror test_operator_hook.cpp -o test_operator_hook.ft
+$> clang++ -Wall -Wextra -Werror test_operator_hook.cpp -o test_operator_hook.std
+= Test ===================================================
+$> ./test_operator_hook.ft
+$> ./test_operator_hook.std
+diff -U 3 test_operator_hook.output.ft test_operator_hook.output.std
+
+Diff OK :D
+
+= test_pop_back ================================================================
+$> clang++ -Wall -Wextra -Werror test_pop_back.cpp -o test_pop_back.ft
+$> clang++ -Wall -Wextra -Werror test_pop_back.cpp -o test_pop_back.std
+= Test ===================================================
+$> ./test_pop_back.ft
+$> ./test_pop_back.std
+diff -U 3 test_pop_back.output.ft test_pop_back.output.std
+
+Diff OK :D
+
+= test_rbegin ================================================================
+$> clang++ -Wall -Wextra -Werror test_rbegin.cpp -o test_rbegin.ft
+$> clang++ -Wall -Wextra -Werror test_rbegin.cpp -o test_rbegin.std
+= Test ===================================================
+$> ./test_rbegin.ft
+$> ./test_rbegin.std
+diff -U 3 test_rbegin.output.ft test_rbegin.output.std
+
+Diff OK :D
+
+= test_relational_operators ================================================================
+$> clang++ -Wall -Wextra -Werror test_relational_operators.cpp -o test_relational_operators.ft
+$> clang++ -Wall -Wextra -Werror test_relational_operators.cpp -o test_relational_operators.std
+= Test ===================================================
+$> ./test_relational_operators.ft
+$> ./test_relational_operators.std
+diff -U 3 test_relational_operators.output.ft test_relational_operators.output.std
+
+Diff OK :D
+
+= test_rend ================================================================
+$> clang++ -Wall -Wextra -Werror test_rend.cpp -o test_rend.ft
+$> clang++ -Wall -Wextra -Werror test_rend.cpp -o test_rend.std
+= Test ===================================================
+$> ./test_rend.ft
+$> ./test_rend.std
+diff -U 3 test_rend.output.ft test_rend.output.std
+
+Diff OK :D
+
+= test_reserve ================================================================
+$> clang++ -Wall -Wextra -Werror test_reserve.cpp -o test_reserve.ft
+$> clang++ -Wall -Wextra -Werror test_reserve.cpp -o test_reserve.std
+= Test ===================================================
+$> ./test_reserve.ft
+$> ./test_reserve.std
+diff -U 3 test_reserve.output.ft test_reserve.output.std
+
+Diff OK :D
+
+= test_resize ================================================================
+$> clang++ -Wall -Wextra -Werror test_resize.cpp -o test_resize.ft
+$> clang++ -Wall -Wextra -Werror test_resize.cpp -o test_resize.std
+= Test ===================================================
+$> ./test_resize.ft
+$> ./test_resize.std
+diff -U 3 test_resize.output.ft test_resize.output.std
+
+Diff OK :D
+
+= test_size ================================================================
+$> clang++ -Wall -Wextra -Werror test_size.cpp -o test_size.ft
+$> clang++ -Wall -Wextra -Werror test_size.cpp -o test_size.std
+= Test ===================================================
+$> ./test_size.ft
+$> ./test_size.std
+diff -U 3 test_size.output.ft test_size.output.std
+
+Diff OK :D
+
+= test_swap ================================================================
+$> clang++ -Wall -Wextra -Werror test_swap.cpp -o test_swap.ft
+$> clang++ -Wall -Wextra -Werror test_swap.cpp -o test_swap.std
+= Test ===================================================
+$> ./test_swap.ft
+$> ./test_swap.std
+diff -U 3 test_swap.output.ft test_swap.output.std
+
+Diff OK :D

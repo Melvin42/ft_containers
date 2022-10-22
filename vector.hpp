@@ -39,6 +39,7 @@ namespace ft {
 				/* CONSTRUCT/COPY/DESTROY */
 
 				vector	&operator=(const vector<T, Alloc> &vector) {
+					clear();
 					_alloc = vector.get_allocator();//_alloc;
 					assign(vector.begin(), vector.end());
 					return *this;
