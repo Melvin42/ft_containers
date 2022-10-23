@@ -23,30 +23,14 @@ namespace ft {
 
 				explicit iterator(pointer it) : _pos(it) {}
 
-//				template <class U>
-//					iterator(const iterator<U> &it) {
-////							*this = it;
-//						}
-
-//				template <class U>
-//					iterator	&operator=(const pointer it) {
-//						_pos = it;
-//						return *this;
-//					}
-					iterator	&operator=(const iterator &it) {
-						_pos = it.base();
-						return *this;
-					}
-			iterator(const iterator<typename std::remove_const<T>::type> &it) : _pos(it.base()) {
-//					*this = it;
+				iterator(const iterator<typename std::remove_const<T>::type> &it)
+					: _pos(it.base()) {
 				}
 
-//				template <class U>
-//					iterator	&operator=(const iterator<U> &it) {
-//						_pos = it.base();
-//						return *this;
-//					}
-
+				iterator	&operator=(const iterator &it) {
+					_pos = it.base();
+					return *this;
+				}
 
 				~iterator() {}
 
@@ -58,9 +42,9 @@ namespace ft {
 					return _pos;
 				}
 
-				reference	operator*() { return *_pos; }
+//				reference	operator*() { return *_pos; }
 				reference	operator*() const { return *_pos; }
-				pointer		operator->() { return _pos; }
+//				pointer		operator->() { return _pos; }
 				pointer		operator->() const { return _pos; }
 
 				iterator	&operator-=(difference_type n) {
@@ -99,16 +83,11 @@ namespace ft {
 					return *this;
 				}
 
-//				difference_type	operator+(const iterator &it) const {
-//					return base() + it.base();
-//				}
-
 				iterator	operator+(difference_type v) const {
 					iterator	tmp(*this);
 
 					tmp += v;
 					return tmp;
-//					return iterator(_pos.base() + v);
 				}
 
 				iterator	operator-(difference_type v) const {
@@ -116,28 +95,12 @@ namespace ft {
 
 					tmp -= v;
 					return tmp;
-//					return iterator(_pos.base() - v);
 				}
-
-//				iterator	operator-(difference_type v) const {
-//					iterator	tmp(*this);
-
-//					tmp -= v;
-//					return tmp;
-//					return iterator(_pos.base() - v);
-//				}
 
 				template <class Iterator>
 					difference_type	operator-(const iterator<Iterator> &it) const {
 						return base() - it.base();
 					}
-
-//				iterator	operator-(difference_type v) {
-//					iterator	tmp(*this);
-
-//					tmp -= v;
-//					return tmp;
-//				}
 
 				reference	operator[](difference_type v) {
 					return *(_pos + v);
@@ -186,7 +149,6 @@ namespace ft {
 
 				tmp += v;
 				return tmp;
-//			return iterator<Iterator>(it.base() + v);
 		}
 
 	template <class Iterator>
@@ -197,24 +159,8 @@ namespace ft {
 
 				tmp -= v;
 				return tmp;
-//			return iterator<Iterator>(it.base() + v);
-//			return iterator<Iterator>(it.base() - v);
 		}
 
-//	template <class T>
-//		typename iterator<T>::difference_type operator-(const iterator<T> &lhs, const iterator<T> &rhs) {
-//			return rhs.base() - lhs.base();
-//		}
-
-//	template <class T, class U>
-//		typename iterator<T>::difference_type operator+(const iterator<T> &lhs, const iterator<U> &rhs) {
-//			return lhs.base() + rhs.base();
-//		}
-
-//	template <class T, class U>
-//		typename iterator<T>::difference_type operator-(const iterator<T> &lhs, const iterator<U> &rhs) {
-//			return lhs.base() - rhs.base();
-//		}
 };
 
 #endif

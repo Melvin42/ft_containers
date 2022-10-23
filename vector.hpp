@@ -354,89 +354,28 @@ namespace ft {
 					}
 
 				iterator	erase(iterator pos) {
-					for (iterator it = pos; it != end(); ++it) {
-						_alloc.destroy(it);
+					iterator	ret(pos);
+
+					int i = 0;
+					
+					for (iterator it = pos; it != end(); it++, i++) {
+						_alloc.destroy(pos.base() + i);
 						if (it + 1 != end())
-							alloc.construct(it, *(it + 1));
+							_alloc.construct(pos.base() + i, *(it + 1));
 					}
 					--_p_end;
-					return pos;
+					return ret;
+//					return pos;
 				}
-					/*
-					value_type	tmp[size() - 1];
-					iterator	it = begin();
-					size_t		i = 0;
-					size_t		len = size();
-					size_t		ret;
-
-					while (it != pos) {
-						tmp[i] = *it;
-						++it;
-						++i;
-					}
-					ret = i;
-					while (++it != end()) {
-						tmp[i] = *it;
-						++i;
-					}
-					i = 0;
-					for (i = 0; i < size(); i++) {
-						_alloc.destroy(_p + i);
-					}
-					_p_end = _p;
-					for (i = 0; i + 1 < len; i++) {
-						_alloc.construct(_p + i, tmp[i]);
-						++_p_end;
-					}
-					return iterator(_p + ret);
-					*/
-//				}
 
 				iterator	erase(iterator first, iterator last) {
-					size_t	i = 0;
-					size_t	n = 0;
-					size_t	len = size();
-					size_t	ret = 0;
-
-//					if (last - first > 0)
-//						n = last - first;
-					for (iterator it = first; it != last; ++it, ++n);
-					if (n > len)
-						n = len;
-					if (len - n <= 0)
-						len = 0;
-					else
-						len -= n;
-
-					value_type	tmp[len + 1];
-
-					if (len > 0) {
-						iterator	it = begin();
-
-						while (it != first && i < len) {
-							tmp[i] = *it;
-							++it;
-							++i;
-						}
-						ret = i;
-						while (it != last) {
-							++it;
-						}
-						while (it != end() && i < len) {
-							tmp[i] = *it;
-							++it;
-							++i;
-						}
+					size_type	dist = std::distance(first, last);
+					iterator	ret(first);
+					while (dist) {
+						ret = erase(ret);
+						--dist;
 					}
-					for (i = 0; i < size(); i++) {
-						_alloc.destroy(_p + i);
-					}
-					_p_end = _p;
-					for (i = 0; i < len; i++) {
-						_alloc.construct(_p + i, tmp[i]);
-						++_p_end;
-					}
-					return iterator(_p + ret);
+					return ret;
 				}
 
 				void	swap(vector<T, Alloc> &x) {
@@ -462,13 +401,13 @@ namespace ft {
 				}
 
 				void	clear() {
-					erase(begin(), end());
-//					size_t	len = size();
+//					erase(begin(), end());
+					size_t	len = size();
 
-//					for (size_t i = 0; i <= len; i++) {
-//						_alloc.destroy(_p + i);
-//					}
-//					_p_end = _p;
+					for (size_t i = 0; i <= len; i++) {
+						_alloc.destroy(_p + i);
+					}
+					_p_end = _p;
 				}
 
 //				friend typename iterator::difference_type operator-(const_iterator &lhs, const_iterator &rhs) {;;;
