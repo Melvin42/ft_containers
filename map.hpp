@@ -10,7 +10,7 @@
 #include <map>
 #include "iterator_traits.hpp"
 #include "reverse_iterator.hpp"
-#include <type_traits>
+#include <cmath>
 
 namespace ft {
 	template <class Key, class T, class Compare, class Alloc> class map;
@@ -40,7 +40,6 @@ namespace ft {
 				typedef std::size_t									size_type;
 
 			private:
-//				struct Node;
 				struct Node {
 					value_type		_pair;
 					Node			*parent;
@@ -97,7 +96,7 @@ namespace ft {
 //					return IteratorMap<const U>(_pos);
 //				}
 
-				IteratorMap(const IteratorMap<typename std::remove_const<U>::type> &it)
+				IteratorMap(const IteratorMap<typename ft::remove_const<U>::type> &it)
 					: _pos(it._pos), _p_end(it._p_end), _comp(it._comp) {}
 
 			private:
@@ -520,7 +519,7 @@ namespace ft {
 						}
 					} else {
 						Node	*tmpNode = minValueNode(position._pos->right);
-						_alloc_node.destroy(&(position._pos->_pair));
+						_alloc.destroy(&(position._pos->_pair));
 
 						if (tmpNode != position._pos->right) {
 							tmpNode->parent->left = tmpNode->right;

@@ -3,6 +3,7 @@
 
 #include "iterator_traits.hpp"
 #include "reverse_iterator.hpp"
+#include "utils.hpp"
 
 namespace ft {
 	template <class T>
@@ -23,7 +24,7 @@ namespace ft {
 
 				explicit iterator(pointer it) : _pos(it) {}
 
-				iterator(const iterator<typename std::remove_const<T>::type> &it)
+				iterator(const iterator<typename ft::remove_const<T>::type> &it)
 					: _pos(it.base()) {
 				}
 

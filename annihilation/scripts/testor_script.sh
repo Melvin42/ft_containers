@@ -7,7 +7,7 @@ PATH_FT=..
 INCLUDE_FT=../../../$PATH_FT
 PATH_TESTS=tests
 ERROR="There is an error. Stop."
-CC="clang++ -Wall -Wextra -Werror"
+CC="clang++ -Wall -Wextra -Werror -std=c++98"
 TRC=../../../deepthough
 RED="\033[31m"
 GREEN="\033[32m"
@@ -17,7 +17,7 @@ UNDERLINE="\e[4m"
 BOLD="\e[1m"
 ENDCOLOR="\e[0m"
 
-exec 2> /dev/null
+#exec 2> /dev/null
 
 generate_main()
 {

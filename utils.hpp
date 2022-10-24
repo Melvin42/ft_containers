@@ -2,6 +2,16 @@
 #define UTILS_HPP
 
 namespace ft {
+	template <typename T>
+		struct remove_const {
+			typedef T	type;
+		};
+
+	template <typename T>
+		struct remove_const<const T> {
+			typedef T	type;
+		};
+
 	template <bool cond, typename result=void>
 		struct	enable_if {
 		};
