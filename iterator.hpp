@@ -28,7 +28,12 @@ namespace ft {
 					: _pos(it.base()) {
 				}
 
-				iterator	&operator=(const iterator &it) {
+				iterator	&operator=(const pointer &it) {
+					_pos = it;
+					return *this;
+				}
+
+				iterator	&operator=(const iterator<typename ft::remove_const<T>::type> &it) {
 					_pos = it.base();
 					return *this;
 				}
@@ -43,9 +48,9 @@ namespace ft {
 					return _pos;
 				}
 
-//				reference	operator*() { return *_pos; }
+				reference	operator*() { return *_pos; }
 				reference	operator*() const { return *_pos; }
-//				pointer		operator->() { return _pos; }
+				pointer		operator->() { return _pos; }
 				pointer		operator->() const { return _pos; }
 
 				iterator	&operator-=(difference_type n) {
